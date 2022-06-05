@@ -9,6 +9,12 @@ from alembic import context
 # access to the values within the .ini file in use.
 from data.data import Base
 from models.admin import Admin
+from models.teacher import Teacher
+from models.student import Student
+from models.group import Group
+from models.mark import Mark
+from models.task import Task
+from models.school import School
 
 config = context.config
 
