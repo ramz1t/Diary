@@ -1,5 +1,5 @@
 from models.admin import ApiAdmin
 from logic.admin import create_new_admin
 
-admin = ApiAdmin(name='1534', password='admin', id=1)
+admin = ApiAdmin(email='1534', password='admin')
 create_new_admin(admin)

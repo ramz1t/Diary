@@ -8,7 +8,7 @@ class Teacher(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     password = Column(String)
-    login = Column(String)
+    email = Column(String)
     school_id = Column(Integer)
     subject = Column(String)
     # classes: relationship(Group)
@@ -18,6 +18,6 @@ class ApiTeacher(BaseModel):
     id: int
     name: str
     password: str
-    login: str
+    email: str
     school_id: int
     subject: str

@@ -6,11 +6,10 @@ from data.data import Base
 class Admin(Base):
     __tablename__ = 'admins'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    email = Column(String)
     password = Column(String)
 
 
 class ApiAdmin(BaseModel):
-    id: int
-    name: str
+    email: str
     password: str

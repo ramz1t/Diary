@@ -7,29 +7,15 @@ from fastapi import status, HTTPException, Depends
 from data.data import Sessions
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
-#from models.auth import AuthSession, ApiNewAuth
-#from func.helpers import generate_token
-#from func.helpers import hashing_password
 from passlib.context import CryptContext
 from models.token import TokenData
-#from func.helpers import get_user_by_email
+from func.helpers import get_user_by_email
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
-
-# def new_auth(auth: ApiNewAuth) -> str or JSONResponse:
-#     with Sessions() as session:
-#         user = get_user_by_username(auth.username)
-#         if not user or user.password_hash != hashing_password(auth.password):
-#             return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content='Incorrect login or password')
-#         auth_session = AuthSession(token=generate_token(), user_id=user.id)
-#         session.add(auth_session)
-#         session.commit()
-#         return auth_session.token
 
 from fastapi.security import OAuth2
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
