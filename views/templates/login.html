@@ -4,33 +4,15 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <script type="text/javascript" src="{{ url_for('static', path='js/login.js') }}"></script>
-    <link rel="stylesheet" href='/style/login.css'>
 </head>
 <body>
 <form>
-<!--    <p>login</p>-->
-<!--    <input id="email" type="text">-->
-<!--    <p>password</p>-->
-<!--    <input id="password" type="password">-->
-<!--    <br>-->
-<!--    <br>-->
-
-        <p class="text-center fs-3 fw-bolder">Authorization</p>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="email" placeholder="name@example.com">
-            <label for="email">Email address</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password" placeholder="password">
-            <label for="password">Password</label>
-        </div>
-        <div class="btn-login">
-            <button type="button" class="btn btn-login-custom text-light" onclick="login()">Log In</button>
-        </div>
-
-<div class="had">
-    <a class="link text-decoration-none" href="/register" >I don't have an account</a>
-</div>
+    <p>login</p>
+    <input id="email" type="text">
+    <p>password</p>
+    <input id="password" type="password">
+    <br>
+    <br>
 
 </form>
 <button onclick="login()">Login</button>
