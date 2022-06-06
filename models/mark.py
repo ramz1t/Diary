@@ -10,6 +10,6 @@ class Mark(Base):
     # student: relationship-back(User)
 
 
-class Mark(BaseModel):
+class ApiMark(BaseModel):
     id: int
     value: int

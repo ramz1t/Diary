@@ -14,7 +14,7 @@ class Teacher(Base):
     # classes: relationship(Group)
 
 
-class Teacher(BaseModel):
+class ApiTeacher(BaseModel):
     id: int
     name: str
     password: str

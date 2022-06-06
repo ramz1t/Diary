@@ -13,7 +13,7 @@ class Student(Base):
     # marks = relationship(Mark)
 
 
-class Student(BaseModel):
+class ApiStudent(BaseModel):
     id: int
     name: str
     password: str

@@ -13,7 +13,7 @@ class Task(Base):
     # teacher: relationship - back(Teacher)
 
 
-class Task(BaseModel):
+class ApiTask(BaseModel):
     id: int
     body: str
     # idk how i need to tell about time

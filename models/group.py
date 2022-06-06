@@ -11,5 +11,5 @@ class Group(Base):
     # teacher: relationship - back(Teacher)
 
 
-class Group(BaseModel):
+class ApiGroup(BaseModel):
     name: str
