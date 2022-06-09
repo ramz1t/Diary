@@ -4,6 +4,7 @@ from data.data import Base
 
 
 class Key(Base):
+    __tablename__ = 'keys'
     id = Column(Integer, primary_key=True)
     value = Column(String)
     name = Column(String)

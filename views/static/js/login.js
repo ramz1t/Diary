@@ -14,7 +14,7 @@ async function login() {
         })
     });
     if (response.ok) {
-        window.open('/' + type);
+        window.open('/' + type, '_self');
     } else {
         alert(response.status);
     }
