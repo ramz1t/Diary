@@ -17,8 +17,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link rel="stylesheet" href='../static/styles/login.css'>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 <body>
+<a href="/">choose user type</a>
 <div class="card shadow-lg" style="width: 30rem;">
     <div class="card-body">
         <p class="text-center fs-3 fw-bolder">Login</p>
@@ -32,12 +34,18 @@
             <label for="password">Password</label>
         </div>
         <div class="btn-custom">
-            <button onclick="submit()" type="button" class="btn btn-login-custom text-light">Login</button>
+            <button onclick="login()" type="button" class="btn btn-login-custom text-light">Login</button>
         </div>
-        <div class="hadnt">
+        <div class="hadnt" id="footer">
             <a class="link text-decoration-none" href="/register">I haven't account</a>
         </div>
     </div>
 </div>
 </body>
 </html>
+<script>
+    var type = $.cookie('type');
+    if (type === 'admin') {
+        document.getElementById('footer').innerHTML = '';
+    }
+</script>

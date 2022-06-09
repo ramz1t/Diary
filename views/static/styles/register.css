@@ -9,10 +9,19 @@
     align-items: center;
     justify-content: center;
 }
-.card{
+.card {
     float: right;
     right: 10vw;
     top: 10vw;
+}
+
+
+@media screen and (min-width: 800px) {
+    .card {
+        float: right;
+        right: 10vw;
+        top: 10vw;
+    }
 }
 
 .had{

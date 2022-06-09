@@ -18,13 +18,23 @@ templates = Jinja2Templates(directory="views/templates")
 
 
 @app.get('/')
-def login_page(request: Request):
+def mainpage(request: Request):
+    return templates.TemplateResponse('mainpage.html', {"request": request})
+
+
+@app.get('/register')
+def register(request: Request):
+    return templates.TemplateResponse('register.html', {"request": request})
+
+
+@app.get('/login')
+def login(request: Request):
     return templates.TemplateResponse('login.html', {"request": request})
 
 
-@app.post("/token", response_model=Token)
-def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
+@app.post("/token/{type}", response_model=Token)
+def login_for_access_token(type, response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(email=form_data.username, password=form_data.password, type=type)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -36,6 +46,11 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
     )
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get('/admin')
+def adminpage(request: Request):
+    return 'logged in to admin'
 
 
 if __name__ == '__main__':
