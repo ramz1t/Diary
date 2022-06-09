@@ -20,24 +20,28 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 <body>
-<a href="/">choose user type</a>
-<div class="card shadow-lg" style="width: 30rem;">
-    <div class="card-body">
-        <p class="text-center fs-3 fw-bolder">Login</p>
+    <div class="card shadow-lg" style="width: 30rem;">
+        <div class="card-body">
+            <p class="text-center fs-3 fw-bolder">Login</p>
         </div>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="email" placeholder="name@example.com">
-            <label for="email">Email address</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password" placeholder="password">
-            <label for="password">Password</label>
-        </div>
-        <div class="btn-custom">
-            <button onclick="login()" type="button" class="btn btn-login-custom text-light">Login</button>
+        <div class="card-custom">
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                <label for="email">Email address</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" placeholder="password">
+                <label for="password">Password</label>
+            </div>
+            <div class="btn-custom">
+                <button onclick="login()" type="button" class="btn btn-login-custom text-light">Login</button>
+            </div>
         </div>
         <div class="hadnt" id="footer">
             <a class="link text-decoration-none" href="/register">I haven't account</a>
+        </div>
+        <div class="change-type">
+            <a href="/">Choose user type</a>
         </div>
     </div>
 </div>

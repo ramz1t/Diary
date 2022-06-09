@@ -19,33 +19,37 @@
     <link rel="stylesheet" href='../static/styles/register.css'>
 </head>
 <body>
-<a href="/">choose user type</a>
-<div class="card shadow-lg" style="width: 30rem;">
-    <div class="card-body">
-        <p class="text-center fs-3 fw-bolder">Registration</p>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="email" placeholder="name@example.com">
-            <label for="email">Email address</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password" placeholder="password">
-            <label for="password">Password</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="repeatpassword" placeholder="password">
-            <label for="repeatpassword">Repeat password</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="secretkey" class="form-control" id="secretkey" placeholder="example">
-            <label for="secretkey">Enter secretkey</label>
-        </div>
-        <div class="btn-custom">
-            <button onclick="submit()" type="button" class="btn btn-login-custom text-light">Register</button>
-        </div>
-        <div class="had">
-            <a class="link text-decoration-none" href="/login">I already have an account</a>
+    <div class="card shadow-lg" style="width: 30rem;">
+        <div class="card-body">
+            <p class="text-center fs-3 fw-bolder">Registration</p>
+            <div class="card-custom">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                    <label for="email">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" placeholder="password">
+                    <label for="password">Password</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="repeatpassword" placeholder="password">
+                    <label for="repeatpassword">Repeat password</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="secretkey" class="form-control" id="secretkey" placeholder="example">
+                    <label for="secretkey">Enter secretkey</label>
+                </div>
+                <div class="btn-custom">
+                    <button onclick="submit()" type="button" class="btn btn-login-custom text-light">Register</button>
+                </div>
+            </div>
+                <div class="had">
+                    <a class="link text-decoration-none" href="/login">I already have an account</a>
+                </div>
+                <div class="change-type">
+                    <a href="/">Choose user type</a>
+                </div>
         </div>
     </div>
-</div>
 </body>
 </html>

@@ -13,10 +13,19 @@
 .card{
     float: right;
     right: 10vw;
-    top: 20vw;
+    top: 10vw;
 }
 
 .hadnt{
+    text-align:center;
+    padding: .5vw;
+}
+
+.card-custom{
+    padding: 0.6vw;
+}
+
+.change-type{
     text-align:center;
     padding: .5vw;
 }
