@@ -18,7 +18,17 @@ templates = Jinja2Templates(directory="views/templates")
 
 
 @app.get('/')
-def login_page(request: Request):
+def mainpage(request: Request):
+    return templates.TemplateResponse('mainpage.html', {"request": request})
+
+
+@app.get('/register')
+def register(request: Request):
+    return templates.TemplateResponse('register.html', {"request": request})
+
+
+@app.get('/login')
+def login(request: Request):
     return templates.TemplateResponse('login.html', {"request": request})
 
 
