@@ -36,10 +36,16 @@
         <div class="btn-custom">
             <button onclick="login()" type="button" class="btn btn-login-custom text-light">Login</button>
         </div>
-        <div class="hadnt">
+        <div class="hadnt" id="footer">
             <a class="link text-decoration-none" href="/register">I haven't account</a>
         </div>
     </div>
 </div>
 </body>
 </html>
+<script>
+    var type = $.cookie('type');
+    if (type === 'admin') {
+        document.getElementById('footer').innerHTML = '';
+    }
+</script>
