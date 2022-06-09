@@ -32,8 +32,8 @@ def login(request: Request):
     return templates.TemplateResponse('login.html', {"request": request})
 
 
-@app.post("/token", response_model=Token)
-def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
+@app.post("/token/{type}", response_model=Token)
+def login_for_access_token(type, response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
