@@ -4,8 +4,10 @@ import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
-from logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
-from models.token import Token
+from Dairy.logic.group import add_new_group
+from Dairy.models.group import ApiGroup
+from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from Dairy.models.token import Token
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -32,9 +34,9 @@ def login(request: Request):
     return templates.TemplateResponse('login.html', {"request": request})
 
 
-@app.post("/token/{type}", response_model=Token)
-def login_for_access_token(type, response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(email=form_data.username, password=form_data.password, type=type)
+@app.post("/token/{usertype}", response_model=Token)
+def login_for_access_token(usertype, response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(email=form_data.username, password=form_data.password, type=usertype)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -50,7 +52,17 @@ def login_for_access_token(type, response: Response, form_data: OAuth2PasswordRe
 
 @app.get('/admin')
 def adminpage(request: Request):
-    return 'logged in to admin'
+    return templates.TemplateResponse('admin/panel.html', {"request": request})
+
+
+@app.get('/groups')
+def groups():
+    pass
+
+
+@app.post('/add_group')
+def add_group(group: ApiGroup):
+    return add_new_group(group)
 
 
 if __name__ == '__main__':

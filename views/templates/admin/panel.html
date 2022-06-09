@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+    <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
+</head>
+<body>
+<h1>Add key</h1>
+<h3>Name</h3>
+<input id="name" type="text">
+<h3>Surname</h3>
+<input id="surname" type="text">
+<h3>Group</h3>
+<input id="group" type="text">
+<button onclick="addKey()">add key</button>
+<h1>Add group</h1>
+<h3>Group name</h3>
+<input id="groupname" type="text">
+<button onclick="addGroup()">add group</button>
+<h1>All groups</h1>
+
+</body>
+</html>

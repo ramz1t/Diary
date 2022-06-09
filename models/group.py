@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
-from data.data import Base
+from Dairy.data.data import Base
 
 
 class Group(Base):
