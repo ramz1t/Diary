@@ -15,9 +15,5 @@ class Teacher(Base):
 
 
 class ApiTeacher(BaseModel):
-    id: int
-    name: str
     password: str
     email: str
-    school_id: int
-    subject: str

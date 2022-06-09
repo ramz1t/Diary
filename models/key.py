@@ -10,6 +10,7 @@ class Key(Base):
     name = Column(String)
     surname = Column(String)
     group = Column(String)
+    school_id = Column(Integer)
 
 
 class ApiKey(BaseModel):
@@ -17,3 +18,4 @@ class ApiKey(BaseModel):
     name: str
     surname: str
     group: str
+    school_id: int

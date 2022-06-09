@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
-from data.data import Base
+from Dairy.data.data import Base
 
 
 class Student(Base):
@@ -11,13 +11,11 @@ class Student(Base):
     password = Column(String)
     email = Column(String)
     school_id = Column(Integer)
+    group = Column(String)
     # marks = relationship(Mark)
 
 
 class ApiStudent(BaseModel):
-    id: int
-    name: str
-    surname: str
     password: str
     email: str
-    school_id: int
+    key: str

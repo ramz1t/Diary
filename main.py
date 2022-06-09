@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 import uvicorn
+from uvicorn import run
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -8,10 +9,13 @@ from Dairy.logic.group import add_new_group
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from Dairy.models.token import Token
+from models.student import ApiStudent
+from logic.student import create_new_student
+
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from uvicorn import run
+
 
 
 app = FastAPI()
@@ -27,6 +31,12 @@ def mainpage(request: Request):
 @app.get('/register')
 def register(request: Request):
     return templates.TemplateResponse('register.html', {"request": request})
+
+
+@app.get('/create_student')
+def create_account(student: ApiStudent):
+    response = create_new_student(student)
+    return response
 
 
 @app.get('/login')
