@@ -1,0 +1,17 @@
+.btn-login-custom{
+    background-color:#004d00 !important;
+    width: 100%;
+}
+
+.btn-custom{
+    margin: auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.card{
+    float: right;
+    right: 10vw;
+    top: 20vw;
+}
