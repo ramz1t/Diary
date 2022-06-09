@@ -65,8 +65,8 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def authenticate_user(email: str, password: str):
-    user = get_user_by_email(email)
+def authenticate_user(email: str, password: str, type: str):
+    user = get_user_by_email(email=email, type=type)
     if not user:
         return False
     if not verify_password(password, user.password):

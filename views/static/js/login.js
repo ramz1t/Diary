@@ -1,7 +1,9 @@
 async function login() {
+    var type = $.cookie("type");
+    console.log(type);
     var pass = document.getElementById("password").value;
     var email = document.getElementById("email").value;
-    var response = await fetch('/token', {
+    var response = await fetch('/token/' + type, {
         method: 'POST',
         headers: {
             'accept': 'application/json'
@@ -11,8 +13,8 @@ async function login() {
             'password': pass
         })
     });
-    if (response.status == '200') {
-        alert('LOGIN DONE');
+    if (response.ok) {
+        window.open('/' + type);
     } else {
         alert(response.status);
     }
