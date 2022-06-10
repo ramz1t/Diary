@@ -1,25 +1,23 @@
 from datetime import timedelta
 
 import uvicorn
-from uvicorn import run
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from Dairy.logic.group import add_new_group
-from Dairy.logic.key import add_new_key
+from Dairy.logic.key import add_new_key, get_all_groups
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from Dairy.models.key import ApiKey
 from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
-from models.student import ApiStudent
-from logic.student import create_new_student
+from Dairy.models.student import ApiStudent
+from Dairy.logic.student import create_new_student
 
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
 
 
 app = FastAPI()
@@ -72,12 +70,9 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 @app.get('/admin')
 def adminpage(request: Request):
-    return templates.TemplateResponse('admin/panel.html', {"request": request})
-
-
-@app.get('/groups')
-def groups():
-    pass
+    groups = get_all_groups()
+    return templates.TemplateResponse('admin/panel.html', {"request": request,
+                                                           "groups": groups})
 
 
 @app.post('/add_group')
@@ -91,4 +86,4 @@ def add_key(key: ApiKey):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8002)
+    uvicorn.run(app, host='127.0.0.1', port=8003)

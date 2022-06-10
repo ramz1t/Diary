@@ -37,8 +37,13 @@ async function addKey() {
                             })
                         });
     if (response.ok) {
-        alert('key added');
+        window.open('/admin', '_self')
     } else {
         alert('error');
     }
+}
+
+function changegroup(value) {
+    console.log(value);
+    document.getElementById("export").download = `/files/${value}.txt`;
 }

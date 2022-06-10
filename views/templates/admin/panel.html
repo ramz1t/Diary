@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Admin panel</title>
     <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
 <h1>Add key</h1>
@@ -21,6 +22,11 @@
 <input id="groupname" type="text">
 <button onclick="addGroup()">add group</button>
 <h1>All groups</h1>
-
+{% for name in groups %}
+<input id="{{ name }}" type="radio" name="groups" value="{{ name }}">
+<label onclick="changegroup('{{name}}')" for="{{ name }}">{{ name }}</label>
+{% endfor %}
+<br>
+<a href="" id="export" download>export</a>
 </body>
 </html>

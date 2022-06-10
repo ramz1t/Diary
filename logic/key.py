@@ -30,3 +30,9 @@ def delete_key(value: str):
         key = session.query(Key).filter_by(value=value).first()
         session.delete(key)
         session.commit()
+
+
+def get_all_groups():
+    with Sessions() as session:
+        keys = session.query(Key).all()
+        return set([key.group for key in keys])
