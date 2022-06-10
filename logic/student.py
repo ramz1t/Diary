@@ -3,7 +3,7 @@ from Dairy.data.data import Sessions
 from fastapi.responses import JSONResponse
 from fastapi import status
 from Dairy.logic.auth import get_password_hash
-from Dairy.logic.key import get_key
+from Dairy.logic.key import get_key, delete_key
 
 
 def create_new_student(student: ApiStudent):
@@ -17,4 +17,5 @@ def create_new_student(student: ApiStudent):
                           surname=key.surname, school_id=key.school_id, group=key.group)
         session.add(student)
         session.commit()
+        delete_key(key.value)
     return JSONResponse(status_code=status.HTTP_201_CREATED, content='Student created')

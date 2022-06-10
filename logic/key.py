@@ -23,3 +23,10 @@ def add_new_key(key: ApiKey):
         session.add(key)
         session.commit()
     return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
+
+
+def delete_key(value: str):
+    with Sessions() as session:
+        key = session.query(Key).filter_by(value=value).first()
+        session.delete(key)
+        session.commit()

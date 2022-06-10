@@ -7,9 +7,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from Dairy.logic.group import add_new_group
 from Dairy.logic.key import add_new_key
+from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from Dairy.models.key import ApiKey
+from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from models.student import ApiStudent
 from logic.student import create_new_student
@@ -38,6 +40,12 @@ def register(request: Request):
 @app.post('/create_student')
 def create_account(student: ApiStudent):
     response = create_new_student(student)
+    return response
+
+
+@app.post('/create_teacher')
+def create_teacher(teacher: ApiTeacher):
+    response = create_new_teacher(teacher)
     return response
 
 
