@@ -1,8 +1,25 @@
+from fastapi.responses import JSONResponse
+from fastapi import status
 from Dairy.data.data import Sessions
-from Dairy.models.key import Key
+from Dairy.models.key import Key, ApiKey
+from random import randint
+import string
+
+
+symbols = string.digits + string.ascii_letters
 
 
 def get_key(value: str):
     with Sessions() as session:
         key = session.query(Key).filter_by(value=value).first()
         return key
+
+
+def add_new_key(key: ApiKey):
+    with Sessions() as session:
+        value = ''.join([symbols[randint(0, 62)] for _ in range(5)])
+        key = Key(value=value, name=key.name, surname=key.surname,
+                  group=key.group, school_id=key.school_id)
+        session.add(key)
+        session.commit()
+    return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')

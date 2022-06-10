@@ -14,7 +14,6 @@ class Key(Base):
 
 
 class ApiKey(BaseModel):
-    value: str
     name: str
     surname: str
     group: str

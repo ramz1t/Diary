@@ -6,8 +6,10 @@ from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from Dairy.logic.group import add_new_group
+from Dairy.logic.key import add_new_key
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from Dairy.models.key import ApiKey
 from Dairy.models.token import Token
 from models.student import ApiStudent
 from logic.student import create_new_student
@@ -33,7 +35,7 @@ def register(request: Request):
     return templates.TemplateResponse('register.html', {"request": request})
 
 
-@app.get('/create_student')
+@app.post('/create_student')
 def create_account(student: ApiStudent):
     response = create_new_student(student)
     return response
@@ -75,5 +77,10 @@ def add_group(group: ApiGroup):
     return add_new_group(group)
 
 
+@app.post('/add_key')
+def add_key(key: ApiKey):
+    return add_new_key(key)
+
+
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8001)
+    uvicorn.run(app, host='127.0.0.1', port=8002)

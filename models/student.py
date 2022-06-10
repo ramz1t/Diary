@@ -1,10 +1,11 @@
 from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
-from Dairy.data.data import Base
+from data.data import Base
 
 
 class Student(Base):
     __tablename__ = 'students'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     name = Column(String)
     surname = Column(String)
