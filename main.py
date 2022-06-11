@@ -33,9 +33,10 @@ def mainpage(request: Request):
     return templates.TemplateResponse('mainpage.html', {"request": request})
 
 
-@app.get('/register')
-def register(request: Request):
-    return templates.TemplateResponse('register.html', {"request": request})
+@app.get('/{usertype}/register')
+def register(usertype: str, request: Request):
+    return templates.TemplateResponse('register.html', {"request": request,
+                                                        "usertype": usertype})
 
 
 @app.post('/create_student')
@@ -50,9 +51,10 @@ def create_teacher(teacher: ApiTeacher):
     return response
 
 
-@app.get('/login')
-def login(request: Request):
-    return templates.TemplateResponse('login.html', {"request": request})
+@app.get('/{usertype}/login')
+def login(usertype: str, request: Request):
+    return templates.TemplateResponse('login.html', {"request": request,
+                                                     "usertype": usertype})
 
 
 @app.post("/token/{usertype}", response_model=Token)
@@ -76,6 +78,12 @@ def adminpage(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups_by_school(current_user.email)
     return templates.TemplateResponse('admin/panel.html', {"request": request,
                                                            "groups": groups})
+
+
+@app.get('/student')
+def studentprofile(request: Request, current_user=Depends(get_current_user)):
+    return templates.TemplateResponse('student/profile.html', {"request": request,
+                                                               "email": current_user.email})
 
 
 @app.post('/add_group')

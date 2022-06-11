@@ -14,6 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script type="text/javascript" src="{{ url_for('static', path='js/auth.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', path='js/settings.js') }}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href='../static/styles/register.css'>
@@ -21,7 +23,7 @@
 <body>
     <div class="card shadow-lg" style="width: 30rem;">
         <div class="card-body">
-            <p class="text-center fs-3 fw-bolder">Registration</p>
+            <p class="text-center fs-3 fw-bolder">Register ({{ usertype }})</p>
             <div class="card-custom">
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="email" placeholder="name@example.com">
@@ -44,7 +46,7 @@
                 </div>
             </div>
                 <div class="had">
-                    <a class="link text-decoration-none" href="/login">I already have an account</a>
+                    <a class="link text-decoration-none" onclick="openLoginPage($.cookie('type'))">I already have an account</a>
                 </div>
                 <div class="change-type">
                     <a href="/">Choose user type</a>

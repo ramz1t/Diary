@@ -39,3 +39,7 @@ async function submit() {
         alert("все работает")
     }
 }
+
+function openLoginPage(type) {
+    window.open(SERVER_DOMAIN + `/${type}/login`, '_self')
+}

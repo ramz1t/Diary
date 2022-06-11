@@ -4,6 +4,7 @@
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <script type="text/javascript" src="{{ url_for('static', path='js/login.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', path='js/settings.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
             integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
             crossorigin="anonymous"></script>
@@ -22,7 +23,7 @@
 <body>
     <div class="card shadow-lg" style="width: 30rem;">
         <div class="card-body">
-            <p class="text-center fs-3 fw-bolder">Login</p>
+            <p class="text-center fs-3 fw-bolder">Login ({{ usertype }})</p>
         </div>
         <div class="card-custom">
             <div class="form-floating mb-3">
@@ -38,7 +39,7 @@
             </div>
         </div>
         <div class="hadnt" id="footer">
-            <a class="link text-decoration-none" href="/register">I haven't account</a>
+            <a class="link text-decoration-none" onclick="openRegisterPage($.cookie('type'))">I don't have an account</a>
         </div>
         <div class="change-type">
             <a href="/">Choose user type</a>

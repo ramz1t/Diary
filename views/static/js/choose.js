@@ -1,4 +1,4 @@
 function choose(type) {
     document.cookie = "type=" + type;
-    window.open('/login', '_self')
+    window.open(`${type}/login`, '_self')
 }

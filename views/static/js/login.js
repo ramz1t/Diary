@@ -18,3 +18,7 @@ async function login() {
         alert(response.status);
     }
 }
+
+function openRegisterPage(type) {
+    window.open(SERVER_DOMAIN + `/${type}/register`, '_self')
+}
