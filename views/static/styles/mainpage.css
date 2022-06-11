@@ -1,3 +1,7 @@
+body{
+    background-image: url("../photos/bg1.jpg");
+}
+
 .btn-login-custom{
     background-color:#004d00 !important;
     width: 100%;
