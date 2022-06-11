@@ -23,4 +23,4 @@ def create_file(group: str):
     with open(f'files/{group}.txt', 'w') as file:
         file.write(group + '\n')
         for key in keys:
-            file.write(f'{key.value} - {key.surname} {key.name}')
+            file.write(f'{key.value} - {key.surname} {key.name}\n')

@@ -87,6 +87,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="token")
 
+
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -101,7 +102,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user_by_email(email=token_data.username)
+    user = get_user_by_email(email=token_data.username, type=payload.get('type'))
     if user is None:
         raise credentials_exception
     return user

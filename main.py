@@ -4,18 +4,16 @@ import uvicorn
 
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import Response
+from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from starlette.responses import FileResponse
-
 from Dairy.func.helpers import create_file
 from Dairy.logic.group import add_new_group
-from Dairy.logic.key import add_new_key, get_all_groups
+from Dairy.logic.key import add_new_key, get_groups_by_school
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.group import ApiGroup
-from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.key import ApiKey
 from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
@@ -67,15 +65,15 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data={"sub": user.email, "type": usertype}, expires_delta=access_token_expires
     )
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     return {"access_token": access_token, "token_type": "bearer"}
 
 
 @app.get('/admin')
-def adminpage(request: Request):
-    groups = get_all_groups()
+def adminpage(request: Request, current_user=Depends(get_current_user)):
+    groups = get_groups_by_school(current_user.email)
     return templates.TemplateResponse('admin/panel.html', {"request": request,
                                                            "groups": groups})
 
