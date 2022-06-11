@@ -43,7 +43,6 @@ async function addKey() {
     }
 }
 
-function changegroup(value) {
-    console.log(value);
-    document.getElementById("export").download = `/files/${value}.txt`;
+function download(value) {
+    window.open(`download/${value}`)
 }

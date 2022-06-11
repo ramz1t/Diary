@@ -8,8 +8,8 @@ from data.data import Sessions
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from models.token import TokenData
-from func.helpers import get_user_by_email
+from Dairy.models.token import TokenData
+from Dairy.func.helpers import get_user_by_email
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"

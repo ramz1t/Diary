@@ -23,10 +23,10 @@
 <button onclick="addGroup()">add group</button>
 <h1>All groups</h1>
 {% for name in groups %}
-<input id="{{ name }}" type="radio" name="groups" value="{{ name }}">
-<label onclick="changegroup('{{name}}')" for="{{ name }}">{{ name }}</label>
+<label for="{{ name }}">{{ name }}</label>
+<button id="{{ name }}" onclick="download('{{ name }}')">export</button>
+<br>
 {% endfor %}
 <br>
-<a href="" id="export" download>export</a>
 </body>
 </html>

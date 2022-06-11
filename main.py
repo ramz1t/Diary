@@ -1,9 +1,16 @@
 from datetime import timedelta
 
 import uvicorn
+
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import Response
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
+from starlette.responses import FileResponse
+
+from Dairy.func.helpers import create_file
 from Dairy.logic.group import add_new_group
 from Dairy.logic.key import add_new_key, get_all_groups
 from Dairy.logic.teacher import create_new_teacher
@@ -15,9 +22,7 @@ from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
 from Dairy.logic.student import create_new_student
 
-from fastapi.responses import Response
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+
 
 
 app = FastAPI()
@@ -83,6 +88,14 @@ def add_group(group: ApiGroup):
 @app.post('/add_key')
 def add_key(key: ApiKey):
     return add_new_key(key)
+
+
+@app.get('/download/{filename}')
+def download_file(filename):
+    create_file(filename)
+    return FileResponse(f'./files/{filename}.txt',
+                        media_type='application/octet-stream',
+                        filename=filename)
 
 
 if __name__ == '__main__':
