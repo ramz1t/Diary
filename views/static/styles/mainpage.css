@@ -19,3 +19,7 @@ body{
     right: 10vw;
     top: 20vw;
 }
+
+#logo {
+    padding: 25px;
+}

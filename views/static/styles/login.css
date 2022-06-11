@@ -33,3 +33,7 @@ body{
     text-align:center;
     padding: .5vw;
 }
+
+#logo {
+    padding: 25px;
+}
