@@ -19,6 +19,7 @@
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href='../static/styles/register.css'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
 </head>
 <body>
 <img id="logo" src="{{ url_for('static', path='photos/dairy.png') }}">
@@ -40,7 +41,7 @@
                 </div>
                 <div class="form-floating mb-3">
                     <input type="secretkey" class="form-control" id="secretkey" placeholder="example">
-                    <label for="secretkey">Enter secretkey</label>
+                    <label for="secretkey"><i class="bi bi-link icon-custom"></i>Enter secretkey</label>
                 </div>
                 <div class="btn-custom">
                     <button onclick="submit()" type="button" class="btn btn-login-custom text-light">Register</button>
