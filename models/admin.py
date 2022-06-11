@@ -5,6 +5,7 @@ from data.data import Base
 
 class Admin(Base):
     __tablename__ = 'admins'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     email = Column(String)
     password = Column(String)
