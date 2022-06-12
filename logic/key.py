@@ -17,7 +17,7 @@ def get_key(value: str):
 
 def add_new_key(key: ApiKey, school_id: int):
     with Sessions() as session:
-        value = ''.join([symbols[randint(0, 62)] for _ in range(5)])
+        value = ''.join([symbols[randint(0, 62)] for _ in range(8)])
         key = Key(value=value, name=key.name, surname=key.surname,
                   group=key.group, school_id=school_id)
         session.add(key)
