@@ -14,4 +14,3 @@ class Group(Base):
 
 class ApiGroup(BaseModel):
     name: str
-    school_id: int

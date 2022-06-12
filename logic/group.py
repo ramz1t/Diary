@@ -4,11 +4,17 @@ from fastapi.responses import JSONResponse
 from fastapi import status
 
 
-def add_new_group(group: ApiGroup):
+def add_new_group(group: ApiGroup, school_id: int):
     with Sessions() as session:
         if not session.query(Group).filter_by(name=group.name).first() is None:
             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
-        group = Group(name=group.name)
+        group = Group(name=group.name, school_id=school_id)
         session.add(group)
         session.commit()
     return JSONResponse(status_code=status.HTTP_201_CREATED, content='Group created successfully')
+
+
+def get_groups(school_id: int):
+    with Sessions() as session:
+        groups = session.query(Group).filter_by(school_id=school_id).all()
+        return set([group.name for group in groups])

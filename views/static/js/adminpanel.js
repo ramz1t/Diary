@@ -21,7 +21,11 @@ async function addGroup() {
 async function addKey() {
     var name = document.getElementById('name').value;
     var surname = document.getElementById('surname').value;
-    var group = document.getElementById('group').value;
+    if (document.querySelector('input[name="group"]:checked') != null) {
+        var group = document.querySelector('input[name="group"]:checked').value;
+    } else {
+        return
+    }
     var response = await fetch('/add_key', {
                             method: 'POST',
                             headers: {

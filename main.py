@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from Dairy.func.helpers import create_file
-from Dairy.logic.group import add_new_group
+from Dairy.logic.group import add_new_group, get_groups
 from Dairy.logic.key import add_new_key, get_groups_by_school
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.group import ApiGroup
@@ -76,8 +76,10 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 @app.get('/admin')
 def adminpage(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups_by_school(current_user.email)
+    create_groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/panel.html', {"request": request,
-                                                           "groups": groups})
+                                                           "groups": groups,
+                                                           "create_groups": create_groups})
 
 
 @app.get('/student')
@@ -87,8 +89,8 @@ def studentprofile(request: Request, current_user=Depends(get_current_user)):
 
 
 @app.post('/add_group')
-def add_group(group: ApiGroup):
-    return add_new_group(group)
+def add_group(group: ApiGroup, current_user=Depends(get_current_user)):
+    return add_new_group(group, current_user.email)
 
 
 @app.post('/add_key')
