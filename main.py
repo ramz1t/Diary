@@ -92,8 +92,8 @@ def add_group(group: ApiGroup):
 
 
 @app.post('/add_key')
-def add_key(key: ApiKey):
-    return add_new_key(key)
+def add_key(key: ApiKey, current_user=Depends(get_current_user)):
+    return add_new_key(key, current_user.email)
 
 
 @app.get('/download/{filename}')

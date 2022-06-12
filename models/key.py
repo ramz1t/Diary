@@ -17,4 +17,3 @@ class ApiKey(BaseModel):
     name: str
     surname: str
     group: str
-    school_id: int
