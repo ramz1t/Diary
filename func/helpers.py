@@ -17,9 +17,9 @@ def get_user_by_email(email: str, type: str):
             return session.query(Teacher).filter_by(email=email).first()
 
 
-def create_file(group: str):
+def create_file(group: str, school_id: int):
     with Sessions() as session:
-        keys = session.query(Key).filter_by(group=group).all()
+        keys = session.query(Key).filter_by(group=group, school_id=school_id).all()
     with open(f'files/{group}.txt', 'w') as file:
         file.write(group + '\n')
         for key in keys:

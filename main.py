@@ -97,8 +97,8 @@ def add_key(key: ApiKey):
 
 
 @app.get('/download/{filename}')
-def download_file(filename):
-    create_file(filename)
+def download_file(filename, current_user=Depends(get_current_user)):
+    create_file(filename, current_user.email)
     return FileResponse(f'./files/{filename}.txt',
                         media_type='application/octet-stream',
                         filename=filename)
