@@ -13,7 +13,7 @@ class Student(Base):
     email = Column(String)
     school_id = Column(Integer)
     group = Column(String)
-    group_id = Column(Integer, ForeignKey("groups.id"))
+    #group_id = Column(Integer, ForeignKey("groups.id"))
     # marks = relationship(Mark)
 
 
