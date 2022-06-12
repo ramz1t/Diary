@@ -1,15 +1,16 @@
 from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
 from data.data import Base
+from sqlalchemy.orm import relationship
 
 
 class Group(Base):
     __tablename__ = 'groups'
-    name = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
     school_id = Column(Integer)
-    # students: relationship(Student)
+    students = relationship("Student")
     # tasks: relationship(Task)
-    # teacher: relationship - back(Teacher)
 
 
 class ApiGroup(BaseModel):

@@ -10,6 +10,7 @@ class School(Base):
     city = Column(String)
 
 
+
 class ApiSchool(BaseModel):
     id: int
     name: str

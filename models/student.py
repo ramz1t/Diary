@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from pydantic import BaseModel
 from data.data import Base
 
@@ -13,6 +13,7 @@ class Student(Base):
     email = Column(String)
     school_id = Column(Integer)
     group = Column(String)
+    group_id = Column(Integer, ForeignKey("groups.id"))
     # marks = relationship(Mark)
 
 

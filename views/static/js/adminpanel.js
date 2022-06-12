@@ -48,3 +48,7 @@ async function addKey() {
 function download(value) {
     window.open(`download/${value}`)
 }
+
+function logout() {
+    window.open('admin/login');
+}
