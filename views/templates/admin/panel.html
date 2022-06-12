@@ -1,12 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin panel</title>
     <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!--    <link rel="stylesheet" href="{{ url_for('static', path='styles/admin/panel.css') }}">-->
+<!--    {% include 'components/bootstrap.html' %}-->
 </head>
-<body>
+    <body>
+<!--        <div class="card shadow-lg" style="width: 30rem;">-->
+<!--            <div class="card-body">-->
+<!--                <p class="text-center fs-3 fw-bolder">Add Key</p>-->
+<!--            </div>-->
+<!--            <div class="card-custom">-->
+<!--                <div class="form-floating mb-3">-->
+<!--                    <input type="text" class="form-control" id="name">-->
+<!--                    <label for="name">Name</label>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <input type="text" class="form-control" id="surname">-->
+<!--                    <label for="surname">Surname</label>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <input type="text" class="form-control" id="schoolid">-->
+<!--                    <label for="schoolid">School id</label>-->
+<!--                </div>-->
+<!--                <div class="btn">-->
+<!--                    <button onclick="addKey()" type="button" class="btn btn-login-custom text-light">Add Key</button>-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                    <p class="text-center fs-3 fw-bolder">Add Group</p>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <input type="text" class="form-control" id="groupname">-->
+<!--                    <label for="groupname"></label>-->
+<!--                </div>-->
+<!--                <div class="btn">-->
+<!--                    <button onclick="addGroup()" type="button"-->
+<!--                            class="btn btn-login-custom text-light">Add Group</button>-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                    <p class="text-center fs-3 fw-bolder">All groups</p>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    {% for name in groups %}-->
+<!--                    <label for="{{ name }}">{{ name }}</label>-->
+<!--                    <button id="{{ name }}" type="button" class="btn btn-login-custom text-light"-->
+<!--                            onclick="download('{{ name }}')">export</button>-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 <h1>Add key</h1>
 <h3>Name</h3>
 <input id="name" type="text">
@@ -28,6 +72,6 @@
 <br>
 {% endfor %}
 <br>
-<a href="admin/login">logout</a>
-</body>
+<a class='logout' href="admin/login">logout</a>
+    </body>
 </html>
