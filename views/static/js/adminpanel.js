@@ -11,7 +11,7 @@ async function addGroup() {
         })
     });
     if (response.ok) {
-        alert('group added');
+        window.open('/admin', '_self');
     } else {
         alert('error');
     }
