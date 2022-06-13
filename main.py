@@ -79,7 +79,8 @@ def adminpage(request: Request, current_user=Depends(get_current_user)):
     create_groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/panel.html', {"request": request,
                                                            "groups": groups,
-                                                           "create_groups": create_groups})
+                                                           "create_groups": create_groups,
+                                                           "email": current_user.email})
 
 
 @app.get('/student')
