@@ -50,5 +50,5 @@ function download(value) {
 }
 
 function logout() {
-    window.open('admin/login');
+    window.open('admin/login', '_self');
 }
