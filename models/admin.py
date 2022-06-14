@@ -14,3 +14,8 @@ class Admin(Base):
 class ApiAdmin(BaseModel):
     email: str
     password: str
+
+
+class ChangePassword(BaseModel):
+    old_password: str
+    new_password: str

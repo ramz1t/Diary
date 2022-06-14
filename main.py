@@ -9,9 +9,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from Dairy.func.helpers import create_file
+from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups
 from Dairy.logic.key import add_new_key, get_groups_by_school
 from Dairy.logic.teacher import create_new_teacher
+from Dairy.models.admin import ChangePassword
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.key import ApiKey
@@ -19,9 +21,6 @@ from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
 from Dairy.logic.student import create_new_student
-
-
-
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
@@ -105,6 +104,12 @@ def download_file(filename, current_user=Depends(get_current_user)):
     return FileResponse(f'./files/{filename}.txt',
                         media_type='application/octet-stream',
                         filename=filename)
+
+
+@app.post("/change_password")
+def change_password(body: ChangePassword, current_user=Depends(get_current_user)):
+    return change_admin_password(email=current_user.email, old_password=body.old_password,
+                                 new_password=body.new_password)
 
 
 if __name__ == '__main__':
