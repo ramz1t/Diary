@@ -40,6 +40,7 @@ body{
   display: flex;
   flex-direction: row;
   justify-content: left;
+  position: relative;
 }
 
 .page-element {
@@ -50,4 +51,31 @@ body{
 
 .controls {
     width: 13%;
+}
+
+.wave-container {
+  background: #ffffff;
+    text-align: center;
+    overflow: hidden;
+    position: fixed;
+    width:100%;
+    bottom:0;
+}
+.wave-container > svg {
+  display: block;
+}
+
+@keyframes animateWave {
+  0% {
+    transform: scale(1,0);
+  }
+  100% {
+    transform: scale(1,1);
+  }
+}
+
+.wave-container > svg {
+  display: block;
+  transform-origin: bottom;
+  animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
