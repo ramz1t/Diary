@@ -1,25 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap');
 
-body{
+body {
     font-family: 'Montserrat', sans-serif !important;
 }
 
-.card-custom{
+.card-custom {
     padding: 0.6vw;
 }
 
-.card{
+.card {
     float: right;
     right: 10vw;
     top: 10vw;
 }
 
-.btn-login-custom{
-    background-color:#004d00 !important;
+.btn-login-custom {
+    background-color: #004d00 !important;
     width: 100%;
 }
 
-.btn-custom{
+.btn-custom {
     margin: auto;
     width: 100%;
     align-items: center;
@@ -27,20 +27,20 @@ body{
 }
 
 
-.bi-people{
+.bi-people {
     padding-right: 12px;
 }
 
-.bi-person{
+.bi-person {
     padding-right: 12px;
 }
 
 .page {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    position: relative;
 }
 
 .page-element {
@@ -54,28 +54,29 @@ body{
 }
 
 .wave-container {
-  background: #ffffff;
+    background: #ffffff;
     text-align: center;
     overflow: hidden;
     position: fixed;
-    width:100%;
-    bottom:0;
+    width: 100%;
+    bottom: 0;
 }
+
 .wave-container > svg {
-  display: block;
+    display: block;
 }
 
 @keyframes animateWave {
-  0% {
-    transform: scale(1,0);
-  }
-  100% {
-    transform: scale(1,1);
-  }
+    0% {
+        transform: scale(1, 0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
 }
 
 .wave-container > svg {
-  display: block;
-  transform-origin: bottom;
-  animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    display: block;
+    transform-origin: bottom;
+    animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
