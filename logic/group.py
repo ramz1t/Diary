@@ -21,4 +21,6 @@ def get_groups(school_id: int):
 
 
 def get_all_students_from_group(group: str):
-    pass
+    with Sessions() as session:
+        group = session.query(Group).filter_by(name=group).first()
+        return group.students

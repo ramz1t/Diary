@@ -10,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 
 from Dairy.func.helpers import create_file
 from Dairy.logic.admin import change_admin_password
-from Dairy.logic.group import add_new_group, get_groups
+from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
 from Dairy.logic.key import add_new_key, get_groups_by_school
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
