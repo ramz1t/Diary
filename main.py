@@ -135,7 +135,7 @@ def add_key_page(request: Request, current_user=Depends(get_current_user)):
 @app.get('/admin/exportkeys')
 def export_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
-    keys = get_keys_data_by_school(current_user.email)
+    keys = get_keys_by_school(current_user.email)
     return templates.TemplateResponse('admin/exportkeys.html', {"request": request,
                                                                 "groups": sorted(groups),
                                                                 "keys": keys})

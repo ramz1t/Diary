@@ -49,7 +49,8 @@ function download(value) {
 }
 
 function logout() {
-    window.open('admin/login', '_self');
+    window.open( SERVER_DOMAIN + '/admin/login', '_self');
+    document.cookie = 'access_token=; expires=-1;';
 }
 
 async function changePassword() {
