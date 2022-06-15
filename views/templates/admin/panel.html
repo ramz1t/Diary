@@ -1,97 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin panel</title>
-    <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles/admin/panel.css') }}">
-    {% include 'components/bootstrap.html' %}
-</head>
-<body>
-<div class="card shadow-lg" style="width: 30rem;">
-    <div class="card-body">
-        <p class="text-center fs-3 fw-bolder">Login as {{email}}</p>
-    </div>
-    <div class="card-custom">
-        <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true"
-                            aria-controls="collapseOne">Add key</button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                     data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" placeholder="Name">
-                            <label for="name">Name</label>
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin panel</title>
+        <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', path='styles/admin/panel.css') }}">
+        {% include 'components/bootstrap.html' %}
+    </head>
+    <body>
+        <div class="card shadow-lg" style="width: 30rem;">
+            <div class="card-body">
+                <p class="text-center fs-3 fw-bolder">Login as {{email}}</p>
+            </div>
+            <div class="card-custom">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true"
+                                aria-controls="collapseOne">Add key</button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="name" placeholder="Name">
+                                    <label for="name"><i class="bi bi-person"></i>Name</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="surname" placeholder="Surname">
+                                    <label for="surname"><i class="bi bi-person"></i>Surname</label>
+                                </div>
+                                {% for name in create_groups %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="group"
+                                       id="{{ name }}-radio" value="{{ name }}">
+                                    <label class="form-check-label" for="{{ name }}-radio">{{ name }}</label>
+                                </div>
+                                <br>
+                                {% endfor %}
+                                <button class="btn btn-login-custom text-light" onclick="addKey()">Add key</button>
+                            </div>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="surname" placeholder="Surname">
-                            <label for="surname">Surname</label>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Add group
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="groupname" placeholder="Groupname">
+                                    <label for="name"><i class="bi bi-people"></i>Groupname</label>
+                                </div>
+                                <button class="btn btn-login-custom text-light" onclick="addGroup()">Add group</button>
+                            </div>
                         </div>
-                        {% for name in create_groups %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="group"
-                                   id="{{ name }}-radio" value="{{ name }}">
-                            <label class="form-check-label" for="{{ name }}-radio">{{ name }}</label>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false"
+                                    aria-controls="collapseThree">Export keys
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {% for name in groups %}
+                                <label class="label" for="{{ name }}">{{ name }}</label>
+                                <button class="btn btn-login-custom text-light" id="{{ name }}"
+                                        onclick="download('{{ name }}')">export</button>
+                                <br>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <br>
-                        {% endfor %}
-                        <button class="btn btn-login-custom text-light" onclick="addKey()">Add key</button>
+                    </div>
                     </div>
                 </div>
+                <button id="managegroups" type="button" class="btn btn-login-custom text-light"
+                        onclick="manageGroups()">Manage groups</button>
+                <button id="logout" type="button" class="btn btn-danger" onclick="logout()">Log out</button>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Add group
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                     data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="groupname" placeholder="Groupname">
-                            <label for="name">Groupname</label>
-                        </div>
-                        <button class="btn btn-login-custom text-light" onclick="addGroup()">Add group</button>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Export keys
-                    </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                     data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        {% for name in groups %}
-                        <label class="label" for="{{ name }}">{{ name }}</label>
-                        <button class="btn btn-login-custom text-light" id="{{ name }}"
-                                onclick="download('{{ name }}')">export</button>
-                        <br>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <button id="logout" type="button" class="btn btn-danger" onclick="logout()">Log out</button>
-</div>
-
-<input type="password"  id="Old_pass" placeholder="name@example.com">
-<label for="Old_pass">Old password</label>
-<br>
-<input type="password"  id="New_pass" placeholder="name@example.com">
-<label for="New_pass">New password</label>
-<br>
-<input type="password"  id="Repeat_new_pass" placeholder="name@example.com">
-<label for="Repeat_new_pass">Repeat new password</label>
-<br>
-<button type="button"  onclick="change_password()">Ok</button>
-</body>
+        <input type="password" id="Old_pass" placeholder="name@example.com">
+        <label for="Old_pass">Old password</label>
+        <br>
+        <input type="password"  id="New_pass" placeholder="name@example.com">
+        <label for="New_pass">New password</label>
+        <br>
+        <input type="password"  id="Repeat_new_pass" placeholder="name@example.com">
+        <label for="Repeat_new_pass">Repeat new password</label>
+        <br>
+        <button type="button"  onclick="changePassword()">Ok</button>
+    </body>
 </html>

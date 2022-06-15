@@ -1,7 +1,5 @@
 from datetime import timedelta
-
 import uvicorn
-
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import Response, FileResponse
@@ -21,6 +19,7 @@ from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
 from Dairy.logic.student import create_new_student
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
@@ -115,6 +114,7 @@ def change_password(body: ChangePassword, current_user=Depends(get_current_user)
 @app.get('/all_students/{group}')
 def all_students(group):
     return get_all_students_from_group(group)
+
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8003)

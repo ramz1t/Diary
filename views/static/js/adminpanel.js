@@ -52,7 +52,7 @@ function logout() {
     window.open('admin/login', '_self');
 }
 
-async function change_password() {
+async function changePassword() {
     var new_pass = document.getElementById("New_pass").value;
     var old_pass = document.getElementById("Old_pass").value;
     var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
@@ -72,4 +72,8 @@ async function change_password() {
             'old_password': old_pass
         })
     });
+}
+
+async function manageGroups(){
+    window.open('/managegroups', '_self')
 }
