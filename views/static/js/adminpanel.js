@@ -75,5 +75,5 @@ async function changePassword() {
 }
 
 async function manageGroups(){
-    window.open('/managegroups', '_self')
+    window.open('/admin/managegroups', '_self')
 }

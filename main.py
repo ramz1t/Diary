@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 from Dairy.func.helpers import create_file
 from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
-from Dairy.logic.key import add_new_key, get_groups_by_school
+from Dairy.logic.key import add_new_key, get_keys_by_school
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
 from Dairy.models.group import ApiGroup
@@ -73,11 +73,11 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 @app.get('/admin')
 def adminpage(request: Request, current_user=Depends(get_current_user)):
-    groups = get_groups_by_school(current_user.email)
-    create_groups = get_groups(current_user.email)
+    keys = get_keys_by_school(current_user.email)
+    groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/panel.html', {"request": request,
+                                                           "keys": keys,
                                                            "groups": groups,
-                                                           "create_groups": create_groups,
                                                            "email": current_user.email})
 
 
@@ -114,6 +114,13 @@ def change_password(body: ChangePassword, current_user=Depends(get_current_user)
 @app.get('/all_students/{group}')
 def all_students(group):
     return get_all_students_from_group(group)
+
+
+@app.get('/admin/managegroups')
+def manage_groups(request: Request, current_user=Depends(get_current_user)):
+    groups = get_groups(current_user.email)
+    return templates.TemplateResponse('admin/managegroups.html', {"request": request,
+                                                                  "groups": sorted(groups)})
 
 
 if __name__ == '__main__':

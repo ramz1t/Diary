@@ -31,7 +31,7 @@
                                     <input type="text" class="form-control" id="surname" placeholder="Surname">
                                     <label for="surname"><i class="bi bi-person"></i>Surname</label>
                                 </div>
-                                {% for name in create_groups %}
+                                {% for name in groups %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="group"
                                        id="{{ name }}-radio" value="{{ name }}">
@@ -70,7 +70,7 @@
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                {% for name in groups %}
+                                {% for name in keys %}
                                 <label class="label" for="{{ name }}">{{ name }}</label>
                                 <button class="btn btn-login-custom text-light" id="{{ name }}"
                                         onclick="download('{{ name }}')">export</button>
