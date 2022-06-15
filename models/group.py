@@ -13,5 +13,15 @@ class Group(Base):
     # tasks: relationship(Task)
 
 
+class Subject(Base):
+    __tablename__ = 'subjects'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+
+
 class ApiGroup(BaseModel):
+    name: str
+
+
+class ApiSubject(BaseModel):
     name: str
