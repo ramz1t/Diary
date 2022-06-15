@@ -112,5 +112,9 @@ def change_password(body: ChangePassword, current_user=Depends(get_current_user)
                                  new_password=body.new_password)
 
 
+@app.get('/all_students/{group}')
+def all_students(group):
+    return get_all_students_from_group(group)
+
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8003)
