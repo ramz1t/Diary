@@ -36,3 +36,9 @@ def get_keys_by_school(school_id: int):
     with Sessions() as session:
         keys = session.query(Key).filter_by(school_id=school_id).all()
         return set([key.group for key in keys])
+
+
+def get_keys_data_by_school(school_id: int):
+    with Sessions() as session:
+        keys = session.query(Key).filter_by(school_id=school_id).all()
+        return keys

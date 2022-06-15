@@ -17,6 +17,7 @@ class Subject(Base):
     __tablename__ = 'subjects'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    type = Column(String)
 
 
 class ApiGroup(BaseModel):
@@ -25,3 +26,4 @@ class ApiGroup(BaseModel):
 
 class ApiSubject(BaseModel):
     name: str
+    type: str

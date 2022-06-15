@@ -18,8 +18,8 @@ async function addGroup() {
 }
 
 async function addKey() {
-    var name = document.getElementById('name').value;
-    var surname = document.getElementById('surname').value;
+    var name = document.getElementById('name');
+    var surname = document.getElementById('surname');
     if (document.querySelector('input[name="group"]:checked') != null) {
         var group = document.querySelector('input[name="group"]:checked').value;
     } else {
@@ -32,13 +32,13 @@ async function addKey() {
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                'name': name,
-                                'surname': surname,
+                                'name': name.value,
+                                'surname': surname.value,
                                 'group': group
                             })
                         });
     if (response.ok) {
-        window.open('/admin', '_self')
+        window.open('/admin/add_key', '_self');
     } else {
         alert('error');
     }

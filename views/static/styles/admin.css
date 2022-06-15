@@ -2,7 +2,6 @@
 
 body{
     font-family: 'Montserrat', sans-serif !important;
-    background-image: url("../../photos/admin-bg.jpg");
 }
 
 .card-custom{
@@ -34,4 +33,21 @@ body{
 
 .bi-person{
     padding-right: 12px;
+}
+
+.page {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.page-element {
+    padding-top: 3%;
+    padding-left: 3%;
+    width: 40%;
+}
+
+.controls {
+    width: 13%;
 }

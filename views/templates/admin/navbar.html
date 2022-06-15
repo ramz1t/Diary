@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage groups</title>
-    {% include 'components/bootstrap.html' %}
-</head>
-<body>
-
-<div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
+<div class="flex-shrink-0 p-3 bg-white">
     <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
         <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
         <span style="padding-left: 15px" class="fs-5 fw-semibold">Admin Panel</span>
@@ -20,7 +11,7 @@
             </button>
             <div class="collapse show" id="home-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">Add</a></li>
+                    <li><a href="" class="link-dark rounded">Add</a></li>
                     <li><a href="#" class="link-dark rounded">Edit</a></li>
                 </ul>
             </div>
@@ -32,7 +23,7 @@
             </button>
             <div class="collapse" id="dashboard-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">Add</a></li>
+                    <li><a href="/admin/add_key" class="link-dark rounded">Add</a></li>
                     <li><a href="#" class="link-dark rounded">Export</a></li>
                 </ul>
             </div>
@@ -46,11 +37,9 @@
             <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="#" class="link-dark rounded">Change password</a></li>
-                    <li><a href="#" class="link-dark rounded">Sign out</a></li>
+                    <li><a href="/admin/login" class="link-dark rounded">Sign out</a></li>
                 </ul>
             </div>
         </li>
     </ul>
 </div>
-</body>
-</html>

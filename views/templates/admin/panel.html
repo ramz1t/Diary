@@ -4,10 +4,11 @@
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin panel</title>
         <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
-        <link rel="stylesheet" href="{{ url_for('static', path='styles/admin/panel.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', path='styles/admin.css') }}">
         {% include 'components/bootstrap.html' %}
     </head>
     <body>
+    {% include 'admin/navbar.html' %}
         <div class="card shadow-lg" style="width: 30rem;">
             <div class="card-body">
                 <p class="text-center fs-3 fw-bolder">Login as {{email}}</p>
