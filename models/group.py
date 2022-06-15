@@ -9,7 +9,7 @@ class Group(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     school_id = Column(Integer)
-    #students = relationship("Student")
+    students = relationship("Student")
     # tasks: relationship(Task)
 
 
