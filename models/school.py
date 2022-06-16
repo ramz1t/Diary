@@ -8,10 +8,10 @@ class School(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     city = Column(String)
-
+    #groups = relationship(groups)
+    #subjects = relationship(subjects)
 
 
 class ApiSchool(BaseModel):
-    id: int
     name: str
     city: str
