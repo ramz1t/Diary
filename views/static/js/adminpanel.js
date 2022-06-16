@@ -26,17 +26,17 @@ async function addStudentKey() {
         return
     }
     var response = await fetch('/add_key_to_db', {
-                            method: 'POST',
-                            headers: {
-                                'accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                'name': name.value,
-                                'surname': surname.value,
-                                'group': group
-                            })
-                        });
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'name': name.value,
+            'surname': surname.value,
+            'group': group
+        })
+    });
     if (response.ok) {
         window.open('/admin/add_student_key', '_self');
     } else {
@@ -49,7 +49,7 @@ function download(value) {
 }
 
 function logout() {
-    window.open( SERVER_DOMAIN + '/admin/login', '_self');
+    window.open(SERVER_DOMAIN + '/admin/login', '_self');
     document.cookie = 'access_token=; expires=-1;';
 }
 
@@ -75,6 +75,32 @@ async function changePassword() {
     });
 }
 
-async function manageGroups(){
+async function manageGroups() {
     window.open('/admin/managegroups', '_self')
+}
+
+async function addSubject() {
+    var subject = document.getElementById('subject').value;
+    if (document.querySelector('input[name="type"]:checked') != null) {
+        var lesson_type = document.querySelector('input[name="type"]:checked').value;
+    } else {
+        return
+    }
+    var response = await fetch('/add_subject_to_db', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+            'name': subject,
+            'type': lesson_type
+        })
+    });
+    if (response.ok) {
+        window.open('/admin/add_subject', '_self');
+    } else {
+        alert('error');
+    }
 }

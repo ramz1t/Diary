@@ -6,7 +6,7 @@
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#home-collapse" aria-expanded="true">
+                    data-bs-target="#home-collapse" aria-expanded="false">
                 Manage groups
             </button>
             <div class="collapse show" id="home-collapse">
@@ -37,6 +37,17 @@
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="/admin/add_teacher_key" class="link-dark rounded">Add</a></li>
                     <li><a href="/admin/export_teacher_keys" class="link-dark rounded">Export</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#subjects-collapse" aria-expanded="false">
+                Subjects
+            </button>
+            <div class="collapse" id="subjects-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/add_subject" class="link-dark rounded">Add</a></li>
                 </ul>
             </div>
         </li>

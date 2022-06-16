@@ -98,3 +98,12 @@ body {
 .icon-custom {
     padding-right: 15px;
 }
+
+.type-choose {
+    display: inline-block;
+    padding-right: 30px;
+}
+
+.type-controls{
+    padding-bottom: 15px;
+}
