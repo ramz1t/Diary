@@ -87,12 +87,12 @@ def studentprofile(request: Request, current_user=Depends(get_current_user)):
                                                                "email": current_user.email})
 
 
-@app.post('/add_group')
+@app.post('/add_group_to_db')
 def add_group(group: ApiGroup, current_user=Depends(get_current_user)):
     return add_new_group(group, current_user.email)
 
 
-@app.post('/add_key')
+@app.post('/add_key_to_db')
 def add_key(key: ApiKey, current_user=Depends(get_current_user)):
     return add_new_key(key, current_user.email)
 
@@ -105,7 +105,7 @@ def download_file(filename, current_user=Depends(get_current_user)):
                         filename=filename)
 
 
-@app.post("/change_password")
+@app.post("/change_user_password")
 def change_password(body: ChangePassword, current_user=Depends(get_current_user)):
     return change_admin_password(email=current_user.email, old_password=body.old_password,
                                  new_password=body.new_password)
@@ -116,7 +116,7 @@ def all_students(group):
     return get_all_students_from_group(group)
 
 
-@app.get('/admin/managegroups')
+@app.get('/admin/manage_groups')
 def manage_groups(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/managegroups.html', {"request": request,
@@ -132,13 +132,18 @@ def add_key_page(request: Request, current_user=Depends(get_current_user)):
                                                             "keys": keys})
 
 
-@app.get('/admin/exportkeys')
+@app.get('/admin/export_keys')
 def export_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
     keys = get_keys_by_school(current_user.email)
     return templates.TemplateResponse('admin/exportkeys.html', {"request": request,
                                                                 "groups": sorted(groups),
                                                                 "keys": keys})
+
+
+@app.get('/admin/change_password')
+def change_password_page(request: Request):
+    return templates.TemplateResponse('admin/changepassword.html', {"request": request})
 
 
 if __name__ == '__main__':
