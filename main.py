@@ -97,7 +97,7 @@ def add_key(key: ApiKey, current_user=Depends(get_current_user)):
     return add_new_key(key, current_user.email)
 
 
-@app.get('/download/{filename}')
+@app.get('/admin/download/{filename}')
 def download_file(filename, current_user=Depends(get_current_user)):
     create_file(filename, current_user.email)
     return FileResponse(f'./files/{filename}.txt',

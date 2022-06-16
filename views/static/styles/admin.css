@@ -80,3 +80,21 @@ body {
     transform-origin: bottom;
     animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
+
+.download {
+    width: 80px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background: #004d00;
+    color: white;
+}
+
+.for-export {
+    display: inline-block;
+    padding-right: 15px;
+}
+
+.icon-custom {
+    padding-right: 15px;
+}
