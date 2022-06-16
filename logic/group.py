@@ -17,7 +17,7 @@ def add_new_group(group: ApiGroup, school_id: int):
 def get_groups(school_id: int):
     with Sessions() as session:
         groups = session.query(Group).filter_by(school_id=school_id).all()
-        return set([group.name for group in groups])
+        return groups
 
 
 def get_all_students_from_group(group: str):

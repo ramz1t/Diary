@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 from Dairy.func.helpers import create_file
 from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
-from Dairy.logic.key import add_new_key, get_keys_by_school, get_keys_data_by_school
+from Dairy.logic.key import add_new_key, get_keys, get_keys_for_export
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
 from Dairy.models.group import ApiGroup
@@ -73,7 +73,7 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 @app.get('/admin')
 def adminpage(request: Request, current_user=Depends(get_current_user)):
-    keys = get_keys_by_school(current_user.email)
+    keys = get_keys(current_user.email)
     groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/panel.html', {"request": request,
                                                            "keys": keys,
@@ -126,24 +126,29 @@ def manage_groups(request: Request, current_user=Depends(get_current_user)):
 @app.get('/admin/add_key')
 def add_key_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
-    keys = get_keys_data_by_school(current_user.email)
+    keys = get_keys(current_user.email)
     return templates.TemplateResponse('admin/addkey.html', {"request": request,
-                                                            "groups": sorted(groups),
+                                                            "groups": groups,
                                                             "keys": keys})
 
 
 @app.get('/admin/export_keys')
 def export_page(request: Request, current_user=Depends(get_current_user)):
-    groups = get_groups(current_user.email)
-    keys = get_keys_by_school(current_user.email)
+    keys_for_export = get_keys_for_export(current_user.email)
     return templates.TemplateResponse('admin/exportkeys.html', {"request": request,
-                                                                "groups": sorted(groups),
-                                                                "keys": keys})
+                                                                "keys_for_export": keys_for_export})
 
 
 @app.get('/admin/change_password')
 def change_password_page(request: Request):
     return templates.TemplateResponse('admin/changepassword.html', {"request": request})
+
+
+@app.get('/admin/add_group')
+def add_group_page(request: Request, current_user=Depends(get_current_user)):
+    groups = get_groups(current_user.email)
+    return templates.TemplateResponse('admin/addgroup.html', {"request": request,
+                                                              "groups": groups})
 
 
 if __name__ == '__main__':

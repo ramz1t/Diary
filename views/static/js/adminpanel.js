@@ -1,6 +1,6 @@
 async function addGroup() {
     var groupName = document.getElementById("groupname").value;
-    var response = await fetch('/add_group', {
+    var response = await fetch('/add_group_to_db', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
@@ -11,7 +11,7 @@ async function addGroup() {
         })
     });
     if (response.ok) {
-        window.open('/admin', '_self');
+        window.open('/admin/add_group', '_self');
     } else {
         alert('error');
     }
@@ -25,7 +25,7 @@ async function addKey() {
     } else {
         return
     }
-    var response = await fetch('/add_key', {
+    var response = await fetch('/add_key_to_db', {
                             method: 'POST',
                             headers: {
                                 'accept': 'application/json',

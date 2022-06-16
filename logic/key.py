@@ -32,13 +32,13 @@ def delete_key(value: str):
         session.commit()
 
 
-def get_keys_by_school(school_id: int):
-    with Sessions() as session:
-        keys = session.query(Key).filter_by(school_id=school_id).all()
-        return set([key.group for key in keys])
-
-
-def get_keys_data_by_school(school_id: int):
+def get_keys(school_id: int):
     with Sessions() as session:
         keys = session.query(Key).filter_by(school_id=school_id).all()
         return keys
+
+
+def get_keys_for_export(school_id: int):
+    with Sessions() as session:
+        keys_for_export = session.query(Key).filter_by(school_id=school_id).all()
+        return set([key.group for key in keys_for_export])
