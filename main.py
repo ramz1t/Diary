@@ -174,8 +174,6 @@ def add_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
     return add_new_teacher_key(key, current_user.email)
 
 
-
-
 @app.get('/admin/add_subject')
 def add_subject_page(request: Request, current_user=Depends(get_current_user)):
     return templates.TemplateResponse('admin/addsubject.html', {"request": request})
