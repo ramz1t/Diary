@@ -19,12 +19,24 @@
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#dashboard-collapse" aria-expanded="false">
-                Manage keys
+                Student's keys
             </button>
             <div class="collapse" id="dashboard-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/add_key" class="link-dark rounded">Add</a></li>
-                    <li><a href="/admin/export_keys" class="link-dark rounded">Export</a></li>
+                    <li><a href="/admin/add_student_key" class="link-dark rounded">Add</a></li>
+                    <li><a href="/admin/export_student_keys" class="link-dark rounded">Export</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#teachers-collapse" aria-expanded="false">
+                Teacher's keys
+            </button>
+            <div class="collapse" id="teachers-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/add_teacher_key" class="link-dark rounded">Add</a></li>
+                    <li><a href="/admin/export_teacher_keys" class="link-dark rounded">Export</a></li>
                 </ul>
             </div>
         </li>

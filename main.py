@@ -9,17 +9,17 @@ from fastapi.templating import Jinja2Templates
 from Dairy.func.helpers import create_file
 from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
-from Dairy.logic.key import add_new_key, get_keys, get_keys_for_export
+from Dairy.logic.key import add_new_student_key, get_student_keys, get_student_keys_for_export
+from Dairy.logic.key import get_teacher_keys, get_teacher_keys_for_export, add_new_teacher_key
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
-from Dairy.models.key import ApiKey
+from Dairy.models.key import ApiKey, ApiTeacherKey
 from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
 from Dairy.logic.student import create_new_student
-
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
@@ -73,7 +73,7 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 @app.get('/admin')
 def adminpage(request: Request, current_user=Depends(get_current_user)):
-    keys = get_keys(current_user.email)
+    keys = get_student_keys(current_user.email)
     groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/panel.html', {"request": request,
                                                            "keys": keys,
@@ -92,9 +92,9 @@ def add_group(group: ApiGroup, current_user=Depends(get_current_user)):
     return add_new_group(group, current_user.email)
 
 
-@app.post('/add_key_to_db')
+@app.post('/add_student_key_to_db')
 def add_key(key: ApiKey, current_user=Depends(get_current_user)):
-    return add_new_key(key, current_user.email)
+    return add_new_student_key(key, current_user.email)
 
 
 @app.get('/admin/download/{filename}')
@@ -123,20 +123,20 @@ def manage_groups(request: Request, current_user=Depends(get_current_user)):
                                                                   "groups": sorted(groups)})
 
 
-@app.get('/admin/add_key')
+@app.get('/admin/add_student_key')
 def add_key_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
-    keys = get_keys(current_user.email)
-    return templates.TemplateResponse('admin/addkey.html', {"request": request,
-                                                            "groups": groups,
-                                                            "keys": keys})
+    keys = get_student_keys(current_user.email)
+    return templates.TemplateResponse('admin/add_student_key.html', {"request": request,
+                                                                     "groups": groups,
+                                                                     "keys": keys})
 
 
-@app.get('/admin/export_keys')
+@app.get('/admin/export_student_keys')
 def export_page(request: Request, current_user=Depends(get_current_user)):
-    keys_for_export = get_keys_for_export(current_user.email)
-    return templates.TemplateResponse('admin/exportkeys.html', {"request": request,
-                                                                "keys_for_export": keys_for_export})
+    keys_for_export = get_student_keys_for_export(current_user.email)
+    return templates.TemplateResponse('admin/export_student_keys.html', {"request": request,
+                                                                         "keys_for_export": keys_for_export})
 
 
 @app.get('/admin/change_password')
@@ -149,6 +149,27 @@ def add_group_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/addgroup.html', {"request": request,
                                                               "groups": groups})
+
+
+@app.get('/admin/add_teacher_key')
+def add_key_page(request: Request, current_user=Depends(get_current_user)):
+    keys = get_teacher_keys(current_user.email)
+    return templates.TemplateResponse('admin/add_teacher_key.html', {"request": request,
+                                                                     "keys": keys})
+
+
+@app.get('/admin/export_teacher_keys')
+def export_page(request: Request, current_user=Depends(get_current_user)):
+    keys_for_export = get_teacher_keys_for_export(current_user.email)
+    return templates.TemplateResponse('admin/export_teacher_keys.html', {"request": request,
+                                                                         "keys_for_export": keys_for_export})
+
+
+@app.post('/add_teacher_key_to_db')
+def add_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
+    return add_new_teacher_key(key, current_user.email)
+
+
 
 
 if __name__ == '__main__':

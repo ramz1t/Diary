@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Key</title>
+    <title>Add Student's Key</title>
     {% include 'components/bootstrap.html' %}
     <link rel="stylesheet" href="{{ url_for('static', path='styles/admin.css') }}">
     <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
@@ -29,7 +29,7 @@
         </div>
         <br>
         {% endfor %}
-        <button class="btn btn-login-custom text-light" onclick="addKey()">Add key</button>
+        <button class="btn btn-login-custom text-light" onclick="addStudentKey()">Add key</button>
     </div>
     <div class="page-element">
         <h1>Available keys</h1>

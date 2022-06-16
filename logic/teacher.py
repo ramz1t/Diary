@@ -3,12 +3,12 @@ from Dairy.data.data import Sessions
 from fastapi.responses import JSONResponse
 from fastapi import status
 from Dairy.logic.auth import get_password_hash
-from Dairy.logic.key import get_key
+from Dairy.logic.key import get_teacher_key, delete_teacher_key
 
 
 def create_new_teacher(teacher: ApiTeacher):
     with Sessions() as session:
-        key = get_key(teacher.key)
+        key = get_teacher_key(teacher.key)
         if key is None:
             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong key')
         if not session.query(Teacher).filter_by(email=teacher.email).first() is None:
@@ -17,4 +17,5 @@ def create_new_teacher(teacher: ApiTeacher):
                           surname=key.surname, school_id=key.school_id, group=key.group)
         session.add(teacher)
         session.commit()
+        delete_teacher_key(key)
     return JSONResponse(status_code=status.HTTP_201_CREATED, content='Teacher created')

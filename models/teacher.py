@@ -11,7 +11,6 @@ class Teacher(Base):
     password = Column(String)
     email = Column(String)
     school_id = Column(Integer)
-    subject = Column(String)
     # classes: relationship(Group)
 
 

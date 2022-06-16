@@ -17,7 +17,7 @@ async function addGroup() {
     }
 }
 
-async function addKey() {
+async function addStudentKey() {
     var name = document.getElementById('name');
     var surname = document.getElementById('surname');
     if (document.querySelector('input[name="group"]:checked') != null) {
@@ -38,7 +38,7 @@ async function addKey() {
                             })
                         });
     if (response.ok) {
-        window.open('/admin/add_key', '_self');
+        window.open('/admin/add_student_key', '_self');
     } else {
         alert('error');
     }
