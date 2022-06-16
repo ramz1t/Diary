@@ -11,7 +11,6 @@ from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
 from Dairy.logic.key import add_new_student_key, get_student_keys, get_student_keys_for_export
 from Dairy.logic.key import get_teacher_keys, get_teacher_keys_for_export, add_new_teacher_key
-from Dairy.logic.key import add_new_key, get_keys, get_keys_for_export
 from Dairy.logic.subject import add_new_subject
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
