@@ -4,14 +4,13 @@ from data.data import Base
 from sqlalchemy.orm import relationship
 
 
-class Group(Base):
-    __tablename__ = 'groups'
+class Subject(Base):
+    __tablename__ = 'subjects'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    school_id = Column(Integer)
-    students = relationship("Student")
-    # tasks: relationship(Task)
+    type = Column(String)
 
 
-class ApiGroup(BaseModel):
+class ApiSubject(BaseModel):
     name: str
+    type: str

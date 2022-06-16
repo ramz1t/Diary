@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Group</title>
+    <meta charset="UTF-8">
+    <title>Add Subject</title>
     {% include 'components/bootstrap.html' %}
     <link rel="stylesheet" href="{{ url_for('static', path='styles/admin.css') }}">
     <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
@@ -11,30 +11,42 @@
 <div class="page">
     <div class="controls">{% include 'admin/navbar.html' %}</div>
     <div class="page-element ">
-        <h1>Add group</h1>
+        <h1>Add subject</h1>
         <br>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="groupname" placeholder="Name">
-            <label for="groupname"><i class="bi bi-person"></i>Group name</label>
+            <input type="text" class="form-control" id="subject" placeholder="Subject">
+            <label for="subject"><i class="bi bi-book icon-custom"></i>Subject</label>
         </div>
-        <button class="btn btn-login-custom text-light" onclick="addGroup()">Add group</button>
+        <div class="form-check type-controls">
+            <div class="type-choose">
+                <input class="form-check-input" type="radio" name="type"
+                       id="L" value="L">
+                <label class="form-check-label" for="L">Lesson</label>
+            </div>
+            <div class="type-choose">
+                <input class="form-check-input" type="radio" name="type"
+                       id="C" value="C">
+                <label class="form-check-label" for="C">Optional cource</label>
+            </div>
+        </div>
+        <button class="btn btn-login-custom text-light" onclick="addSubject()">Add subject</button>
     </div>
     <div class="page-element">
-        <h1>Added groups</h1>
-        <table class="table groups">
+        <h1>All subjects in school</h1>
+        <table class="table keys">
             <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Number of students</th>
+                <th scope="col">Type</th>
             </tr>
             </thead>
             <tbody>
-            {% for group in groups %}
+            {% for sub in subjects %}
             <tr>
-                <th scope="row">{{ group.id }}</th>
-                <td>{{ group.name }}</td>
-                <td>{{ group.students }}</td>
+                <th scope="row">{{ sub.id }}</th>
+                <td>{{ sub.name }}</td>
+                <td>{{ sub.type }}</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -49,6 +61,5 @@
         </svg>
     </div>
 </footer>
-
 </body>
 </html>

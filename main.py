@@ -10,11 +10,13 @@ from Dairy.func.helpers import create_file
 from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
 from Dairy.logic.key import add_new_key, get_keys, get_keys_for_export
+from Dairy.logic.subject import add_new_subject
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.key import ApiKey
+from Dairy.models.subject import ApiSubject
 from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
@@ -149,6 +151,16 @@ def add_group_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
     return templates.TemplateResponse('admin/addgroup.html', {"request": request,
                                                               "groups": groups})
+
+
+@app.get('/admin/add_subject')
+def add_subject_page(request: Request, current_user=Depends(get_current_user)):
+    return templates.TemplateResponse('admin/addsubject.html', {"request": request})
+
+
+@app.post('/add_subject_to_db')
+def add_subject(subject: ApiSubject):
+    return add_new_subject(subject)
 
 
 if __name__ == '__main__':
