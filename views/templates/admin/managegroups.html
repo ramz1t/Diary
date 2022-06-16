@@ -3,54 +3,25 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage groups</title>
+    <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/admin.css') }}">
     {% include 'components/bootstrap.html' %}
 </head>
 <body>
+    <div class="page">
+        <div class="controls">{% include 'admin/navbar.html' %}</div>
+            <div class="page-element ">
 
-<div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-    <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-        <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
-        <span style="padding-left: 15px" class="fs-5 fw-semibold">Admin Panel</span>
-    </a>
-    <ul class="list-unstyled ps-0">
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#home-collapse" aria-expanded="true">
-                Manage groups
-            </button>
-            <div class="collapse show" id="home-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">Add</a></li>
-                    <li><a href="#" class="link-dark rounded">Edit</a></li>
-                </ul>
             </div>
-        </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#dashboard-collapse" aria-expanded="false">
-                Manage keys
-            </button>
-            <div class="collapse" id="dashboard-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">Add</a></li>
-                    <li><a href="#" class="link-dark rounded">Export</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="border-top my-3"></li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#account-collapse" aria-expanded="false">
-                Account
-            </button>
-            <div class="collapse" id="account-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">Change password</a></li>
-                    <li><a href="#" class="link-dark rounded">Sign out</a></li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-</div>
+        </div>
+    </div>
+    <footer>
+        <div class="wave-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#004d00" fill-opacity="1"
+                  d="M0,96L48,128C96,160,192,224,288,234.7C384,245,480,203,576,202.7C672,203,768,245,864,256C960,267,1056,245,1152,234.7C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </footer>
 </body>
 </html>
