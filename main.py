@@ -99,7 +99,7 @@ def add_group(group: ApiGroup, current_user=Depends(get_current_user)):
 
 
 @app.post('/add_student_key_to_db')
-def add_key(key: ApiKey, current_user=Depends(get_current_user)):
+def add_student_key(key: ApiKey, current_user=Depends(get_current_user)):
     return add_new_student_key(key, current_user.email)
 
 
@@ -130,7 +130,7 @@ def manage_groups(request: Request, current_user=Depends(get_current_user)):
 
 
 @app.get('/admin/add_student_key')
-def add_key_page(request: Request, current_user=Depends(get_current_user)):
+def add_student_key_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
     keys = get_student_keys(current_user.email)
     return templates.TemplateResponse('admin/add_student_key.html', {"request": request,
@@ -139,7 +139,7 @@ def add_key_page(request: Request, current_user=Depends(get_current_user)):
 
 
 @app.get('/admin/export_student_keys')
-def export_page(request: Request, current_user=Depends(get_current_user)):
+def teacher_export_page(request: Request, current_user=Depends(get_current_user)):
     keys_for_export = get_student_keys_for_export(current_user.email)
     return templates.TemplateResponse('admin/export_student_keys.html', {"request": request,
                                                                          "keys_for_export": keys_for_export})
@@ -158,21 +158,21 @@ def add_group_page(request: Request, current_user=Depends(get_current_user)):
 
 
 @app.get('/admin/add_teacher_key')
-def add_key_page(request: Request, current_user=Depends(get_current_user)):
+def add_teacher_key_page(request: Request, current_user=Depends(get_current_user)):
     keys = get_teacher_keys(current_user.email)
     return templates.TemplateResponse('admin/add_teacher_key.html', {"request": request,
                                                                      "keys": keys})
 
 
 @app.get('/admin/export_teacher_keys')
-def export_page(request: Request, current_user=Depends(get_current_user)):
+def teacher_export_page(request: Request, current_user=Depends(get_current_user)):
     keys_for_export = get_teacher_keys_for_export(current_user.email)
     return templates.TemplateResponse('admin/export_teacher_keys.html', {"request": request,
                                                                          "keys_for_export": keys_for_export})
 
 
 @app.post('/add_teacher_key_to_db')
-def add_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
+def add_teacher_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
     return add_new_teacher_key(key, current_user.email)
 
 
