@@ -16,6 +16,7 @@ from models.mark import Mark
 from models.task import Task
 from models.school import School
 from models.key import Key
+from models.subject import Subject
 
 config = context.config
 
