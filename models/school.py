@@ -13,5 +13,4 @@ class School(Base):
 
 
 class ApiSchool(BaseModel):
-    name: str
     city: str

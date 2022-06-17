@@ -11,6 +11,7 @@ from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
 from Dairy.logic.key import add_new_student_key, get_student_keys, get_student_keys_for_export
 from Dairy.logic.key import get_teacher_keys, get_teacher_keys_for_export, add_new_teacher_key
+from Dairy.logic.school import check_school_in_db, add_new_school
 from Dairy.logic.subject import add_new_subject
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
@@ -18,6 +19,7 @@ from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.key import ApiKey, ApiTeacherKey
 from Dairy.models.key import ApiKey
+from Dairy.models.school import ApiSchool
 from Dairy.models.subject import ApiSubject
 from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
@@ -182,6 +184,19 @@ def add_subject_page(request: Request, current_user=Depends(get_current_user)):
 @app.post('/add_subject_to_db')
 def add_subject(subject: ApiSubject):
     return add_new_subject(subject)
+
+
+@app.get('/admin/school')
+def school_page(request: Request, current_user=Depends(get_current_user)):
+    availability = check_school_in_db(current_user.email)
+    return templates.TemplateResponse('admin/school.html', {"request": request,
+                                                            "number": current_user.email,
+                                                            "availability": availability})
+
+
+@app.post('/add_school_to_db')
+def add_school(school: ApiSchool, current_user=Depends(get_current_user)):
+    return add_new_school(school, school_id=current_user.email)
 
 
 if __name__ == '__main__':

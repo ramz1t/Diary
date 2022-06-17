@@ -104,3 +104,24 @@ async function addSubject() {
         alert('error');
     }
 }
+
+
+async function addSchool() {
+    var city = document.getElementById('city').value;
+    var response = await fetch('/add_school_to_db', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+            'city': city
+        })
+    });
+    if (response.ok) {
+        window.open('/admin/school', '_self');
+    } else {
+        alert('error');
+    }
+}
