@@ -21,10 +21,10 @@ def add_new_group(group: ApiGroup, school_id: int):
 def get_groups(school_id: int):
     with Sessions() as session:
         school = session.query(School).filter_by(name=school_id).first()
-        if school is None:
-            return []
-        else:
+        try:
             return school.groups
+        except AttributeError:
+            return []
 
 
 def get_all_students_from_group(group: str):
