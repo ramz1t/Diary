@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
 from data.data import Base
+from sqlalchemy.orm import relationship
 
 
 class School(Base):
@@ -8,7 +9,7 @@ class School(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     city = Column(String)
-    #groups = relationship(groups)
+    groups = relationship('Group')
     #subjects = relationship(subjects)
 
 

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from pydantic import BaseModel
 from data.data import Base
 from sqlalchemy.orm import relationship
@@ -10,6 +10,7 @@ class Group(Base):
     name = Column(String)
     school_id = Column(Integer)
     students = relationship("Student")
+    school_db_id = Column(Integer, ForeignKey('schools.id'))
     # tasks: relationship(Task)
 
 
