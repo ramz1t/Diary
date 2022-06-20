@@ -44,6 +44,27 @@ async function addStudentKey() {
     }
 }
 
+async function addTeacherKey(){
+     var name = document.getElementById('name').value.trim();
+     var surname = document.getElementById('surname').value.trim();
+     var response = await fetch('/add_teacher_key_to_db', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'name': name,
+            'surname': surname,
+        })
+    });
+    if (response.ok) {
+        window.open('/admin/add_teacher_key', '_self');
+    } else {
+        alert('error');
+    }
+}
+
 function download(value) {
     window.open(`download/${value}`)
 }
