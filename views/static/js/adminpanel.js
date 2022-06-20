@@ -18,8 +18,8 @@ async function addGroup() {
 }
 
 async function addStudentKey() {
-    var name = document.getElementById('name');
-    var surname = document.getElementById('surname');
+    var name = document.getElementById('name').value.trim();
+    var surname = document.getElementById('surname').value.trim();
     if (document.querySelector('input[name="group"]:checked') != null) {
         var group = document.querySelector('input[name="group"]:checked').value;
     } else {
@@ -32,8 +32,8 @@ async function addStudentKey() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            'name': name.value,
-            'surname': surname.value,
+            'name': name,
+            'surname': surname,
             'group': group
         })
     });
