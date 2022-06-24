@@ -69,6 +69,10 @@ function download(value) {
     window.open(`download/${value}`)
 }
 
+function downloadTeachers(){
+    window.open('/admin/download/teachers', '_blank')
+}
+
 function logout() {
     window.open(SERVER_DOMAIN + '/admin/login', '_self');
     document.cookie = 'access_token=; expires=-1;';

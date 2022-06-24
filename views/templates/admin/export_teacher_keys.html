@@ -14,16 +14,15 @@
         <h1>Export keys</h1>
         <br>
 
-        {% for group in keys_for_export %}
+
         <div class="for-export">
             <div class="form-floating mb-3 export-btn">
-                <button class="download" id="{{ group }}" onclick="download('{{ group }}')">
-                    <i class="bi bi-cloud-arrow-down icon-custom"></i>{{ group }}
+                <button class="download" id="export" onclick="downloadTeachers()">
+                    <i class="bi bi-cloud-arrow-down icon-custom"></i>Teacher's keys
                 </button>
                 <br>
             </div>
         </div>
-        {% endfor %}
 
     </div>
 

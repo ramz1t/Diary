@@ -6,7 +6,7 @@ from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from Dairy.func.helpers import create_file
+from Dairy.files.export import write_student_keys, write_teacher_keys
 from Dairy.logic.admin import change_admin_password
 from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
 from Dairy.logic.key import add_new_student_key, get_student_keys, get_student_keys_for_export
@@ -105,7 +105,15 @@ def add_student_key(key: ApiKey, current_user=Depends(get_current_user)):
 
 @app.get('/admin/download/{filename}')
 def download_file(filename, current_user=Depends(get_current_user)):
-    create_file(filename, current_user.email)
+    write_student_keys(filename, current_user.email)
+    return FileResponse(f'./files/{filename}.txt',
+                        media_type='application/octet-stream',
+                        filename=filename)
+
+
+@app.get('/admin/download/teachers')
+def download_teachers(filename, current_user=Depends(get_current_user)):
+    write_teacher_keys(filename, current_user.email)
     return FileResponse(f'./files/{filename}.txt',
                         media_type='application/octet-stream',
                         filename=filename)
