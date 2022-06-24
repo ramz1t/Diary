@@ -14,8 +14,8 @@ def create_new_teacher(teacher: ApiTeacher):
         if not session.query(Teacher).filter_by(email=teacher.email).first() is None:
             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
         teacher = Teacher(email=teacher.email, password=get_password_hash(teacher.password), name=key.name,
-                          surname=key.surname, school_id=key.school_id, group=key.group)
+                          surname=key.surname, school_id=key.school_id)
         session.add(teacher)
         session.commit()
-        delete_teacher_key(key)
+        delete_teacher_key(key.value)
     return JSONResponse(status_code=status.HTTP_201_CREATED, content='Teacher created')

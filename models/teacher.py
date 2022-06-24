@@ -10,6 +10,7 @@ class Teacher(Base):
     name = Column(String)
     password = Column(String)
     email = Column(String)
+    surname = Column(String)
     school_id = Column(Integer)
     # classes: relationship(Group)
 
