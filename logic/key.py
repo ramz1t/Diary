@@ -75,4 +75,4 @@ def get_teacher_keys(school_id: int):
 def get_teacher_keys_for_export(school_id: int):
     with Sessions() as session:
         keys_for_export = session.query(TeacherKey).filter_by(school_id=school_id).all()
-        return set([key for key in keys_for_export])
+        return keys_for_export

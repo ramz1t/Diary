@@ -88,8 +88,14 @@ def adminpage(request: Request, current_user=Depends(get_current_user)):
 
 
 @app.get('/student')
-def studentprofile(request: Request, current_user=Depends(get_current_user)):
+def student_profile(request: Request, current_user=Depends(get_current_user)):
     return templates.TemplateResponse('student/profile.html', {"request": request,
+                                                               "email": current_user.email})
+
+
+@app.get('/teacher')
+def teacher_profile(request: Request, current_user=Depends(get_current_user)):
+    return templates.TemplateResponse('teacher/profile.html', {"request": request,
                                                                "email": current_user.email})
 
 
@@ -112,11 +118,11 @@ def download_file(filename, current_user=Depends(get_current_user)):
 
 
 @app.get('/admin/download/teachers')
-def download_teachers(filename, current_user=Depends(get_current_user)):
-    write_teacher_keys(filename, current_user.email)
-    return FileResponse(f'./files/{filename}.txt',
+def download_teachers(current_user=Depends(get_current_user)):
+    write_teacher_keys(current_user.email)
+    return FileResponse(f'./files/teachers.txt',
                         media_type='application/octet-stream',
-                        filename=filename)
+                        filename='teachers.txt')
 
 
 @app.post("/change_user_password")
@@ -173,10 +179,8 @@ def add_teacher_key_page(request: Request, current_user=Depends(get_current_user
 
 
 @app.get('/admin/export_teacher_keys')
-def teacher_export_page(request: Request, current_user=Depends(get_current_user)):
-    keys_for_export = get_teacher_keys_for_export(current_user.email)
-    return templates.TemplateResponse('admin/export_teacher_keys.html', {"request": request,
-                                                                         "keys_for_export": keys_for_export})
+def teacher_export_page(request: Request):
+    return templates.TemplateResponse('admin/export_teacher_keys.html', {"request": request})
 
 
 @app.post('/add_teacher_key_to_db')
