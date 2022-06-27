@@ -211,5 +211,10 @@ def add_school(school: ApiSchool, current_user=Depends(get_current_user)):
     return add_new_school(school, school_id=current_user.email)
 
 
+@app.get('/load_page/{page}')
+def load_page(page: str, request: Request, current_user=Depends(get_current_user)):
+    return templates.TemplateResponse(f'admin/{page}.html', {"request": request})
+
+
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8003)

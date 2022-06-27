@@ -124,3 +124,18 @@ async function addSchool() {
         alert('error');
     }
 }
+
+
+async function loadPage(page) {
+    var response = await fetch(`http://127.0.0.1:8003/load_page/${page}`, {
+        headers: {
+        'accept': 'application/json'
+        }
+    });
+    if (response.ok) {
+        var wrapper = document.getElementById('wrapper');
+        response = await response.text();
+        wrapper.innerHTML = '';
+        wrapper.innerHTML = response;
+    }
+}
