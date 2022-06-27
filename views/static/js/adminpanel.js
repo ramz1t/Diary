@@ -66,11 +66,11 @@ async function addTeacherKey(){
 }
 
 function downloadGroup(group) {
-    window.open(`/admin/download/${group}`, '_blank')
+    window.open(`/download_group/${group}`, '_blank')
 }
 
 async function downloadTeachers(){
-    window.open('/admin/download/teachers', '_blank')
+    window.open('/download_teachers', '_blank')
 }
 
 

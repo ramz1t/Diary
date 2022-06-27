@@ -109,20 +109,20 @@ def add_student_key(key: ApiKey, current_user=Depends(get_current_user)):
     return add_new_student_key(key, current_user.email)
 
 
-@app.get('/admin/download/{filename}')
-def download_file(filename, current_user=Depends(get_current_user)):
-    write_student_keys(filename, current_user.email)
-    return FileResponse(f'./files/{filename}.txt',
+@app.get('/download_group/{groupname}')
+def download_file(groupname, current_user=Depends(get_current_user)):
+    write_student_keys(groupname, current_user.email)
+    return FileResponse(f'./files/{groupname}.txt',
                         media_type='application/octet-stream',
-                        filename=filename)
+                        filename=groupname)
 
 
-@app.get('/admin/download/teachers')
+@app.get('/download_teachers')
 def download_teachers(current_user=Depends(get_current_user)):
     write_teacher_keys(current_user.email)
     return FileResponse(f'./files/teachers.txt',
                         media_type='application/octet-stream',
-                        filename='teachers.txt')
+                        filename='teachers')
 
 
 @app.post("/change_user_password")
