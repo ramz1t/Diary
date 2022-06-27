@@ -1,6 +1,6 @@
 function logout() {
     var type = $.cookie("type");
-    window.open(SERVER_DOMAIN + `/${type}/login`, '_self');
+    window.open(`/${type}/login`, '_self');
     document.cookie = 'access_token=; expires=-1;';
 }
 
@@ -13,7 +13,7 @@ async function changePassword() {
         document.getElementById("Repeat_new_pass").classList.add('is-invalid');
         return;
     }
-    var response = await fetch(SERVER_DOMAIN + '/change_password', {
+    var response = await fetch('/change_password', {
         method: 'POST',
         headers: {
             'accept': 'application/json',

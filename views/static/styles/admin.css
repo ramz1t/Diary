@@ -35,18 +35,15 @@ body {
     padding-right: 12px;
 }
 
-.page {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    position: relative;
+.page-grid {
+    display: grid;
+    gap: 5rem;
+    grid-template-columns: 50px 1fr 1fr;
 }
 
 .page-element {
-    padding-top: 3%;
-    padding-left: 3%;
-    width: 40%;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .controls {
