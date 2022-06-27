@@ -17,7 +17,7 @@
         {% for group in keys_for_export %}
         <div class="for-export">
             <div class="form-floating mb-3 export-btn">
-                <button class="download" id="{{ group }}" onclick="download('{{ group }}')">
+                <button class="download" id="{{ group }}" onclick="downloadGroup('{{ group }}')">
                     <i class="bi bi-cloud-arrow-down icon-custom"></i>{{ group }}
                 </button>
                 <br>
