@@ -35,19 +35,28 @@ body {
     padding-right: 12px;
 }
 
-.page-grid {
-    display: grid;
-    gap: 5rem;
-    grid-template-columns: 50px 1fr 1fr;
+.page {
+    display: flex;
+    flex-direction: row;
 }
 
-.page-element {
+.content-grid {
+    margin-left: 1rem;
+    display: grid;
+    gap: 2rem;
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .content-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.content-element {
+    padding-top: 1rem;
     width: 100%;
     margin: 0 auto;
-}
-
-.controls {
-    width: 13%;
 }
 
 .wave-container {
