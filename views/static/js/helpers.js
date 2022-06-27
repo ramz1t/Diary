@@ -1,5 +1,6 @@
 function logout() {
-    window.open(SERVER_DOMAIN + `${type}/login`, '_self');
+    var type = $.cookie("type");
+    window.open(SERVER_DOMAIN + `/${type}/login`, '_self');
     document.cookie = 'access_token=; expires=-1;';
 }
 
