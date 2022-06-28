@@ -1,9 +1,8 @@
 from Dairy.models.group import Group, ApiGroup
 from Dairy.data.data import Sessions
+from Dairy.models.school import School
 from fastapi.responses import JSONResponse
 from fastapi import status
-
-from Dairy.models.school import School
 
 
 def add_new_group(group: ApiGroup, school_id: int):

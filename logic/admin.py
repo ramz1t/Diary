@@ -1,9 +1,9 @@
-from models.admin import ApiAdmin, Admin
-from data.data import Sessions
+from Dairy.models.admin import ApiAdmin, Admin
+from Dairy.data.data import Sessions
+from Dairy.logic.auth import get_password_hash
+from Dairy.logic.auth import verify_password
 from fastapi.responses import JSONResponse
 from fastapi import status
-from logic.auth import get_password_hash
-from logic.auth import verify_password
 
 
 def create_new_admin(admin: ApiAdmin):

@@ -5,7 +5,11 @@ from Dairy.models.key import Key, ApiKey, TeacherKey, ApiTeacherKey
 from random import randint
 import string
 
+
 symbols = string.digits + string.ascii_letters
+
+
+'''Student's functions'''
 
 
 def get_student_key(value: str):
@@ -41,6 +45,9 @@ def get_student_keys_for_export(school_id: int):
     with Sessions() as session:
         keys_for_export = session.query(Key).filter_by(school_id=school_id).all()
         return set([key.group for key in keys_for_export])
+
+
+'''Teacher's functions'''
 
 
 def get_teacher_key(value: str):

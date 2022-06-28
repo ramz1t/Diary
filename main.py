@@ -72,7 +72,7 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 
 @app.get('/admin')
-def admin_page(request: Request, current_user=Depends(get_current_user)):
+def admin_page(request: Request):
     return templates.TemplateResponse('admin.html', {"request": request})
 
 
@@ -90,7 +90,8 @@ def teacher_profile(request: Request, current_user=Depends(get_current_user)):
 
 @app.get('/load_page/{page}')
 def load_page(page: str, request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse(f'admin/{page}.html', get_data_for_page(page=page, request=request, current_user=current_user))
+    return templates.TemplateResponse(f'admin/{page}.html',
+                                      get_data_for_page(page=page, request=request, current_user=current_user))
 
 
 ''' DB urls'''
