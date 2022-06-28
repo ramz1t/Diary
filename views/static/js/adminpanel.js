@@ -11,7 +11,7 @@ async function addGroup() {
         })
     });
     if (response.ok) {
-        window.open('/admin/add_group', '_self');
+        document.location.reload(true);
     } else {
         alert('error');
     }
@@ -38,16 +38,16 @@ async function addStudentKey() {
         })
     });
     if (response.ok) {
-        window.open('/admin/add_student_key', '_self');
+        document.location.reload(true);
     } else {
         alert('error');
     }
 }
 
-async function addTeacherKey(){
-     var name = document.getElementById('name').value.trim();
-     var surname = document.getElementById('surname').value.trim();
-     var response = await fetch('/add_teacher_key_to_db', {
+async function addTeacherKey() {
+    var name = document.getElementById('name').value.trim();
+    var surname = document.getElementById('surname').value.trim();
+    var response = await fetch('/add_teacher_key_to_db', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
@@ -59,7 +59,7 @@ async function addTeacherKey(){
         })
     });
     if (response.ok) {
-        window.open('/admin/add_teacher_key', '_self');
+        document.location.reload(true);
     } else {
         alert('error');
     }
@@ -69,7 +69,7 @@ function downloadGroup(group) {
     window.open(`/download_group/${group}`, '_blank')
 }
 
-async function downloadTeachers(){
+async function downloadTeachers() {
     window.open('/download_teachers', '_blank')
 }
 
@@ -98,7 +98,7 @@ async function addSubject() {
         })
     });
     if (response.ok) {
-        window.open('/admin/add_subject', '_self');
+        document.location.reload(true);
     } else {
         alert('error');
     }
@@ -119,7 +119,7 @@ async function addSchool() {
         })
     });
     if (response.ok) {
-        window.open('/admin/school', '_self');
+        document.location.reload(true);
     } else {
         alert('error');
     }
@@ -127,15 +127,23 @@ async function addSchool() {
 
 
 async function loadPage(page) {
-    var response = await fetch(`/load_page/${page}`, {
-        headers: {
-        'accept': 'application/json'
+    if (page === 'load') {
+        page = $.cookie("page");
+    } else {
+        document.cookie = "page=" + page;
+    }
+    console.log(page);
+    if (page !== undefined) {
+        var response = await fetch(`/load_page/${page}`, {
+            headers: {
+                'accept': 'application/json'
+            }
+        });
+        if (response.ok) {
+            var wrapper = document.getElementById('wrapper');
+            response = await response.text();
+            wrapper.innerHTML = '';
+            wrapper.innerHTML = response;
         }
-    });
-    if (response.ok) {
-        var wrapper = document.getElementById('wrapper');
-        response = await response.text();
-        wrapper.innerHTML = '';
-        wrapper.innerHTML = response;
     }
 }
