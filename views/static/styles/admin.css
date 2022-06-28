@@ -119,7 +119,15 @@ body {
 }
 
 .navbar-button {
-
     background: none;
     border: none;
+}
+
+.navbar-icon {
+    padding-left: 25px;
+    padding-right: 5px;
+}
+
+.controls {
+    width: 250px;
 }

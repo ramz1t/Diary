@@ -7,58 +7,62 @@
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#home-collapse" aria-expanded="false">
-                Groups
+                <i class="bi bi-people icon-custom"></i>Groups
             </button>
             <div class="collapse show" id="home-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><button class="navbar-button" onclick="loadPage('add_group')">Add</button></li>
-                    <li><a href="#" class="link-dark rounded">Edit</a></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage('add_group')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+<!--                    <li><a href="#" class="link-dark rounded">Edit</a></li>-->
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#dashboard-collapse" aria-expanded="false">
-                Student's keys
+                <i class="bi bi-key icon-custom"></i>Student's keys
             </button>
             <div class="collapse" id="dashboard-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><button class="navbar-button" onclick="loadPage('add_student_key')">Add</button></li>
-                    <li><button class="navbar-button" onclick="loadPage('export_student_keys')">Export</button></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage('add_student_key')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('export_student_keys')"><i class="bi bi-send navbar-icon"></i>Export</button></li>
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#teachers-collapse" aria-expanded="false">
-                Teacher's keys
+                <i class="bi bi-key icon-custom"></i>Teacher's keys
             </button>
             <div class="collapse" id="teachers-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><button class="navbar-button" onclick="loadPage('add_teacher_key')">Add</button></li>
-                    <li><button class="navbar-button" onclick="loadPage('export_teacher_keys')">Export</button></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage('add_teacher_key')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('export_teacher_keys')"><i class="bi bi-send navbar-icon"></i>Export</button></li>
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#subjects-collapse" aria-expanded="false">
-                Subjects
+                <i class="bi bi-book icon-custom"></i>Subjects
             </button>
             <div class="collapse" id="subjects-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><button class="navbar-button" onclick="loadPage('add_subject')">Add</button></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage('add_subject')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#school-collapse" aria-expanded="false">
-                School
+                <i class="bi bi-house-door icon-custom"></i>School
             </button>
             <div class="collapse" id="school-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><button class="navbar-button" onclick="loadPage('school')">Manage</button></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage('school')"><i class="bi bi-kanban navbar-icon"></i>Manage</button></li>
                 </ul>
             </div>
         </li>
@@ -66,12 +70,12 @@
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#account-collapse" aria-expanded="false">
-                Account
+                <i class="bi bi-person-circle icon-custom"></i>Account
             </button>
             <div class="collapse" id="account-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><button class="navbar-button" onclick="loadPage('change_password')">Change password</button></li>
-                    <li><button class="navbar-button" onclick="logout()">Log out</button></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage('change_password')"><i class="bi bi-lock navbar-icon"></i>Change password</button></li>
+                    <li><button class="navbar-button" onclick="logout()"><i class="bi bi-box-arrow-right navbar-icon"></i>Log out</button></li>
                 </ul>
             </div>
         </li>
