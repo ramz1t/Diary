@@ -10,7 +10,7 @@ class School(Base):
     name = Column(String)
     city = Column(String)
     groups = relationship('Group')
-    #subjects = relationship(subjects)
+    subjects = relationship('Subject')
 
 
 class ApiSchool(BaseModel):

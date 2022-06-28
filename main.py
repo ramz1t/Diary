@@ -124,8 +124,8 @@ def add_teacher_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
 
 
 @app.post('/add_subject_to_db')
-def add_subject(subject: ApiSubject):
-    return add_new_subject(subject)
+def add_subject(subject: ApiSubject, current_user=Depends(get_current_user)):
+    return add_new_subject(subject, current_user.email)
 
 
 @app.post('/add_school_to_db')
