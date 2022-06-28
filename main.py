@@ -7,18 +7,18 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from Dairy.files.export import write_student_keys, write_teacher_keys
+from Dairy.func.helpers import get_data_for_page
 from Dairy.logic.admin import change_admin_password
-from Dairy.logic.group import add_new_group, get_groups, get_all_students_from_group
-from Dairy.logic.key import add_new_student_key, get_student_keys, get_student_keys_for_export
-from Dairy.logic.key import get_teacher_keys, get_teacher_keys_for_export, add_new_teacher_key
-from Dairy.logic.school import check_school_in_db, add_new_school
+from Dairy.logic.group import add_new_group, get_all_students_from_group
+from Dairy.logic.key import add_new_student_key
+from Dairy.logic.key import add_new_teacher_key
+from Dairy.logic.school import add_new_school
 from Dairy.logic.subject import add_new_subject
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ChangePassword
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.key import ApiKey, ApiTeacherKey
-from Dairy.models.key import ApiKey
 from Dairy.models.school import ApiSchool
 from Dairy.models.subject import ApiSubject
 from Dairy.models.teacher import ApiTeacher
@@ -32,8 +32,11 @@ app.mount("/static", StaticFiles(directory="views/static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
 
 
+'''  login and register stuff  '''
+
+
 @app.get('/')
-def mainpage(request: Request):
+def main_page(request: Request):
     return templates.TemplateResponse('mainpage.html', {"request": request})
 
 
@@ -41,18 +44,6 @@ def mainpage(request: Request):
 def register(usertype: str, request: Request):
     return templates.TemplateResponse('register.html', {"request": request,
                                                         "usertype": usertype})
-
-
-@app.post('/create_student')
-def create_account(student: ApiStudent):
-    response = create_new_student(student)
-    return response
-
-
-@app.post('/create_teacher')
-def create_teacher(teacher: ApiTeacher):
-    response = create_new_teacher(teacher)
-    return response
 
 
 @app.get('/{usertype}/login')
@@ -77,8 +68,11 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+''' pages '''
+
+
 @app.get('/admin')
-def adminpage(request: Request, current_user=Depends(get_current_user)):
+def admin_page(request: Request, current_user=Depends(get_current_user)):
     return templates.TemplateResponse('admin.html', {"request": request})
 
 
@@ -94,6 +88,25 @@ def teacher_profile(request: Request, current_user=Depends(get_current_user)):
                                                                "email": current_user.email})
 
 
+@app.get('/load_page/{page}')
+def load_page(page: str, request: Request, current_user=Depends(get_current_user)):
+    return templates.TemplateResponse(f'admin/{page}.html', get_data_for_page(page=page, request=request, current_user=current_user))
+
+
+''' DB urls'''
+
+
+@app.post('/create_student')
+def create_account(student: ApiStudent):
+    return create_new_student(student)
+
+
+@app.post('/create_teacher')
+def create_teacher(teacher: ApiTeacher):
+    response = create_new_teacher(teacher)
+    return response
+
+
 @app.post('/add_group_to_db')
 def add_group(group: ApiGroup, current_user=Depends(get_current_user)):
     return add_new_group(group, current_user.email)
@@ -102,6 +115,35 @@ def add_group(group: ApiGroup, current_user=Depends(get_current_user)):
 @app.post('/add_student_key_to_db')
 def add_student_key(key: ApiKey, current_user=Depends(get_current_user)):
     return add_new_student_key(key, current_user.email)
+
+
+@app.post('/add_teacher_key_to_db')
+def add_teacher_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
+    return add_new_teacher_key(key, current_user.email)
+
+
+@app.post('/add_subject_to_db')
+def add_subject(subject: ApiSubject):
+    return add_new_subject(subject)
+
+
+@app.post('/add_school_to_db')
+def add_school(school: ApiSchool, current_user=Depends(get_current_user)):
+    return add_new_school(school, school_id=current_user.email)
+
+
+@app.post("/change_user_password")
+def change_password(body: ChangePassword, current_user=Depends(get_current_user)):
+    return change_admin_password(email=current_user.email, old_password=body.old_password,
+                                 new_password=body.new_password)
+
+
+@app.get('/all_students/{group}')
+def all_students(group):
+    return get_all_students_from_group(group)
+
+
+''' download urls'''
 
 
 @app.get('/download_group/{groupname}')
@@ -118,97 +160,6 @@ def download_teachers(current_user=Depends(get_current_user)):
     return FileResponse(f'./files/teachers.txt',
                         media_type='application/octet-stream',
                         filename='teachers')
-
-
-@app.post("/change_user_password")
-def change_password(body: ChangePassword, current_user=Depends(get_current_user)):
-    return change_admin_password(email=current_user.email, old_password=body.old_password,
-                                 new_password=body.new_password)
-
-
-@app.get('/all_students/{group}')
-def all_students(group):
-    return get_all_students_from_group(group)
-
-
-@app.get('/admin/manage_groups')
-def manage_groups(request: Request, current_user=Depends(get_current_user)):
-    groups = get_groups(current_user.email)
-    return templates.TemplateResponse('admin/manage_groups.html', {"request": request,
-                                                                  "groups": sorted(groups)})
-
-
-@app.get('/admin/add_student_key')
-def add_student_key_page(request: Request, current_user=Depends(get_current_user)):
-    groups = get_groups(current_user.email)
-    keys = get_student_keys(current_user.email)
-    return templates.TemplateResponse('admin/add_student_key.html', {"request": request,
-                                                                     "groups": groups,
-                                                                     "keys": keys})
-
-
-@app.get('/admin/export_student_keys')
-def teacher_export_page(request: Request, current_user=Depends(get_current_user)):
-    keys_for_export = get_student_keys_for_export(current_user.email)
-    return templates.TemplateResponse('admin/export_student_keys.html', {"request": request,
-                                                                         "keys_for_export": keys_for_export})
-
-
-@app.get('/admin/change_password')
-def change_password_page(request: Request):
-    return templates.TemplateResponse('admin/change_password.html', {"request": request})
-
-
-@app.get('/admin/add_group')
-def add_group_page(request: Request, current_user=Depends(get_current_user)):
-    groups = get_groups(current_user.email)
-    return templates.TemplateResponse('admin/add_group.html', {"request": request,
-                                                              "groups": groups})
-
-
-@app.get('/admin/add_teacher_key')
-def add_teacher_key_page(request: Request, current_user=Depends(get_current_user)):
-    keys = get_teacher_keys(current_user.email)
-    return templates.TemplateResponse('admin/add_teacher_key.html', {"request": request,
-                                                                     "keys": keys})
-
-
-@app.get('/admin/export_teacher_keys')
-def teacher_export_page(request: Request):
-    return templates.TemplateResponse('admin/export_teacher_keys.html', {"request": request})
-
-
-@app.post('/add_teacher_key_to_db')
-def add_teacher_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
-    return add_new_teacher_key(key, current_user.email)
-
-
-@app.get('/admin/add_subject')
-def add_subject_page(request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse('admin/add_subject.html', {"request": request})
-
-
-@app.post('/add_subject_to_db')
-def add_subject(subject: ApiSubject):
-    return add_new_subject(subject)
-
-
-@app.get('/admin/school')
-def school_page(request: Request, current_user=Depends(get_current_user)):
-    availability = check_school_in_db(current_user.email)
-    return templates.TemplateResponse('admin/school.html', {"request": request,
-                                                            "number": current_user.email,
-                                                            "availability": availability})
-
-
-@app.post('/add_school_to_db')
-def add_school(school: ApiSchool, current_user=Depends(get_current_user)):
-    return add_new_school(school, school_id=current_user.email)
-
-
-@app.get('/load_page/{page}')
-def load_page(page: str, request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse(f'admin/{page}.html', {"request": request})
 
 
 if __name__ == '__main__':
