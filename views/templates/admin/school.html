@@ -1,5 +1,5 @@
-<div class="content-grid">
-    <div class="content-element">
+<div class="content-grid" id="classes-manager">
+    <div class="content-element" id="classes">
         {% if availability == False %}
         <h1>School №{{ number}} is not available</h1>
         <br>
@@ -10,7 +10,44 @@
         </div>
         <button class="btn btn-login-custom text-light" onclick="addSchool()">Add school</button>
         {% elif availability == True %}
-        <h1>School №{{ number}} is available</h1>
+        <h1>Manage school №{{ number}}</h1>
+        <br>
+        <div class="dropdowns">
+            <div class="dropdown">
+                <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="group"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose group
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for group in groups %}
+                    <li><a class="dropdown-item" onclick="setValue('group', {{ group.name }})" >{{ group.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="subject"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose subject
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for subject in subjects %}
+                    <li><a class="dropdown-item" onclick="setValue('subject', {{ subject.name }})" >{{ subject.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="teacher"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose teacher
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for teacher in teachers %}
+                    <li><a class="dropdown-item" onclick="setValue('teacher', {{ teacher.surname }})" >{{teacher.surname}} {{ teacher.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <button class="btn btn-login-custom text-light" onclick="addClass()">Add class</button>
         {% else %}
         <h1>Error</h1>
         {% endif %}

@@ -1,3 +1,4 @@
+from Dairy.models.school import School
 from Dairy.models.teacher import ApiTeacher, Teacher
 from Dairy.data.data import Sessions
 from fastapi.responses import JSONResponse
@@ -19,3 +20,12 @@ def create_new_teacher(teacher: ApiTeacher):
         session.commit()
         delete_teacher_key(key.value)
     return JSONResponse(status_code=status.HTTP_201_CREATED, content='Teacher created')
+
+
+def get_teachers(school_id: int):
+    with Sessions() as session:
+        school = session.query(School).filter_by(name=school_id).first()
+        try:
+            return school.teachers
+        except AttributeError:
+            return []

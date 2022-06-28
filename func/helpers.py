@@ -2,22 +2,11 @@ from Dairy.logic.group import get_groups
 from Dairy.logic.key import get_student_keys, get_student_keys_for_export, get_teacher_keys
 from Dairy.logic.school import check_school_in_db
 from Dairy.logic.subject import get_subjects
+from Dairy.logic.teacher import get_teachers
 from Dairy.models.admin import Admin
 from Dairy.models.student import Student
 from Dairy.models.teacher import Teacher
 from Dairy.data.data import Sessions
-
-
-def get_user_by_email(email: str, type: str):
-    if type == 'admin':
-        with Sessions() as session:
-            return session.query(Admin).filter_by(email=email).first()
-    elif type == 'student':
-        with Sessions() as session:
-            return session.query(Student).filter_by(email=email).first()
-    elif type == 'teacher':
-        with Sessions() as session:
-            return session.query(Teacher).filter_by(email=email).first()
 
 
 def get_data_for_page(page: str, current_user, request):
@@ -38,8 +27,12 @@ def get_data_for_page(page: str, current_user, request):
         keys = get_teacher_keys(current_user.email)
         return {"request": request, "keys": keys}
     elif page == 'school':
+        teachers = get_teachers(current_user.email)
+        groups = get_groups(current_user.email)
+        subjects = get_subjects(current_user.email)
         availability = check_school_in_db(current_user.email)
-        return {"request": request, "number": current_user.email, "availability": availability}
+        return {"request": request, "number": current_user.email, "availability": availability, "subjects": subjects,
+                "teachers": teachers, "groups": groups}
     elif page == 'add_subject':
         subjects = get_subjects(current_user.email)
         return {"request": request, "subjects": subjects}

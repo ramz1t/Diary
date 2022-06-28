@@ -12,7 +12,7 @@ from fastapi import status
 from typing import Optional
 from typing import Dict
 from Dairy.models.token import TokenData
-from Dairy.func.helpers import get_user_by_email
+from Dairy.func.db_user_find import get_user_by_email
 
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
@@ -100,5 +100,3 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise credentials_exception
     return user
-
-

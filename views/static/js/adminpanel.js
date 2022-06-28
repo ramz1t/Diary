@@ -131,7 +131,6 @@ async function loadPage(page) {
     } else {
         document.cookie = "page=" + page;
     }
-    console.log(page);
     if (page !== undefined) {
         var response = await fetch(`/load_page/${page}`, {
             headers: {

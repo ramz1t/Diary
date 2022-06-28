@@ -17,6 +17,7 @@ from models.task import Task
 from models.school import School
 from models.key import Key
 from models.subject import Subject
+from models.classes_rel import ClassesRelationship
 
 config = context.config
 
