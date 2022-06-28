@@ -72,7 +72,7 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 
 @app.get('/admin')
-def admin_page(request: Request):
+def admin_page(request: Request, current_user=Depends(get_current_user)):
     return templates.TemplateResponse('admin.html', {"request": request})
 
 
