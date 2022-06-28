@@ -117,3 +117,9 @@ body {
 .type-controls{
     padding-bottom: 15px;
 }
+
+.navbar-button {
+
+    background: none;
+    border: none;
+}

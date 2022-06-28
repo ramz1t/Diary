@@ -1,0 +1,31 @@
+<div class="content-grid">
+    <div class="content-element">
+        <h1>Add group</h1>
+        <br>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="groupname" placeholder="Name">
+            <label for="groupname"><i class="bi bi-person"></i>Group name</label>
+        </div>
+        <button class="btn btn-login-custom text-light" onclick="addGroup()">Add group</button>
+    </div>
+    <div class="content-element">
+        <h1>Added groups</h1>
+        <table class="table groups">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Number of students</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for group in groups %}
+            <tr>
+                <th scope="row">{{ group.id }}</th>
+                <td>{{ group.name }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

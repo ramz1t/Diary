@@ -11,7 +11,7 @@
             </button>
             <div class="collapse show" id="home-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/add_group" class="link-dark rounded">Add</a></li>
+                    <li><button class="navbar-button" onclick="loadPage('add_group')">Add</button></li>
                     <li><a href="#" class="link-dark rounded">Edit</a></li>
                 </ul>
             </div>
@@ -23,8 +23,8 @@
             </button>
             <div class="collapse" id="dashboard-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><button onclick="loadPage('add_student_key')">Add</button></li>
-                    <li><a href="/admin/export_student_keys" class="link-dark rounded">Export</a></li>
+                    <li><button class="navbar-button" onclick="loadPage('add_student_key')">Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('export_student_keys')">Export</button></li>
                 </ul>
             </div>
         </li>
@@ -35,8 +35,8 @@
             </button>
             <div class="collapse" id="teachers-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/add_teacher_key" class="link-dark rounded">Add</a></li>
-                    <li><a href="/admin/export_teacher_keys" class="link-dark rounded">Export</a></li>
+                    <li><button class="navbar-button" onclick="loadPage('add_teacher_key')">Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('export_teacher_keys')">Export</button></li>
                 </ul>
             </div>
         </li>
@@ -47,7 +47,7 @@
             </button>
             <div class="collapse" id="subjects-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/add_subject" class="link-dark rounded">Add</a></li>
+                    <li><button class="navbar-button" onclick="loadPage('add_subject')">Add</button></li>
                 </ul>
             </div>
         </li>
@@ -58,7 +58,7 @@
             </button>
             <div class="collapse" id="school-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/school" class="link-dark rounded">Manage</a></li>
+                    <li><button class="navbar-button" onclick="loadPage('school')">Manage</button></li>
                 </ul>
             </div>
         </li>

@@ -127,7 +127,7 @@ async function addSchool() {
 
 
 async function loadPage(page) {
-    var response = await fetch(`http://127.0.0.1:8003/load_page/${page}`, {
+    var response = await fetch(`/load_page/${page}`, {
         headers: {
         'accept': 'application/json'
         }

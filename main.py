@@ -79,12 +79,7 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 @app.get('/admin')
 def adminpage(request: Request, current_user=Depends(get_current_user)):
-    keys = get_student_keys(current_user.email)
-    groups = get_groups(current_user.email)
-    return templates.TemplateResponse('admin/panel.html', {"request": request,
-                                                           "keys": keys,
-                                                           "groups": groups,
-                                                           "email": current_user.email})
+    return templates.TemplateResponse('admin.html', {"request": request})
 
 
 @app.get('/student')
@@ -139,7 +134,7 @@ def all_students(group):
 @app.get('/admin/manage_groups')
 def manage_groups(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
-    return templates.TemplateResponse('admin/managegroups.html', {"request": request,
+    return templates.TemplateResponse('admin/manage_groups.html', {"request": request,
                                                                   "groups": sorted(groups)})
 
 
@@ -161,13 +156,13 @@ def teacher_export_page(request: Request, current_user=Depends(get_current_user)
 
 @app.get('/admin/change_password')
 def change_password_page(request: Request):
-    return templates.TemplateResponse('admin/changepassword.html', {"request": request})
+    return templates.TemplateResponse('admin/change_password.html', {"request": request})
 
 
 @app.get('/admin/add_group')
 def add_group_page(request: Request, current_user=Depends(get_current_user)):
     groups = get_groups(current_user.email)
-    return templates.TemplateResponse('admin/addgroup.html', {"request": request,
+    return templates.TemplateResponse('admin/add_group.html', {"request": request,
                                                               "groups": groups})
 
 
@@ -190,7 +185,7 @@ def add_teacher_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
 
 @app.get('/admin/add_subject')
 def add_subject_page(request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse('admin/addsubject.html', {"request": request})
+    return templates.TemplateResponse('admin/add_subject.html', {"request": request})
 
 
 @app.post('/add_subject_to_db')
