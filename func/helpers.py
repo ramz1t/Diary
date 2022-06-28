@@ -1,6 +1,7 @@
 from Dairy.logic.group import get_groups
 from Dairy.logic.key import get_student_keys, get_student_keys_for_export, get_teacher_keys
 from Dairy.logic.school import check_school_in_db
+from Dairy.logic.subject import get_subjects
 from Dairy.models.admin import Admin
 from Dairy.models.student import Student
 from Dairy.models.teacher import Teacher
@@ -39,7 +40,8 @@ def get_data_for_page(page: str, current_user, request):
     elif page == 'school':
         availability = check_school_in_db(current_user.email)
         return {"request": request, "number": current_user.email, "availability": availability}
-    elif page == 'change_password':
-        return {"request": request}
+    elif page == 'add_subject':
+        subjects = get_subjects(current_user.email)
+        return {"request": request, "subjects": subjects}
     else:
         return {"request": request}

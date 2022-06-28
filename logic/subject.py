@@ -1,3 +1,4 @@
+from Dairy.models.school import School
 from Dairy.models.subject import Subject, ApiSubject
 from Dairy.data.data import Sessions
 from fastapi.responses import JSONResponse
@@ -14,5 +15,10 @@ def add_new_subject(subject: ApiSubject):
     return JSONResponse(status_code=status.HTTP_201_CREATED, content='Subject added')
 
 
-def get_subjects():
-    pass
+def get_subjects(school_id: int):
+    with Sessions() as session:
+        school = session.query(School).filter_by(name=school_id).first()
+        try:
+            return school.subjects
+        except AttributeError:
+            return []

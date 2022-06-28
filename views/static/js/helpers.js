@@ -13,7 +13,7 @@ async function changePassword() {
         document.getElementById("Repeat_new_pass").classList.add('is-invalid');
         return;
     }
-    var response = await fetch('/change_password', {
+    var response = await fetch('/change_user_password', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
@@ -24,4 +24,9 @@ async function changePassword() {
             'old_password': old_pass
         })
     });
+    if (response.ok) {
+        alert('password changed');
+    } else {
+        alert('error');
+    }
 }

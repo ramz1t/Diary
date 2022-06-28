@@ -125,7 +125,6 @@ async function addSchool() {
     }
 }
 
-
 async function loadPage(page) {
     if (page === 'load') {
         page = $.cookie("page");
