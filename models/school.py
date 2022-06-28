@@ -11,6 +11,7 @@ class School(Base):
     city = Column(String)
     groups = relationship('Group')
     subjects = relationship('Subject')
+    teachers = relationship('Teacher')
 
 
 class ApiSchool(BaseModel):

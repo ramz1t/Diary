@@ -103,8 +103,8 @@ def create_account(student: ApiStudent):
 
 
 @app.post('/create_teacher')
-def create_teacher(teacher: ApiTeacher):
-    response = create_new_teacher(teacher)
+def create_teacher(teacher: ApiTeacher, current_user=Depends(get_current_user)):
+    response = create_new_teacher(teacher, current_user.email)
     return response
 
 
