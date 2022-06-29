@@ -145,3 +145,36 @@ async function loadPage(page) {
         }
     }
 }
+
+function setValue(type, value, id) {
+    document.getElementById(type).innerHTML = value;
+    document.getElementById(type + '_id').innerText = id;
+}
+
+async function addClass() {
+    var group = document.getElementById('group').innerText.trim();
+    var subject = document.getElementById('subject').innerText.trim();
+    var teacher = document.getElementById('teacher').innerText.trim();
+    if (group === 'Choose group' || subject === 'Choose subject' || teacher === 'Choose teacher') {
+        alert('not enough info');
+        return;
+    }
+    var response = await fetch('/add_class_to_db', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'group_id': document.getElementById('group_id').innerText,
+            'subject_id': document.getElementById('subject_id').innerText,
+            'teacher_id': document.getElementById('teacher_id').innerText
+        })
+    });
+    if (response.ok) {
+        var text = await response.json();
+        alert(text);
+    } else {
+        alert('error');
+    }
+}

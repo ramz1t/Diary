@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from pydantic import BaseModel
 from data.data import Base
 
@@ -9,9 +9,10 @@ class ClassesRelationship(Base):
     group_id = Column(Integer)
     subject_id = Column(Integer)
     teacher_id = Column(Integer)
+    school_db_id = Column(Integer, ForeignKey('schools.id'))
 
 
-class ApiClassesRelationship(BaseModel):
+class ApiClass(BaseModel):
     group_id: int
     subject_id: int
     teacher_id: int

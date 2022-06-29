@@ -12,6 +12,7 @@ class School(Base):
     groups = relationship('Group')
     subjects = relationship('Subject')
     teachers = relationship('Teacher')
+    classes = relationship('ClassesRelationship')
 
 
 class ApiSchool(BaseModel):
