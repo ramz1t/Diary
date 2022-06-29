@@ -17,12 +17,22 @@ body{
     justify-content: center;
 }
 
-.card{
-    float: right;
-    right: 10vw;
-    top: 20vw;
-}
-
 #logo {
     padding: 25px;
+}
+
+.page-flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.page-flex-element {
+    width: 50%;
+    height: 100vh;
+}
+
+#card-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
