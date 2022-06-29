@@ -11,7 +11,7 @@
             </button>
             <div class="collapse show" id="home-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage('add_group')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'add_group')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
 <!--                    <li><a href="#" class="link-dark rounded">Edit</a></li>-->
                     <li class="border-top my-3"></li>
                 </ul>
@@ -24,8 +24,8 @@
             </button>
             <div class="collapse" id="dashboard-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage('add_student_key')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
-                    <li><button class="navbar-button" onclick="loadPage('export_student_keys')"><i class="bi bi-send navbar-icon"></i>Export</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'add_student_key')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'export_student_keys')"><i class="bi bi-send navbar-icon"></i>Export</button></li>
                     <li class="border-top my-3"></li>
                 </ul>
             </div>
@@ -37,8 +37,8 @@
             </button>
             <div class="collapse" id="teachers-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage('add_teacher_key')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
-                    <li><button class="navbar-button" onclick="loadPage('export_teacher_keys')"><i class="bi bi-send navbar-icon"></i>Export</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'add_teacher_key')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'export_teacher_keys')"><i class="bi bi-send navbar-icon"></i>Export</button></li>
                     <li class="border-top my-3"></li>
                 </ul>
             </div>
@@ -50,7 +50,7 @@
             </button>
             <div class="collapse" id="subjects-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage('add_subject')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'add_subject')"><i class="bi bi-plus navbar-icon"></i>Add</button></li>
                     <li class="border-top my-3"></li>
                 </ul>
             </div>
@@ -62,7 +62,7 @@
             </button>
             <div class="collapse" id="school-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage('school')"><i class="bi bi-kanban navbar-icon"></i>Manage</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'school')"><i class="bi bi-kanban navbar-icon"></i>Manage</button></li>
                 </ul>
             </div>
         </li>
@@ -74,7 +74,7 @@
             </button>
             <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage('change_password')"><i class="bi bi-lock navbar-icon"></i>Change password</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'change_password')"><i class="bi bi-lock navbar-icon"></i>Change password</button></li>
                     <li><button class="navbar-button" onclick="logout()"><i class="bi bi-box-arrow-right navbar-icon"></i>Log out</button></li>
                 </ul>
             </div>

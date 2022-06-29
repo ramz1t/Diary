@@ -89,9 +89,9 @@ def teacher_profile(request: Request, current_user=Depends(get_current_user)):
                                                                "email": current_user.email})
 
 
-@app.get('/load_page/{page}')
-def load_page(page: str, request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse(f'admin/{page}.html',
+@app.get('/load_page/{type}/{page}')
+def load_page(type: str, page: str, request: Request, current_user=Depends(get_current_user)):
+    return templates.TemplateResponse(f'{type}/{page}.html',
                                       get_data_for_page(page=page, request=request, current_user=current_user))
 
 

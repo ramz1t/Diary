@@ -29,3 +29,24 @@ async function changePassword() {
     var text = await response.json();
     alert(text);
 }
+
+async function loadPage(type, page) {
+    if (page === 'load') {
+        page = $.cookie("page");
+    } else {
+        document.cookie = "page=" + page;
+    }
+    if (page !== undefined) {
+        var response = await fetch(`/load_page/${type}/${page}`, {
+            headers: {
+                'accept': 'application/json'
+            }
+        });
+        if (response.ok) {
+            var wrapper = document.getElementById('wrapper');
+            response = await response.text();
+            wrapper.innerHTML = '';
+            wrapper.innerHTML = response;
+        }
+    }
+}

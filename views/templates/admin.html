@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin panel</title>
-    <script type="text/javascript" src="{{ url_for('static', path='js/adminpanel.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', path='js/admin.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', path='styles/admin.css') }}">
     {% include 'components/bootstrap.html' %}
 </head>
-<body onload="loadPage('load')">
+<body onload="loadPage('admin', 'load')">
 <div class="page">
     <div class="controls">{% include 'admin/navbar.html' %}</div>
     <div id="wrapper"></div>

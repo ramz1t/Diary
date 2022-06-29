@@ -125,26 +125,6 @@ async function addSchool() {
     }
 }
 
-async function loadPage(page) {
-    if (page === 'load') {
-        page = $.cookie("page");
-    } else {
-        document.cookie = "page=" + page;
-    }
-    if (page !== undefined) {
-        var response = await fetch(`/load_page/${page}`, {
-            headers: {
-                'accept': 'application/json'
-            }
-        });
-        if (response.ok) {
-            var wrapper = document.getElementById('wrapper');
-            response = await response.text();
-            wrapper.innerHTML = '';
-            wrapper.innerHTML = response;
-        }
-    }
-}
 
 function setValue(type, value, id) {
     document.getElementById(type).innerHTML = value;
