@@ -52,6 +52,29 @@
         <h1>Error</h1>
         {% endif %}
     </div>
+    <div class="content-element">
+        <h1>All classes</h1>
+        <table class="table keys">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Group</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Teacher</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for class in classes %}
+            <tr>
+                <th scope="row">{{ class.id }}</th>
+                <td>{{ class.group }}</td>
+                <td>{{ class.subject }}</td>
+                <td>{{ class.teacher }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <p style="display: none" class="info" id="group_id"></p>
 <p style="display: none" class="info" id="teacher_id"></p>

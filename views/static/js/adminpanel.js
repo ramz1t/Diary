@@ -172,9 +172,9 @@ async function addClass() {
         })
     });
     if (response.ok) {
+        document.location.reload(true);
+    } else {
         var text = await response.json();
         alert(text);
-    } else {
-        alert('error');
     }
 }
