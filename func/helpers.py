@@ -33,8 +33,10 @@ def get_data_for_page(page: str, current_user, request):
         subjects = get_subjects(current_user.email)
         classes = get_classes(current_user.email)
         availability = check_school_in_db(current_user.email)
-        return {"request": request, "number": current_user.email, "availability": availability, "subjects": subjects,
-                "teachers": teachers, "groups": groups, "classes": classes}
+        return {"request": request, "number": current_user.email, "availability": availability,
+                "subjects": sorted(subjects, key=lambda x: x.name),
+                "teachers": sorted(teachers, key=lambda x: x.surname), "groups": groups,
+                "classes": classes}
     elif page == 'add_subject':
         subjects = get_subjects(current_user.email)
         return {"request": request, "subjects": subjects}
