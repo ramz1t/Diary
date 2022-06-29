@@ -5,6 +5,7 @@ function logout() {
 }
 
 async function changePassword() {
+    var type = $.cookie("type");
     var new_pass = document.getElementById("New_pass").value;
     var old_pass = document.getElementById("Old_pass").value;
     var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
@@ -21,12 +22,10 @@ async function changePassword() {
         },
         body: JSON.stringify({
             'new_password': new_pass,
-            'old_password': old_pass
+            'old_password': old_pass,
+            'type': type
         })
     });
-    if (response.ok) {
-        alert('password changed');
-    } else {
-        alert('error');
-    }
+    var text = await response.json();
+    alert(text);
 }

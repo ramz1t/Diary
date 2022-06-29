@@ -1,12 +1,15 @@
+from starlette import status
+from starlette.responses import JSONResponse
+
+from Dairy.func.db_user_find import get_user_by_email
+from Dairy.logic.auth import verify_password, get_password_hash
 from Dairy.logic.cls import get_classes
 from Dairy.logic.group import get_groups
 from Dairy.logic.key import get_student_keys, get_student_keys_for_export, get_teacher_keys
 from Dairy.logic.school import check_school_in_db
 from Dairy.logic.subject import get_subjects
 from Dairy.logic.teacher import get_teachers
-from Dairy.models.admin import Admin
-from Dairy.models.student import Student
-from Dairy.models.teacher import Teacher
+from Dairy.models.admin import ApiChangePassword
 from Dairy.data.data import Sessions
 
 
@@ -42,3 +45,14 @@ def get_data_for_page(page: str, current_user, request):
         return {"request": request, "subjects": subjects}
     else:
         return {"request": request}
+
+
+def change_user_password(email, body: ApiChangePassword):
+    with Sessions() as session:
+        user = get_user_by_email(email=email, type=body.type)
+        if not verify_password(plain_password=body.old_password, hashed_password=user.password):
+            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old password is not correct')
+        user.password = get_password_hash(body.new_password)
+        session.add(user)
+        session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')

@@ -16,6 +16,7 @@ class ApiAdmin(BaseModel):
     password: str
 
 
-class ChangePassword(BaseModel):
+class ApiChangePassword(BaseModel):
     old_password: str
     new_password: str
+    type: str
