@@ -18,7 +18,7 @@ from models.school import School
 from models.key import Key
 from models.subject import Subject
 from models.classes_rel import ClassesRelationship
-
+from models.day import Day, ScheduleClass
 config = context.config
 
 # Interpret the config file for Python logging.
