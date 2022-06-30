@@ -8,7 +8,11 @@
     {% include 'components/bootstrap.html' %}
 </head>
 <body>
-<img id="logo" src="{{ url_for('static', path='photos/dairy.png') }}">
+<div class="page-flex">
+    <div class="page-flex-element">
+        <img id="logo" src="{{ url_for('static', path='photos/dairy.png') }}">
+    </div>
+    <div class="page-flex-element" id="card-div">
     <div class="card shadow-lg" style="width: 30rem;">
         <div class="card-body">
             <p class="text-center fs-3 fw-bolder">Register ({{ usertype }})</p>
@@ -41,5 +45,7 @@
                 </div>
         </div>
     </div>
+</div>
+</div>
 </body>
 </html>
