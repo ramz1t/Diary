@@ -14,10 +14,7 @@ from Dairy.data.data import Sessions
 
 
 def get_data_for_page(page: str, current_user, request):
-    if page == 'manage_groups':
-        groups = get_groups(current_user.email)
-        return {"request": request, "groups": sorted(groups)}
-    elif page == 'add_student_key':
+    if page == 'add_student_key':
         groups = get_groups(current_user.email)
         keys = get_student_keys(current_user.email)
         return {"request": request, "groups": groups, "keys": keys}
@@ -43,6 +40,9 @@ def get_data_for_page(page: str, current_user, request):
     elif page == 'add_subject':
         subjects = get_subjects(current_user.email)
         return {"request": request, "subjects": subjects}
+    elif page == 'manage_groups':
+        classes = get_classes(current_user.email)
+        return {"request": request, "classes": sorted(classes, key=lambda x: x['subject'])}
     else:
         return {"request": request}
 

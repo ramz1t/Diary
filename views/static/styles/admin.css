@@ -148,3 +148,16 @@ body {
     background: none;
     border-color: black !important;
 }
+
+.day {
+    border: black 1px;
+}
+
+.day-body {
+    display: flex;
+    flex-direction: row;
+}
+
+.dropdown-custom {
+    width: 10rem;
+}

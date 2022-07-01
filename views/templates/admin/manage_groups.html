@@ -1,4 +1,28 @@
 <div class="content-grid">
     <div class="content-element">
+        <h1>Edit schedule</h1>
+        <div class="day">
+            <div class="day-title">
+                <h3>Monday</h3>
+            </div>
+            <div class="day-body">
+                <div class="dropdown">
+                    <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="lesson1"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+
+                    </a>
+                    <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
+                        {% for class in classes %}
+                        <li><a class="dropdown-item"
+                               onclick="setValue('class1', '{{ class.subject }}', '{{class.id}}')">{{
+                            class.subject }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    <p style="display: none" id="class1_id"></p>
+                    <p style="display: none" id="class1_state">fix</p>
+                </div>
+                <button>Edit</button>
+            </div>
+        </div>
     </div>
 </div>
