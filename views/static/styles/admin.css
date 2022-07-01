@@ -148,3 +148,13 @@ body {
     background: none;
     border-color: black !important;
 }
+
+.page-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.page-flex-element {
+    height: 100vh;
+}
