@@ -11,7 +11,7 @@ class Group(Base):
     school_id = Column(Integer)
     students = relationship("Student")
     school_db_id = Column(Integer, ForeignKey('schools.id'))
-    classes = relationship("Day")
+    #classes = relationship("Day")
     # tasks: relationship(Task)
 
 

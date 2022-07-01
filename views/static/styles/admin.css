@@ -67,9 +67,7 @@ body {
     background: #ffffff;
     text-align: center;
     overflow: hidden;
-    position: fixed;
     width: 100%;
-    bottom: 0;
 }
 
 .wave-container > svg {
@@ -130,6 +128,7 @@ body {
 
 .controls {
     width: 250px;
+    position: sticky;
 }
 
 .dropdowns {
@@ -162,12 +161,9 @@ body {
     width: 10rem;
 }
 
-.page-flex {
+.all-site {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-.page-flex-element {
-    height: 100vh;
+    min-height: 100vh;
 }
