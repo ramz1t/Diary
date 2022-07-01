@@ -1,11 +1,11 @@
-<div style="margin-top: 2rem">
+<div onload="loadSchedule('load')" style="margin-top: 2rem">
     <div style="display: flex; flex-direction: row">
         <h1 style="padding-right: 1rem">Edit schedule of </h1>
         <div class="class-dropdown">
             <h1 onclick="showDropdown()" class="dropbtn" id="group">group</h1>
             <div id="class-dropdown" class="class-dropdown-content">
                 {% for group in groups %}
-                <a onclick="chooseGroup('{{group.name}}', '{{group.id}}')" >{{ group.name }}</a>
+                <a onclick="chooseGroup('{{group.name}}', '{{group.id}}')">{{ group.name }}</a>
                 {% endfor %}
                 <p style="display: none" id="group_id"></p>
             </div>
@@ -13,30 +13,33 @@
     </div>
     <br>
     <div class="schedule" id="schedule-wrapper">
-        {% for i in range(0, 5) %}
+        {% for day_i in range(days|length) %}
         <div class="day">
             <div class="day-title">
                 <h3>{{ days[i] }}</h3>
             </div>
-            <div class="day-body">
+            <div class="day-body" id="day-{{day_i}}">
                 <div class="choose-class">
-                    <div class="lesson-number"><h3 class="lesson-number-h">{{i + 1}})</h3></div>
+                    <div class="lesson-number"><h3 class="lesson-number-h">1)</h3></div>
                     <div class="dropdown">
-                        <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="lesson-{{i}}-1"
+                        <a class="btn dropdown-toggle dropdown-custom" href="#" role="button"
+                           id="lesson-{{day_i}}-{{lesson_i}}"
                            data-bs-toggle="dropdown" aria-expanded="false">
                         </a>
                         <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
-                            {% for class in classes %}
+                            {% for lesson_i in range(classes|length) %}
                             <li><a class="dropdown-item"
-                                   onclick="setValue('lesson-{{i}}-1', '{{ class.subject }}', '{{class.id}}')">{{
-                                class.subject }}</a></li>
+                                   onclick="setValue('lesson-{{day_i}}-1',
+                                                    '{{ classes[lesson_i].subject }}',
+                                                    '{{ classes[lesson_i].id}}')">{{
+                                classes[lesson_i].subject }}</a></li>
                             {% endfor %}
                         </ul>
-                        <p style="display: none" id="lesson-{{i}}-1_id"></p>
+                        <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_id"></p>
                     </div>
                     <button class="submit-lesson"><i class="bi bi-check2"></i></button>
                 </div>
-                <button class="add-lesson">Add lesson </button>
+                <button onclick="addLesson('{{lesson_i}}', 'day-{{day_i}}')" class="add-lesson">Add lesson</button>
             </div>
         </div>
         {% endfor %}

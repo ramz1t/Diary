@@ -178,3 +178,12 @@ function chooseGroup(group, id) {
     document.getElementById('group').innerHTML = group;
     document.cookie = "group=" + id;
 }
+
+function addLesson(lesson_number, day_number) {
+    var day = document.getElementById(day_number);
+    day.removeChild(day.lastElementChild);
+}
+
+async function loadSchedule(group) {
+
+}
