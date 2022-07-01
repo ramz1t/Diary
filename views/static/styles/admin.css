@@ -41,7 +41,6 @@ body {
 }
 
 .content-grid {
-    margin-left: 1rem;
     display: grid;
     gap: 2rem;
     width: 100%;
