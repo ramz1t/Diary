@@ -1,28 +1,44 @@
-<div class="content-grid">
-    <div class="content-element">
-        <h1>Edit schedule</h1>
-        <div class="day">
-            <div class="day-title">
-                <h3>Monday</h3>
-            </div>
-            <div class="day-body">
-                <div class="dropdown">
-                    <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="lesson1"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-
-                    </a>
-                    <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
-                        {% for class in classes %}
-                        <li><a class="dropdown-item"
-                               onclick="setValue('class1', '{{ class.subject }}', '{{class.id}}')">{{
-                            class.subject }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    <p style="display: none" id="class1_id"></p>
-                    <p style="display: none" id="class1_state">fix</p>
-                </div>
-                <button>Edit</button>
+<div style="margin-top: 2rem">
+    <div style="display: flex; flex-direction: row">
+        <h1 style="padding-right: 1rem">Edit schedule of </h1>
+        <div class="class-dropdown">
+            <h1 onclick="showDropdown()" class="dropbtn" id="group">group</h1>
+            <div id="class-dropdown" class="class-dropdown-content">
+                {% for group in groups %}
+                <a onclick="chooseGroup('{{group.name}}', '{{group.id}}')" >{{ group.name }}</a>
+                {% endfor %}
+                <p style="display: none" id="group_id"></p>
             </div>
         </div>
+    </div>
+    <br>
+    <div class="schedule" id="schedule-wrapper">
+        {% for i in range(0, 5) %}
+        <div class="day">
+            <div class="day-title">
+                <h3>{{ days[i] }}</h3>
+            </div>
+            <div class="day-body">
+                <div class="choose-class">
+                    <div class="lesson-number"><h3 class="lesson-number-h">{{i + 1}})</h3></div>
+                    <div class="dropdown">
+                        <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="lesson-{{i}}-1"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                        </a>
+                        <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
+                            {% for class in classes %}
+                            <li><a class="dropdown-item"
+                                   onclick="setValue('lesson-{{i}}-1', '{{ class.subject }}', '{{class.id}}')">{{
+                                class.subject }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <p style="display: none" id="lesson-{{i}}-1_id"></p>
+                    </div>
+                    <button class="submit-lesson"><i class="bi bi-check2"></i></button>
+                </div>
+                <button class="add-lesson">Add lesson </button>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>

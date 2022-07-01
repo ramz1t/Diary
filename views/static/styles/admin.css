@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap');
 
+/** {*/
+/*    outline: solid 1px red;*/
+/*}*/
+
 body {
     font-family: 'Montserrat', sans-serif !important;
 }
@@ -41,6 +45,7 @@ body {
 }
 
 .content-grid {
+    margin-top: 2rem;
     display: grid;
     gap: 2rem;
     width: 100%;
@@ -53,7 +58,6 @@ body {
 }
 
 .content-element {
-    padding-top: 1rem;
     width: 100%;
     margin: 0 auto;
 }
@@ -128,6 +132,7 @@ body {
 .controls {
     width: 250px;
     position: sticky;
+    margin-right: 2rem;
 }
 
 .dropdowns {
@@ -136,10 +141,6 @@ body {
     width: 100%;
     justify-content: flex-start;
     margin-bottom: 1rem;
-}
-
-.dropdown {
-    padding-inline-end: 1rem !important;
 }
 
 .dropdown-custom {
@@ -152,12 +153,19 @@ body {
 }
 
 .day-body {
+    padding: 0.5rem;
+    border: solid 1px black;
+    border-radius: 5px;
+}
+
+.choose-class {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .dropdown-custom {
-    width: 10rem;
+    width: 12rem;
 }
 
 .all-site {
@@ -165,4 +173,72 @@ body {
     flex-direction: column;
     justify-content: space-between;
     min-height: 100vh;
+}
+
+.dropbtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.class-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.class-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.class-dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.class-dropdown-content a:hover {
+    background-color: #ddd
+}
+
+.show {
+    display:block;
+}
+
+.schedule {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    width: 97%;
+}
+
+.add-lesson {
+    background: #004d00;
+    border: none;
+    border-radius: .25rem;
+    color: white;
+    width: 100%;
+    margin-top: 15px;
+    padding: 7px;
+}
+
+.submit-lesson {
+    height: 38px;
+    width: 38px;
+    background: none;
+    border: solid 1px black;
+    border-radius: .25rem;
+}
+
+.lesson-number {
+    display: flex;
+    align-items: flex-end;
+}
+
+.lesson-number-h {
+    margin-bottom: 0;
 }

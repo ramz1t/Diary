@@ -42,7 +42,10 @@ def get_data_for_page(page: str, current_user, request):
         return {"request": request, "subjects": subjects}
     elif page == 'manage_groups':
         classes = get_classes(current_user.email)
-        return {"request": request, "classes": sorted(classes, key=lambda x: x['subject'])}
+        groups = get_groups(current_user.email)
+        days_titles = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        return {"request": request, "classes": sorted(classes, key=lambda x: x['subject']), "groups": groups,
+                "days": days_titles}
     else:
         return {"request": request}
 

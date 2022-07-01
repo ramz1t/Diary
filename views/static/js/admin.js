@@ -104,7 +104,6 @@ async function addSubject() {
     }
 }
 
-
 async function addSchool() {
     var city = document.getElementById('city').value;
     var response = await fetch('/add_school_to_db', {
@@ -124,7 +123,6 @@ async function addSchool() {
         alert('error');
     }
 }
-
 
 function setValue(type, value, id) {
     document.getElementById(type).innerHTML = value;
@@ -157,4 +155,26 @@ async function addClass() {
         var text = await response.json();
         alert(text);
     }
+}
+
+function showDropdown() {
+    document.getElementById("class-dropdown").classList.toggle("show");
+}
+
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("class-dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+
+function chooseGroup(group, id) {
+    document.getElementById('group').innerHTML = group;
+    document.cookie = "group=" + id;
 }
