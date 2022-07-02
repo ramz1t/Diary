@@ -179,9 +179,27 @@ function chooseGroup(group, id) {
     document.cookie = "group=" + id;
 }
 
-function addLesson(lesson_number, day_number) {
-    var day = document.getElementById(day_number);
-    day.removeChild(day.lastElementChild);
+async function addLesson(day_number) {
+    var day = document.getElementById(`day-${day_number}`);
+    var lesson_number = document.getElementById(`day-${day_number}-lessons-count`).innerText;
+    var response = await fetch('http://127.0.0.1:8003/add_lesson', {
+        method: 'POST',
+        headers: {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'day_i': day_number,
+            'lesson_i': lesson_number
+        })
+    });
+    if (response.ok) {
+        day.removeChild(day.lastElementChild);
+        var text = await response.text();
+        // text = text.slice(1, -2);
+        day.insertAdjacentHTML('beforeend', text);
+        document.getElementById(`day-${day_number}-lessons-count`).innerText = parseInt(lesson_number) + 1;
+    }
 }
 
 async function loadSchedule(group) {

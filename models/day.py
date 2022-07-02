@@ -26,3 +26,8 @@ class ScheduleClass(Base):
 class ApiScheduleClass(BaseModel):
     class_number: int
     class_id: int
+
+
+class AddLesson(BaseModel):
+    day_i: int
+    lesson_i: int
