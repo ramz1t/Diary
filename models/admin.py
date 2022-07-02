@@ -20,3 +20,9 @@ class ApiChangePassword(BaseModel):
     old_password: str
     new_password: str
     type: str
+
+
+class ApiChangeEmail(BaseModel):
+    type: str
+    password: str
+    new_email: str

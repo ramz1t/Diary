@@ -242,3 +242,10 @@ body {
 .lesson-number-h {
     margin-bottom: 0;
 }
+
+#change-pass{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 15vh;
+}

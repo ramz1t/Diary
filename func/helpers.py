@@ -9,7 +9,7 @@ from Dairy.logic.key import get_student_keys, get_student_keys_for_export, get_t
 from Dairy.logic.school import check_school_in_db
 from Dairy.logic.subject import get_subjects
 from Dairy.logic.teacher import get_teachers
-from Dairy.models.admin import ApiChangePassword
+from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
 from Dairy.data.data import Sessions
 
 
@@ -59,3 +59,12 @@ def change_user_password(email, body: ApiChangePassword):
         session.add(user)
         session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
+
+
+def change_user_email(email, body: ApiChangeEmail):
+    with Sessions() as session:
+        user = get_user_by_email(email=email, type=body.type)
+        if not verify_password(plain_password=body.password, hashed_password=user.password):
+            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Password is not correct')
+
+
