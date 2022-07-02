@@ -243,5 +243,9 @@ body {
 
 .lesson-number-h {
     margin-bottom: 0;
-    min-width: 25px;
+    min-width: 30px;
+}
+
+.dropdown-toggle::after {
+    border: none !important;
 }

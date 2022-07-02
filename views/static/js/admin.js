@@ -196,7 +196,6 @@ async function addLesson(day_number) {
     if (response.ok) {
         day.removeChild(day.lastElementChild);
         var text = await response.text();
-        // text = text.slice(1, -2);
         day.insertAdjacentHTML('beforeend', text);
         document.getElementById(`day-${day_number}-lessons-count`).innerText = parseInt(lesson_number) + 1;
     }
