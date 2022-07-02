@@ -61,10 +61,10 @@ def change_user_password(email, body: ApiChangePassword):
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
 
 
-def change_user_email(email, body: ApiChangeEmail):
+def change_user_email(body: ApiChangeEmail):
     with Sessions() as session:
-        user = get_user_by_email(email=email, type=body.type)
-        if not verify_password(plain_password=body.password, hashed_password=user.password):
-            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Password is not correct')
-
-
+        user = get_user_by_email(email=body.email, type=body.type).first()
+        user.email = body.new_email
+        session.add(user)
+        session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')

@@ -24,5 +24,5 @@ class ApiChangePassword(BaseModel):
 
 class ApiChangeEmail(BaseModel):
     type: str
-    password: str
     new_email: str
+    email: str

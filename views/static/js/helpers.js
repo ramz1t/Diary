@@ -30,6 +30,21 @@ async function changePassword() {
     alert(text);
 }
 
+async function changeEmail() {
+    var type = $.cookie("type");
+    var new_email = document.getElementById('New_email').value;
+    var response = await fetch('/change_user_email', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+
+    });
+    var text = await response.json();
+    alert(text)
+}
+
 async function loadPage(type, page) {
     if (page === 'load') {
         page = $.cookie("page");

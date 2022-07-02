@@ -1,64 +1,65 @@
 <div class="flex-shrink-0 p-3 bg-white">
     <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
         <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
-        <span style="padding-left: 15px" class="fs-5 fw-semibold">logged in to acc {{ email }}</span>
+        <span style="padding-left: 15px" class="fs-5 fw-semibold">Admin Panel</span>
     </a>
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#home-collapse" aria-expanded="false">
-                1
+                    data-bs-target="#home-collapse" aria-expanded="false">develop
             </button>
             <div class="collapse show" id="home-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">1.1</a></li>
-                    <li><a href="#" class="link-dark rounded">1.2</a></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#dashboard-collapse" aria-expanded="false">
-                2
+                    data-bs-target="#dashboard-collapse" aria-expanded="false">develop
             </button>
             <div class="collapse" id="dashboard-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">2.1</a></li>
-                    <li><a href="#" class="link-dark rounded">2.2</a></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li><button class="navbar-button" onclick="loadPage()"></i>develop</button></li>
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#teachers-collapse" aria-expanded="false">
-                3
+                develop
             </button>
             <div class="collapse" id="teachers-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">3.1</a></li>
-                    <li><a href="#" class="link-dark rounded">3.2</a></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#subjects-collapse" aria-expanded="false">
-                4
+                    data-bs-target="#subjects-collapse" aria-expanded="false">develop
             </button>
             <div class="collapse" id="subjects-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">4.1</a></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li class="border-top my-3"></li>
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#school-collapse" aria-expanded="false">
-                5
+                <i class="bi bi-house-door icon-custom"></i>develop
             </button>
             <div class="collapse" id="school-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">5.1</a></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage()"></i>develop</button></li>
                 </ul>
             </div>
         </li>
@@ -66,12 +67,13 @@
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#account-collapse" aria-expanded="false">
-                Account
+                <i class="bi bi-person-circle icon-custom"></i>Account
             </button>
             <div class="collapse" id="account-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/change_password" class="link-dark rounded">Change password</a></li>
-                    <li><a class="link-dark rounded" onclick="logout()">Log out</a></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'change_password')"><i class="bi bi-lock navbar-icon"></i>Change password</button></li>
+                    <li><button class="navbar-button" onclick="loadPage('admin', 'change_email')"><i class="bi bi-envelope"></i>Change email</button></li>
+                    <li><button class="navbar-button" onclick="logout()"><i class="bi bi-box-arrow-right navbar-icon"></i>Log out</button></li>
                 </ul>
             </div>
         </li>
