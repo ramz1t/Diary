@@ -177,6 +177,7 @@ window.onclick = function (event) {
 function chooseGroup(group, id) {
     document.getElementById('group').innerHTML = group;
     document.cookie = "group=" + id;
+    loadSchedule(group, id)
 }
 
 async function addLesson(day_number) {
@@ -201,6 +202,14 @@ async function addLesson(day_number) {
     }
 }
 
-async function loadSchedule(group) {
-
+async function loadSchedule(group_name, group_id) {
+    console.log(group_id, group_name);
+    if (group_name === 'load') {
+        group_id = $.cookie("group");
+    } else {
+        document.cookie = "group=" + group_id;
+    }
+    if (group_name !== undefined) {
+        console.log('loading', group_name, group_id);
+    }
 }
