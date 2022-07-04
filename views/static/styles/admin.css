@@ -55,6 +55,10 @@ body {
     width: calc(100vw - 290px);
 }
 
+.schedule-wrapper {
+    width: calc(100vw - 290px);
+}
+
 @media (min-width: 1200px) {
     .content-grid {
         grid-template-columns: 1fr 1fr;
