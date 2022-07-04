@@ -4,6 +4,10 @@
 /*    outline: solid 1px red;*/
 /*}*/
 
+:root {
+    --dairy-color: #004d00
+}
+
 body {
     font-family: 'Montserrat', sans-serif !important;
 }
@@ -19,7 +23,7 @@ body {
 }
 
 .btn-login-custom {
-    background-color: #004d00 !important;
+    background-color: var(--dairy-color) !important;
     width: 100%;
 }
 
@@ -48,7 +52,7 @@ body {
     margin-top: 2rem;
     display: grid;
     gap: 2rem;
-    width: 100%;
+    width: calc(100vw - 290px);
 }
 
 @media (min-width: 1200px) {
@@ -64,6 +68,9 @@ body {
 
 #wrapper {
     width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
 }
 
 .wave-container {
@@ -97,7 +104,7 @@ body {
     height: 50px;
     border-radius: 10px;
     border: none;
-    background: #004d00;
+    background: var(--dairy-color);
     color: white;
 }
 
@@ -130,8 +137,8 @@ body {
 }
 
 .controls {
+    position: fixed;
     width: 250px;
-    position: sticky;
     margin-right: 2rem;
 }
 
@@ -219,7 +226,7 @@ body {
 }
 
 .add-lesson {
-    background: #004d00;
+    background: var(--dairy-color);
     border: none;
     border-radius: .25rem;
     color: white;

@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap');
 
+:root {
+    --dairy-color: #004d00
+}
+
 body{
     font-family: 'Montserrat', sans-serif !important;
     background-image: url("../photos/bg1.jpg");
 }
 
 .btn-login-custom{
-    background-color:#004d00 !important;
+    background-color: var(--dairy-color) !important;
     width: 100%;
 }
 
