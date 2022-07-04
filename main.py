@@ -7,17 +7,16 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from Dairy.files.export import write_student_keys, write_teacher_keys
-from Dairy.func.helpers import get_data_for_page, change_user_password
-from Dairy.logic.cls import add_class_to_db, get_classes
+from Dairy.func.helpers import get_data_for_page, change_user_password, change_user_email
+from Dairy.logic.cls import add_class_to_db
 from Dairy.logic.group import add_new_group, get_all_students_from_group
 from Dairy.logic.key import add_new_student_key
 from Dairy.logic.key import add_new_teacher_key
 from Dairy.logic.school import add_new_school
 from Dairy.logic.subject import add_new_subject
 from Dairy.logic.teacher import create_new_teacher
-from Dairy.models.admin import ApiChangePassword
+from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
 from Dairy.models.classes_rel import ApiClass
-from Dairy.models.day import AddLesson
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.key import ApiKey, ApiTeacherKey
@@ -96,15 +95,6 @@ def load_page(type: str, page: str, request: Request, current_user=Depends(get_c
                                       get_data_for_page(page=page, request=request, current_user=current_user))
 
 
-@app.post('/add_lesson')
-def add_lesson(body: AddLesson, request: Request, current_user=Depends(get_current_user)):
-    classes = get_classes(current_user.email)
-    return templates.TemplateResponse('admin/class.html', {"request": request,
-                                                           "day_i": body.day_i,
-                                                           "lesson_i": body.lesson_i + 1,
-                                                           "classes": classes})
-
-
 ''' DB urls'''
 
 
@@ -147,6 +137,11 @@ def add_school(school: ApiSchool, current_user=Depends(get_current_user)):
 @app.post("/change_user_password")
 def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
     return change_user_password(email=current_user.email, body=body)
+
+
+@app.post('/change_user_email')
+def change_email(body: ApiChangeEmail):
+    return change_user_email(body=body)
 
 
 @app.get('/all_students/{group}')
