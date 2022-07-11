@@ -14,7 +14,6 @@ from Dairy.logic.cls import add_class_to_db
 from Dairy.logic.group import add_new_group, get_all_students_from_group
 from Dairy.logic.key import add_new_student_key
 from Dairy.logic.key import add_new_teacher_key
-from Dairy.logic.school import add_new_school
 from Dairy.logic.subject import add_new_subject
 from Dairy.logic.teacher import create_new_teacher
 from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
@@ -139,11 +138,6 @@ def add_teacher_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
 @app.post('/add_subject_to_db')
 def add_subject(subject: ApiSubject, current_user=Depends(get_current_user)):
     return add_new_subject(subject, current_user.email)
-
-
-@app.post('/add_school_to_db')
-def add_school(school: ApiSchool, current_user=Depends(get_current_user)):
-    return add_new_school(school, school_id=current_user.email)
 
 
 @app.post("/change_user_password")

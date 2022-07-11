@@ -1,6 +1,5 @@
-from Dairy.models.school import ApiSchool
-from models.admin import ApiAdmin
-from logic.admin import create_new_admin
+from Dairy.crud_models import ApiBase, Adapter
 
-admin = ApiAdmin(email='1534', password='admin')
-create_new_admin(admin)
+admin = ApiBase(email='2222', password='admin')
+adapter = Adapter()
+adapter.clss['admin']().create(admin)

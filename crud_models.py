@@ -127,7 +127,7 @@ class Admin(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            if not session.query(Admin).filter_by(email=body.email).first() is None:
+            if not session.query(DBAdmin).filter_by(email=body.email).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
             admin = DBAdmin(email=body.email, password=get_password_hash(body.password))
             session.add(admin)

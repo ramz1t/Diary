@@ -6,7 +6,6 @@ from Dairy.logic.auth import verify_password, get_password_hash
 from Dairy.logic.cls import get_classes
 from Dairy.logic.group import get_groups
 from Dairy.logic.key import get_student_keys, get_student_keys_for_export, get_teacher_keys
-from Dairy.logic.school import check_school_in_db
 from Dairy.logic.subject import get_subjects
 from Dairy.logic.teacher import get_teachers
 from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
@@ -32,7 +31,8 @@ def get_data_for_page(page: str, current_user, request):
         groups = get_groups(current_user.email)
         subjects = get_subjects(current_user.email)
         classes = get_classes(current_user.email)
-        availability = check_school_in_db(current_user.email)
+        # availability = check_school_in_db(current_user.email)
+        availability = True
         return {"request": request, "number": current_user.email, "availability": availability,
                 "subjects": sorted(subjects, key=lambda x: x.name),
                 "teachers": sorted(teachers, key=lambda x: x.surname), "groups": groups,

@@ -106,7 +106,7 @@ async function addSubject() {
 
 async function addSchool() {
     var city = document.getElementById('city').value;
-    var response = await fetch('/add_school_to_db', {
+    var response = await fetch('/admin/school/create', {
         method: 'POST',
         headers: {
             'accept': 'application/json',

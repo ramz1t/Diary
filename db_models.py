@@ -81,7 +81,7 @@ class DBSchool(Base):
     groups = relationship('DBGroup')
     subjects = relationship('DBSubject')
     teachers = relationship('DBTeacher')
-    classes = relationship('ClassesRelationship')
+    classes = relationship('DBClassesRelationship')
 
 
 class DBStudent(Base):
