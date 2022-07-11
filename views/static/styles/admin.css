@@ -5,7 +5,8 @@
 /*}*/
 
 :root {
-    --dairy-color: #004d00
+    --dairy-color: #004d00;
+    --nav-width: 290px;
 }
 
 body {
@@ -52,11 +53,11 @@ body {
     margin-top: 2rem;
     display: grid;
     gap: 2rem;
-    width: calc(100vw - 290px);
+    width: calc(100vw - var(--nav-width));
 }
 
 .schedule-wrapper {
-    width: calc(100vw - 290px);
+    width: calc(100vw - var(--nav-width));
 }
 
 @media (min-width: 1200px) {
@@ -142,7 +143,7 @@ body {
 
 .controls {
     position: fixed;
-    width: 250px;
+    width: calc(var(--nav-width) - 40px);
     margin-right: 2rem;
 }
 
@@ -266,4 +267,19 @@ body {
     align-items: center;
     justify-content: center;
     padding-top: 15vh;
+}
+
+.change {
+    margin-top: 2rem;
+    width: calc(100vw - var(--nav-width))
+}
+
+.center-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:focus {
+    box-shadow: none !important;
 }
