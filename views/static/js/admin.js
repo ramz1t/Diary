@@ -85,6 +85,7 @@ async function manageGroups() {
 }
 
 async function addSubject() {
+    var school_id = $.cookie("school_id");
     var subject = document.getElementById('subject').value;
     if (document.querySelector('input[name="type"]:checked') != null) {
         var lesson_type = document.querySelector('input[name="type"]:checked').value;
@@ -99,6 +100,7 @@ async function addSubject() {
         },
 
         body: JSON.stringify({
+            'school_id': school_id,
             'name': subject,
             'type': lesson_type
         })
@@ -136,6 +138,7 @@ function setValue(type, value, id) {
 }
 
 async function addClass() {
+    var school_id = $.cookie("school_id");
     var group = document.getElementById('group').innerText.trim();
     var subject = document.getElementById('subject').innerText.trim();
     var teacher = document.getElementById('teacher').innerText.trim();
@@ -152,7 +155,8 @@ async function addClass() {
         body: JSON.stringify({
             'group_id': document.getElementById('group_id').innerText,
             'subject_id': document.getElementById('subject_id').innerText,
-            'teacher_id': document.getElementById('teacher_id').innerText
+            'teacher_id': document.getElementById('teacher_id').innerText,
+            'school_id': school_id
         })
     });
     if (response.ok) {
