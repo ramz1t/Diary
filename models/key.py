@@ -5,6 +5,7 @@ from data.data import Base
 
 class Key(Base):
     __tablename__ = 'keys'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     value = Column(String)
     name = Column(String)
@@ -15,6 +16,7 @@ class Key(Base):
 
 class TeacherKey(Base):
     __tablename__ = 'teacher_keys'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     name = Column(String)
     surname = Column(String)

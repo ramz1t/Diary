@@ -9,24 +9,23 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from Dairy.files.export import write_student_keys, write_teacher_keys
-from Dairy.func.helpers import get_data_for_page, change_user_password, change_user_email
+from Dairy.func.helpers import get_data_for_page\
+    # , change_user_password, change_user_email
 from Dairy.logic.cls import add_class_to_db
 from Dairy.logic.group import add_new_group, get_all_students_from_group
 from Dairy.logic.key import add_new_student_key
 from Dairy.logic.key import add_new_teacher_key
 from Dairy.logic.subject import add_new_subject
 from Dairy.logic.teacher import create_new_teacher
-from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
+# from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
 from Dairy.models.classes_rel import ApiClass
 from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.key import ApiKey, ApiTeacherKey
-from Dairy.models.school import ApiSchool
 from Dairy.models.subject import ApiSubject
 from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
-from Dairy.logic.student import create_new_student
 from Dairy.crud_models import Adapter
 from Dairy.crud_models import ApiBase
 
@@ -36,7 +35,7 @@ templates = Jinja2Templates(directory="views/templates")
 adapter = Adapter()
 
 
-@app.post('/admin/{model}/{method}')
+@app.post('/execute/{model}/{method}')
 def execute(body: ApiBase, model: str, method: str):
     cls = adapter.clss[model]()
     func = getattr(cls, method)
@@ -109,11 +108,6 @@ def load_page(type: str, page: str, request: Request, current_user=Depends(get_c
 ''' DB urls'''
 
 
-@app.post('/create_student')
-def create_account(student: ApiStudent):
-    return create_new_student(student)
-
-
 @app.post('/create_teacher')
 def create_teacher(teacher: ApiTeacher, current_user=Depends(get_current_user)):
     response = create_new_teacher(teacher, current_user.email)
@@ -140,14 +134,14 @@ def add_subject(subject: ApiSubject, current_user=Depends(get_current_user)):
     return add_new_subject(subject, current_user.email)
 
 
-@app.post("/change_user_password")
-def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
-    return change_user_password(email=current_user.email, body=body)
-
-
-@app.post('/change_user_email')
-def change_email(body: ApiChangeEmail):
-    return change_user_email(body=body)
+# @app.post("/change_user_password")
+# def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
+#     return change_user_password(email=current_user.email, body=body)
+#
+#
+# @app.post('/change_user_email')
+# def change_email(body: ApiChangeEmail):
+#     return change_user_email(body=body)
 
 
 @app.get('/all_students/{group}')

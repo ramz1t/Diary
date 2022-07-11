@@ -5,6 +5,7 @@ from data.data import Base
 
 class ClassesRelationship(Base):
     __tablename__ = 'classes'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     group_id = Column(Integer)
     subject_id = Column(Integer)

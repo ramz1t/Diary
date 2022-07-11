@@ -8,7 +8,7 @@ from Dairy.logic.group import get_groups
 from Dairy.logic.key import get_student_keys, get_student_keys_for_export, get_teacher_keys
 from Dairy.logic.subject import get_subjects
 from Dairy.logic.teacher import get_teachers
-from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
+# from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
 from Dairy.data.data import Sessions
 
 
@@ -50,24 +50,24 @@ def get_data_for_page(page: str, current_user, request):
         return {"request": request}
 
 
-def change_user_password(email, body: ApiChangePassword):
-    with Sessions() as session:
-        user = get_user_by_email(email=email, type=body.type)
-        if not verify_password(plain_password=body.old_password, hashed_password=user.password):
-            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old password is not correct')
-        user.password = get_password_hash(body.new_password)
-        session.add(user)
-        session.commit()
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
-
-
-def change_user_email(body: ApiChangeEmail):
-    with Sessions() as session:
-        user = get_user_by_email(email=body.email, type=body.type).first()
-        if user.email == body.email:
-            user.email = body.new_email
-            session.add(user)
-            session.commit()
-            return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')
-        else:
-            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old email is not correct')
+# def change_user_password(email, body: ApiChangePassword):
+#     with Sessions() as session:
+#         user = get_user_by_email(email=email, type=body.type)
+#         if not verify_password(plain_password=body.old_password, hashed_password=user.password):
+#             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old password is not correct')
+#         user.password = get_password_hash(body.new_password)
+#         session.add(user)
+#         session.commit()
+#         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
+#
+#
+# def change_user_email(body: ApiChangeEmail):
+#     with Sessions() as session:
+#         user = get_user_by_email(email=body.email, type=body.type)
+#         if user.email == body.email:
+#             user.email = body.new_email
+#             session.add(user)
+#             session.commit()
+#             return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')
+#         else:
+#             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old email is not correct')

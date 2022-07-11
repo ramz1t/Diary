@@ -25,7 +25,7 @@ async function addStudentKey() {
     } else {
         return
     }
-    var response = await fetch('/admin/studentkey/add_key', {
+    var response = await fetch('/execute/studentkey/add_key', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
@@ -106,7 +106,7 @@ async function addSubject() {
 
 async function addSchool() {
     var city = document.getElementById('city').value;
-    var response = await fetch('/admin/school/create', {
+    var response = await fetch('/execute/school/create', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
@@ -137,7 +137,7 @@ async function addClass() {
         alert('not enough info');
         return;
     }
-    var response = await fetch('/add_class_to_db', {
+    var response = await fetch('/execute/cls/create', {
         method: 'POST',
         headers: {
             'accept': 'application/json',

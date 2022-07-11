@@ -17,7 +17,7 @@ async function submit() {
             return;
         }
 
-        var response = await fetch(SERVER_DOMAIN + `/create_${type}`, {
+        var response = await fetch(SERVER_DOMAIN + `/execute/${type}/create`, {
             method: 'POST',
             headers: {
                 'accept': 'application/json',

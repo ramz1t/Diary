@@ -238,6 +238,39 @@ class School(CRUDBase):
         pass
 
 
+class Group(CRUDBase):
+
+    def create(self, body: ApiBase):
+        with Sessions() as session:
+            if not session.query(DBGroup).filter_by(name=body.name, school_id=body.school_id).first() is None:
+                return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
+            group = DBGroup(name=body.name, school_id=body.school_id)
+            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school.groups.append(group)
+            session.add(school)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Group created successfully')
+
+    def get(self, body: ApiBase):
+        pass
+
+    def delete(self, body: ApiBase):
+        pass
+
+    def get_groups(self, body: ApiBase):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            try:
+                return school.groups
+            except AttributeError:
+                return []
+
+    def get_all_students_from_group(self, body: ApiBase):
+        with Sessions() as session:
+            group = session.query(DBGroup).filter_by(name=body.group).first()
+            return group.students
+
+
 class Adapter:
 
     _clss = {'student': Student,

@@ -1,9 +1,9 @@
 from fastapi.responses import JSONResponse
 from fastapi import status
 from Dairy.data.data import Sessions
+from Dairy.db_models import DBSchool
 from Dairy.models.classes_rel import ApiClass, ClassesRelationship
 from Dairy.models.group import Group
-from Dairy.models.school import School
 from Dairy.models.subject import Subject
 from Dairy.models.teacher import Teacher
 
@@ -11,7 +11,7 @@ from Dairy.models.teacher import Teacher
 def add_class_to_db(body: ApiClass, school_id: int):
     with Sessions() as session:
         cls = ClassesRelationship(group_id=body.group_id, subject_id=body.subject_id, teacher_id=body.teacher_id)
-        school = session.query(School).filter_by(name=school_id).first()
+        school = session.query(DBSchool).filter_by(name=school_id).first()
         school.classes.append(cls)
         session.add(school)
         session.commit()

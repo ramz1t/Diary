@@ -1,4 +1,4 @@
-from Dairy.models.school import School
+from Dairy.db_models import DBSchool
 from Dairy.models.teacher import ApiTeacher, Teacher
 from Dairy.data.data import Sessions
 from fastapi.responses import JSONResponse
@@ -16,7 +16,7 @@ def create_new_teacher(teacher: ApiTeacher, school_id: int):
             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
         teacher = Teacher(email=teacher.email, password=get_password_hash(teacher.password), name=key.name,
                           surname=key.surname, school_id=key.school_id)
-        school = session.query(School).filter_by(name=school_id).first()
+        school = session.query(DBSchool).filter_by(name=school_id).first()
         school.teachers.append(teacher)
         session.add(school)
         session.commit()
