@@ -66,7 +66,7 @@ class DBGroup(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     school_id = Column(Integer)
-    students = relationship("Student")
+    students = relationship("DBStudent")
     school_db_id = Column(Integer, ForeignKey('schools.id'))
     #classes = relationship("Day")
     # tasks: relationship(Task)
@@ -78,9 +78,9 @@ class DBSchool(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     city = Column(String)
-    groups = relationship('Group')
-    subjects = relationship('Subject')
-    teachers = relationship('Teacher')
+    groups = relationship('DBGroup')
+    subjects = relationship('DBSubject')
+    teachers = relationship('DBTeacher')
     classes = relationship('ClassesRelationship')
 
 
