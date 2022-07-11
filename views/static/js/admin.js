@@ -18,6 +18,7 @@ async function addGroup() {
 }
 
 async function addStudentKey() {
+    var school_id = $.cookie("school_id");
     var name = document.getElementById('name').value.trim();
     var surname = document.getElementById('surname').value.trim();
     if (document.querySelector('input[name="group"]:checked') != null) {
@@ -34,7 +35,8 @@ async function addStudentKey() {
         body: JSON.stringify({
             'name': name,
             'surname': surname,
-            'group': group
+            'group': group,
+            'school_id': school_id
         })
     });
     if (response.ok) {

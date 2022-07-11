@@ -26,18 +26,20 @@ from Dairy.models.subject import ApiSubject
 from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
-from Dairy.crud_models import Adapter
+from Dairy.crud_models import CRUDAdapter
 from Dairy.crud_models import ApiBase
+from Dairy.pages import PagesAdapter, ApiPage
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
-adapter = Adapter()
+crudadapter = CRUDAdapter()
+pagesadapter = PagesAdapter()
 
 
 @app.post('/execute/{model}/{method}')
 def execute(body: ApiBase, model: str, method: str):
-    cls = adapter.clss[model]()
+    cls = crudadapter.clss[model]()
     func = getattr(cls, method)
     return func(body)
 
@@ -99,10 +101,9 @@ def teacher_profile(request: Request, current_user=Depends(get_current_user)):
                                                                "email": current_user.email})
 
 
-@app.get('/load_page/{type}/{page}')
-def load_page(type: str, page: str, request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse(f'{type}/{page}.html',
-                                      get_data_for_page(page=page, request=request, current_user=current_user))
+@app.post('/load_page/')
+def load_page(body: ApiPage, request: Request):
+    return pagesadapter.pages[body.page]().export(body=body, request=request)
 
 
 ''' DB urls'''

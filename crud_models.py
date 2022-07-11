@@ -271,7 +271,7 @@ class Group(CRUDBase):
             return group.students
 
 
-class Adapter:
+class CRUDAdapter:
 
     _clss = {'student': Student,
              'admin': Admin,
@@ -279,7 +279,8 @@ class Adapter:
              'subject': Subject,
              'studentkey': StudentKey,
              'teacherkey': TeacherKey,
-             'school': School}
+             'school': School,
+             'group': Group}
 
     @property
     def clss(self):

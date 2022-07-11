@@ -52,16 +52,24 @@ async function changeEmail() {
 }
 
 async function loadPage(type, page) {
+    var school_id = $.cookie("school_id");
     if (page === 'load') {
         page = $.cookie("page");
     } else {
         document.cookie = "page=" + page;
     }
     if (page !== undefined) {
-        var response = await fetch(`/load_page/${type}/${page}`, {
+        var response = await fetch('http://127.0.0.1:8003/load_page/', {
+            method: 'POST',
             headers: {
-                'accept': 'application/json'
-            }
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'school_id': school_id,
+                'type': type,
+                'page': page
+            })
         });
         if (response.ok) {
             var wrapper = document.getElementById('wrapper');

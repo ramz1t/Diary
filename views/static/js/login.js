@@ -17,6 +17,9 @@ async function login() {
     } else {
         alert(response.status);
     }
+    if (type === 'admin') {
+        document.cookie = "school_id=" + email;
+    }
 }
 
 function openRegisterPage(type) {
