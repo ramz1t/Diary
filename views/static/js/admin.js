@@ -49,15 +49,17 @@ async function addStudentKey() {
 }
 
 async function addTeacherKey() {
+    var school_id = $.cookie("school_id");
     var name = document.getElementById('name').value.trim();
     var surname = document.getElementById('surname').value.trim();
-    var response = await fetch('/execute/teacherkey/create', {
+    var response = await fetch('/execute/teacherkey/add_key', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            'school_id': school_id,
             'name': name,
             'surname': surname,
         })

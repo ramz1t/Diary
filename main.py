@@ -1,34 +1,17 @@
 from datetime import timedelta
-from typing import Union
-
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
 from Dairy.files.export import write_student_keys, write_teacher_keys
-from Dairy.func.helpers import get_data_for_page\
-    # , change_user_password, change_user_email
-from Dairy.logic.cls import add_class_to_db
-from Dairy.logic.group import add_new_group, get_all_students_from_group
-from Dairy.logic.key import add_new_student_key
-from Dairy.logic.key import add_new_teacher_key
-from Dairy.logic.subject import add_new_subject
-from Dairy.logic.teacher import create_new_teacher
-# from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
-from Dairy.models.classes_rel import ApiClass
-from Dairy.models.group import ApiGroup
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
-from Dairy.models.key import ApiKey, ApiTeacherKey
-from Dairy.models.subject import ApiSubject
-from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
-from Dairy.models.student import ApiStudent
 from Dairy.crud_models import CRUDAdapter
 from Dairy.crud_models import ApiBase
 from Dairy.pages import PagesAdapter, ApiPage
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
