@@ -26,11 +26,21 @@ from Dairy.models.teacher import ApiTeacher
 from Dairy.models.token import Token
 from Dairy.models.student import ApiStudent
 from Dairy.logic.student import create_new_student
-
+from Dairy.crud_models import Adapter
+from Dairy.crud_models import ApiBase
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
+adapter = Adapter()
+
+
+@app.post('/admin/{model}/{method}')
+def f(body: ApiBase, model, method):
+    cls = adapter.clss[model]()
+    func = getattr(cls, method)
+    return func(body)
+
 
 
 '''  login and register stuff  '''
