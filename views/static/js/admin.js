@@ -25,7 +25,7 @@ async function addStudentKey() {
     } else {
         return
     }
-    var response = await fetch('/add_student_key_to_db', {
+    var response = await fetch('/admin/studentkey/add_key', {
         method: 'POST',
         headers: {
             'accept': 'application/json',

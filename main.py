@@ -1,4 +1,6 @@
 from datetime import timedelta
+from typing import Union
+
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
@@ -36,7 +38,7 @@ adapter = Adapter()
 
 
 @app.post('/admin/{model}/{method}')
-def f(body: ApiBase, model, method):
+def execute(body: ApiBase, model: str, method: str):
     cls = adapter.clss[model]()
     func = getattr(cls, method)
     return func(body)

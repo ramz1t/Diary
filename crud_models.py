@@ -219,6 +219,25 @@ class Subject(CRUDBase):
         pass
 
 
+class School(CRUDBase):
+
+    def create(self, body: ApiBase):
+        with Sessions() as session:
+            if session.query(DBSchool).filter_by(name=body.school_id).first() is not None:
+                return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='School already created')
+            school = DBSchool(name=body.school_id, city=body.city)
+            session.add(school)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='School created')
+
+    def get(self, body: ApiBase):
+        with Sessions() as session:
+            return session.query(DBSchool).filter_by(name=body.name).first() is not None
+
+    def delete(self, body: ApiBase):
+        pass
+
+
 class Adapter:
 
     _clss = {'student': Student,
@@ -226,7 +245,8 @@ class Adapter:
              'teacher': Teacher,
              'subject': Subject,
              'studentkey': StudentKey,
-             'teacherkey': TeacherKey}
+             'teacherkey': TeacherKey,
+             'school': School}
 
     @property
     def clss(self):
