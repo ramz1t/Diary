@@ -8,7 +8,8 @@ from fastapi.responses import JSONResponse
 from fastapi import status
 from abc import abstractmethod, ABC
 
-from Dairy.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject
+from Dairy.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
+    DBClassesRelationship
 from Dairy.logic.auth import get_password_hash
 
 
@@ -190,6 +191,14 @@ class Teacher(CRUDBase, TeacherKey):
     def delete(self, body: ApiBase):
         return 'teacher deleted'
 
+    def get_teachers(self, body: ApiBase):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            try:
+                return school.teachers
+            except AttributeError:
+                return []
+
 
 class Subject(CRUDBase):
 
@@ -232,7 +241,7 @@ class School(CRUDBase):
 
     def get(self, body: ApiBase):
         with Sessions() as session:
-            return session.query(DBSchool).filter_by(name=body.name).first() is not None
+            return session.query(DBSchool).filter_by(name=body.school_id).first() is not None
 
     def delete(self, body: ApiBase):
         pass
@@ -271,6 +280,36 @@ class Group(CRUDBase):
             return group.students
 
 
+class Cls(CRUDBase):
+
+    def create(self, body: ApiBase):
+        with Sessions() as session:
+            cls = DBClassesRelationship(group_id=body.group_id, subject_id=body.subject_id, teacher_id=body.teacher_id)
+            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school.classes.append(cls)
+            session.add(school)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='class created')
+
+    def get(self, body: ApiBase):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            classes = school.classes
+            result = []
+            for cls in classes:
+                group = session.query(DBGroup).filter_by(id=cls.group_id).first()
+                subject = session.query(DBSubject).filter_by(id=cls.subject_id).first()
+                teacher = session.query(DBTeacher).filter_by(id=cls.teacher_id).first()
+                result.append({"id": cls.id,
+                               "group": group.name,
+                               "subject": subject.name,
+                               "teacher": f'{teacher.surname} {teacher.name}'})
+            return result
+
+    def delete(self, body: ApiBase):
+        pass
+
+
 class CRUDAdapter:
 
     _clss = {'student': Student,
@@ -280,7 +319,8 @@ class CRUDAdapter:
              'studentkey': StudentKey,
              'teacherkey': TeacherKey,
              'school': School,
-             'group': Group}
+             'group': Group,
+             'cls': Cls}
 
     @property
     def clss(self):

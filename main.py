@@ -103,36 +103,13 @@ def teacher_profile(request: Request, current_user=Depends(get_current_user)):
 
 @app.post('/load_page/')
 def load_page(body: ApiPage, request: Request):
-    return pagesadapter.pages[body.page]().export(body=body, request=request)
+    try:
+        return pagesadapter.pages[body.page]().export(body=body, request=request)
+    except KeyError:
+        return templates.TemplateResponse(f'{body.type}/{body.page}.html', {'request': request})
 
 
 ''' DB urls'''
-
-
-@app.post('/create_teacher')
-def create_teacher(teacher: ApiTeacher, current_user=Depends(get_current_user)):
-    response = create_new_teacher(teacher, current_user.email)
-    return response
-
-
-@app.post('/add_group_to_db')
-def add_group(group: ApiGroup, current_user=Depends(get_current_user)):
-    return add_new_group(group, current_user.email)
-
-
-@app.post('/add_student_key_to_db')
-def add_student_key(key: ApiKey, current_user=Depends(get_current_user)):
-    return add_new_student_key(key, current_user.email)
-
-
-@app.post('/add_teacher_key_to_db')
-def add_teacher_key(key: ApiTeacherKey, current_user=Depends(get_current_user)):
-    return add_new_teacher_key(key, current_user.email)
-
-
-@app.post('/add_subject_to_db')
-def add_subject(subject: ApiSubject, current_user=Depends(get_current_user)):
-    return add_new_subject(subject, current_user.email)
 
 
 # @app.post("/change_user_password")
@@ -144,15 +121,6 @@ def add_subject(subject: ApiSubject, current_user=Depends(get_current_user)):
 # def change_email(body: ApiChangeEmail):
 #     return change_user_email(body=body)
 
-
-@app.get('/all_students/{group}')
-def all_students(group):
-    return get_all_students_from_group(group)
-
-
-@app.post('/add_class_to_db')
-def add_class(body: ApiClass, current_user=Depends(get_current_user)):
-    return add_class_to_db(body, current_user.email)
 
 
 ''' download urls'''

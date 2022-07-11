@@ -1,13 +1,15 @@
 async function addGroup() {
+    var school_id = $.cookie("school_id");
     var groupName = document.getElementById("groupname").value;
-    var response = await fetch('/add_group_to_db', {
+    var response = await fetch('/execute/group/create', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            'name': groupName
+            'name': groupName,
+            'school_id': school_id
         })
     });
     if (response.ok) {
@@ -49,7 +51,7 @@ async function addStudentKey() {
 async function addTeacherKey() {
     var name = document.getElementById('name').value.trim();
     var surname = document.getElementById('surname').value.trim();
-    var response = await fetch('/add_teacher_key_to_db', {
+    var response = await fetch('/execute/teacherkey/create', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
@@ -87,7 +89,7 @@ async function addSubject() {
     } else {
         return
     }
-    var response = await fetch('/add_subject_to_db', {
+    var response = await fetch('/execute/subject/create', {
         method: 'POST',
         headers: {
             'accept': 'application/json',
