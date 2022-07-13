@@ -1,8 +1,11 @@
 from abc import abstractmethod, ABC
 from pydantic import BaseModel
+from starlette import status
+from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 
 from Dairy.crud_models import CRUDAdapter
+from Dairy.func.helpers import verify_user_type
 
 clss = CRUDAdapter().clss
 templates = Jinja2Templates(directory="views/templates")
@@ -16,14 +19,20 @@ class ApiPage(BaseModel):
 
 class PageBase(ABC):
 
+    USERTYPE = None
+
     @abstractmethod
     def export(self, body: ApiPage, request):
         raise NotImplementedError
 
 
 class AddStudentKeyPage(PageBase):
+    USERTYPE = 'admin'
 
     def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
         groups = clss['group'].get_groups(self, body)
         keys = clss['studentkey'].get_student_keys(self, body)
         data = {"request": request, "groups": groups, "keys": keys}
@@ -31,32 +40,48 @@ class AddStudentKeyPage(PageBase):
 
 
 class ExportStudentKeysPage(PageBase):
+    USERTYPE = 'admin'
 
     def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
         keys_for_export = clss['student'].get_student_keys_for_export(self, body)
         data = {"request": request, "keys_for_export": keys_for_export}
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 
 class AddGroupPage(PageBase):
+    USERTYPE = 'admin'
 
     def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
         groups = clss['group'].get_groups(self, body)
         data = {"request": request, "groups": groups}
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 
 class AddTeacherKey(PageBase):
+    USERTYPE = 'admin'
 
     def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
         keys = clss['teacherkey'].get_teacher_keys(self, body)
         data = {"request": request, "keys": keys}
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 
 class SchoolPage(PageBase):
+    USERTYPE = 'admin'
 
     def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
         teachers = clss['teacher'].get_teachers(self, body)
         groups = clss['group'].get_groups(self, body)
         subjects = clss['subject'].get_subjects(self, body)
@@ -70,16 +95,24 @@ class SchoolPage(PageBase):
 
 
 class AddSubjectPage(PageBase):
+    USERTYPE = 'admin'
 
     def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
         subjects = clss['subject'].get_subjects(self, body)
         data = {"request": request, "subjects": subjects}
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 
 class ManageGroups(PageBase):
+    USERTYPE = 'admin'
 
     def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
         classes = clss['cls'].get(self, body)
         groups = clss['group'].get_groups(self, body)
         days_titles = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
