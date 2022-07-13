@@ -15,7 +15,7 @@
     <div class="schedule" id="schedule-wrapper">
         {% for day_i in range(days|length) %}
         <div class="day">
-            <p style="display: none" id="day-{{day_i}}-lessons-count">0</p>
+            <p style="display: none" id="day-{{day_i}}-lessons-count">-1</p>
             <div class="day-title">
                 <h3>{{ days[day_i] }}</h3>
             </div>
@@ -39,7 +39,9 @@
                         </ul>
                         <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_id"></p>
                     </div>
-                    <button onclick="addLessonToDB()" class="submit-lesson"><i class="bi bi-check2"></i></button>
+                    <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB()" class="submit-lesson">
+                        <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-check"></i>
+                    </button>
                 </div>
                 {% endfor %}
                 <button onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>

@@ -1,5 +1,5 @@
 <div class="choose-class">
-    <div class="lesson-number"><h3 class="lesson-number-h">{{ lesson_i }}</h3></div>
+    <div class="lesson-number"><h3 class="lesson-number-h">{{ lesson_i + 1 }}</h3></div>
     <div class="dropdown">
         <a class="btn dropdown-toggle dropdown-custom" href="#" role="button"
            id="lesson-{{ day_i }}-{{ lesson_i }}"
@@ -16,6 +16,8 @@
         </ul>
         <p style="display: none" id="lesson-{{ day_i }}-{{ lesson_i }}_id"></p>
     </div>
-    <button onclick="addLessonToDB()" class="submit-lesson"><i class="bi bi-check2"></i></button>
+    <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')" class="submit-lesson unsaved">
+        <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-minus"></i>
+    </button>
 </div>
 <button onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>

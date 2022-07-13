@@ -194,6 +194,12 @@ async function addLesson(day_number) {
     var school_id = $.cookie("school_id");
     var day = document.getElementById(`day-${day_number}`);
     var lesson_number = document.getElementById(`day-${day_number}-lessons-count`).innerText;
+    if (lesson_number !== '-1') {
+        if (document.getElementById(`btn-${day_number}-${lesson_number}`).classList.contains('unsaved')) {
+            alert('last lesson not saved');
+            return;
+        }
+    }
     var response = await fetch('http://127.0.0.1:8003/add_lesson', {
         method: 'POST',
         headers: {
@@ -224,4 +230,14 @@ async function loadSchedule(group_name, group_id) {
     if (group_name !== undefined) {
         console.log('loading', group_name, group_id);
     }
+}
+
+async function addLessonToDB(day_i, lesson_i, group_id, ) {
+    if (document.getElementById(`lesson-${day_i}-${lesson_i}`).innerText === '') {
+        alert('choose lesson');
+        return;
+    }
+    document.getElementById(`btn-${day_i}-${lesson_i}`).classList.remove('unsaved');
+    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-minus');
+    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-check');
 }

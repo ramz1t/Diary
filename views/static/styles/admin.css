@@ -244,8 +244,9 @@ body {
     height: 38px;
     width: 38px;
     background: none;
-    border: solid 1px black;
+    border: solid 1px green;
     border-radius: .25rem;
+    color: green;
 }
 
 .lesson-number {
@@ -282,4 +283,9 @@ body {
 
 .btn:focus {
     box-shadow: none !important;
+}
+
+.unsaved {
+    color: red;
+    border-color: red;
 }
