@@ -5,6 +5,7 @@ from data.data import Base
 
 class Day(Base):
     __tablename__ = 'days'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     group_id = Column(Integer, ForeignKey('groups.id'))
     day_number = Column(Integer)
@@ -18,6 +19,7 @@ class ApiDay(BaseModel):
 
 class ScheduleClass(Base):
     __tablename__ = 'scheduleclasses'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     class_number = Column(Integer)
     class_id = Column(Integer)

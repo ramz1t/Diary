@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from Dairy.files.export import write_student_keys, write_teacher_keys
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
+from Dairy.models.day import AddLesson
 from Dairy.models.token import Token
 from Dairy.crud_models import CRUDAdapter
 from Dairy.crud_models import ApiBase
@@ -90,6 +91,15 @@ def load_page(body: ApiPage, request: Request):
         return pagesadapter.pages[body.page]().export(body=body, request=request)
     except KeyError:
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', {'request': request})
+
+
+@app.post('/add_lesson')
+def add_lesson(body: ApiPage, request: Request, current_user=Depends(get_current_user)):
+    classes = crudadapter.clss['cls']().get(body)
+    return templates.TemplateResponse('admin/class.html', {"request": request,
+                                                           "day_i": body.day_i,
+                                                           "lesson_i": body.lesson_i + 1,
+                                                           "classes": classes})
 
 
 ''' DB urls'''

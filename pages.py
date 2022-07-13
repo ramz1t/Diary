@@ -1,4 +1,6 @@
 from abc import abstractmethod, ABC
+from typing import Optional
+
 from pydantic import BaseModel
 from starlette import status
 from starlette.responses import JSONResponse
@@ -12,9 +14,11 @@ templates = Jinja2Templates(directory="views/templates")
 
 
 class ApiPage(BaseModel):
-    school_id: int
-    type: str
-    page: str
+    school_id: Optional[int]
+    type: Optional[str]
+    page: Optional[str]
+    day_i: Optional[int]
+    lesson_i: Optional[int]
 
 
 class PageBase(ABC):

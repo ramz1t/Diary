@@ -191,6 +191,7 @@ function chooseGroup(group, id) {
 }
 
 async function addLesson(day_number) {
+    var school_id = $.cookie("school_id");
     var day = document.getElementById(`day-${day_number}`);
     var lesson_number = document.getElementById(`day-${day_number}-lessons-count`).innerText;
     var response = await fetch('http://127.0.0.1:8003/add_lesson', {
@@ -201,7 +202,8 @@ async function addLesson(day_number) {
         },
         body: JSON.stringify({
             'day_i': day_number,
-            'lesson_i': lesson_number
+            'lesson_i': lesson_number,
+            'school_id': school_id
         })
     });
     if (response.ok) {
