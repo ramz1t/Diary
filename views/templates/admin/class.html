@@ -16,8 +16,14 @@
         </ul>
         <p style="display: none" id="lesson-{{ day_i }}-{{ lesson_i }}_id"></p>
     </div>
-    <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')" class="submit-lesson unsaved">
+    <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')"
+            class="submit-lesson unsaved">
         <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-minus"></i>
     </button>
 </div>
-<button onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
+<div id="footer-{{day_i}}" class="choose-class">
+    <button style="width: 55%" onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
+    <button style="width: auto" onclick="deleteLesson('{{ day_i}}')" class="del-lesson"><i class="bi bi-trash3"></i>
+        last lesson
+    </button>
+</div>

@@ -44,7 +44,17 @@
                     </button>
                 </div>
                 {% endfor %}
+                {% if 0>0 %}
+                <div id="footer-{{day_i}}" class="choose-class">
+                    <button style="width: 55%" onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
+                    <button style="width: auto" onclick="deleteLesson('{{ day_i}}')" class="del-lesson"><i
+                            class="bi bi-trash3"></i>
+                        last lesson
+                    </button>
+                </div>
+                {% else %}
                 <button onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

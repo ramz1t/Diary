@@ -241,3 +241,15 @@ async function addLessonToDB(day_i, lesson_i, group_id, ) {
     document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-minus');
     document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-check');
 }
+
+async function deleteLesson(day_i) {
+    var day = document.getElementById(`day-${day_i}`);
+    day.removeChild(day.children[day.childElementCount - 2]);
+    var lesson_counter = document.getElementById(`day-${day_i}-lessons-count`);
+    lesson_counter.innerText = parseInt(lesson_counter.innerText) - 1;
+    if (day.childElementCount === 1) {
+        var footer = document.getElementById(`footer-${day_i}`);
+        footer.removeChild(footer.lastElementChild);
+        footer.lastElementChild.setAttribute('style', 'width: 100%');
+    }
+}
