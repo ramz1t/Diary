@@ -1,7 +1,8 @@
 <div class="content-grid">
     <div class="content-element ">
-        <h1>Export keys</h1>
+        <h1>Export students' keys</h1>
         <br>
+        {% if keys_for_export|length > 0 %}
         {% for group in keys_for_export %}
         <div class="for-export">
             <div class="form-floating mb-3 export-btn">
@@ -12,5 +13,8 @@
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        <h3>No keys available for export</h3>
+        {% endif %}
     </div>
 </div>

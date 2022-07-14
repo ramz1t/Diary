@@ -200,7 +200,7 @@ async function addLesson(day_number) {
             return;
         }
     }
-    var response = await fetch('http://127.0.0.1:8003/add_lesson', {
+    var response = await fetch('/add_lesson', {
         method: 'POST',
         headers: {
         'accept': 'application/json',

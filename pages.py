@@ -7,6 +7,7 @@ from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 
 from Dairy.crud_models import CRUDAdapter
+from Dairy.data.data import Sessions
 from Dairy.func.helpers import verify_user_type
 
 clss = CRUDAdapter().clss
@@ -125,10 +126,23 @@ class ManageGroups(PageBase):
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 
+class ExportTeacherKeys(PageBase):
+    USERTYPE = 'admin'
+
+    def export(self, body: ApiPage, request):
+        if not verify_user_type(usertype=self.USERTYPE, request=request):
+            return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
+                                content='No access to this page with this account type')
+        keys = clss['teacherkey'].get_teacher_keys(self, body)
+        availability = len(keys) > 0
+        data = {"request": request, "availability": availability}
+        return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
+
 class PagesAdapter:
 
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
+              'export_teacher_keys': ExportTeacherKeys,
               'add_group': AddGroupPage,
               'add_teacher_key': AddTeacherKey,
               'school': SchoolPage,

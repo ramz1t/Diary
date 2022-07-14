@@ -59,8 +59,9 @@ async function loadPage(type, page) {
         document.cookie = "page=" + page;
     }
     if (page !== undefined) {
-        var response = await fetch('http://127.0.0.1:8003/load_page/', {
+        var response = await fetch('/load_page', {
             method: 'POST',
+
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json'
