@@ -232,7 +232,7 @@ async function loadSchedule(group_name, group_id) {
     }
 }
 
-async function addLessonToDB(day_i, lesson_i, group_id, ) {
+async function addLessonToDB(day_i, lesson_i) {
     if (document.getElementById(`lesson-${day_i}-${lesson_i}`).innerText === '') {
         alert('choose lesson');
         return;

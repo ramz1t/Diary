@@ -27,6 +27,7 @@
                         <a class="btn dropdown-toggle dropdown-custom" href="#" role="button"
                            id="lesson-{{day_i}}-{{lesson_i}}"
                            data-bs-toggle="dropdown" aria-expanded="false">
+<!--                            class name from db data[day_i][lesson_i]-->
                         </a>
                         <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
                             {% for class in classes %}
@@ -45,6 +46,7 @@
                 </div>
                 {% endfor %}
                 {% if 0>0 %}
+<!--                change to data[day_i]|length-->
                 <div id="footer-{{day_i}}" class="choose-class">
                     <button style="width: 55%" onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
                     <button style="width: auto" onclick="deleteLesson('{{ day_i}}')" class="del-lesson"><i
