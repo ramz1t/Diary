@@ -4,20 +4,20 @@ async function submit() {
         var subpass = document.getElementById("repeatpassword").value;
         var email = document.getElementById("email").value;
         var key = document.getElementById("secretkey").value;
-        if (email.search("@") == -1 || email == "") {
+        if (email.search("@") === -1 || email === "") {
             alert('Not email')
             return;
         }
-        if (pass == "") {
+        if (pass === "") {
             alert('Not password')
             return;
         }
-        if (pass != subpass) {
+        if (pass !== subpass) {
             alert('miss match')
             return;
         }
 
-        var response = await fetch(SERVER_DOMAIN + `/execute/${type}/create`, {
+        var response = await fetch(`/execute/${type}/create`, {
             method: 'POST',
             headers: {
                 'accept': 'application/json',
@@ -31,11 +31,8 @@ async function submit() {
         });
 
         if (!response.ok) {
-            if (response.status == '400') {
-                alert('Invalid data');
-            } else if (response.status == '409') {
-                alert('error')
-            }
+            var text = await response.text();
+            alert(text);
         } else {
             alert("все работает")
         }
@@ -44,5 +41,5 @@ async function submit() {
 
 
 function openLoginPage(type) {
-    window.open(SERVER_DOMAIN + `/${type}/login`, '_self')
+    window.open(`/${type}/login`, '_self')
 }

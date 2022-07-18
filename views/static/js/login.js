@@ -23,5 +23,5 @@ async function login() {
 }
 
 function openRegisterPage(type) {
-    window.open(SERVER_DOMAIN + `/${type}/register`, '_self')
+    window.open(`/${type}/register`, '_self')
 }

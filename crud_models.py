@@ -61,12 +61,12 @@ class StudentKey(KeyBase):
 
     def get_key(self, body: ApiBase):
         with Sessions() as session:
-            key = session.query(DBKey).filter_by(value=body.value).first()
+            key = session.query(DBKey).filter_by(value=body.key).first()
             return key
 
     def delete_key(self, body: ApiBase):
         with Sessions() as session:
-            key = session.query(DBKey).filter_by(value=body.value).first()
+            key = session.query(DBKey).filter_by(value=body.key).first()
             session.delete(key)
             session.commit()
 
@@ -147,13 +147,13 @@ class Student(CRUDBase, StudentKey):
     def create(self, body: ApiBase):
         with Sessions() as session:
             key = self.get_key(body)
-            group = session.query(DBGroup).filter_by(name=body.group).first()
+            group = session.query(DBGroup).filter_by(name=key.group).first()
             if key is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong key')
             if not session.query(DBStudent).filter_by(email=body.email).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
-            student = DBStudent(email=body.email, password=get_password_hash(body.password), name=body.name,
-                                surname=body.surname, school_id=body.school_id, group=body.group)
+            student = DBStudent(email=body.email, password=get_password_hash(body.password), name=key.name,
+                                surname=key.surname, school_id=key.school_id, group=key.group)
             group.students.append(student)
             session.add(group)
             session.commit()
