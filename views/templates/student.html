@@ -2,18 +2,18 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" href="{{ url_for('static', path='styles/sitelayout.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', path='styles/navbar.css') }}">
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin panel</title>
     <script type="text/javascript" src="{{ url_for('static', path='js/helpers.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', path='js/admin.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles/admin.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', path='js/student.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/student.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/navbar.css') }}">
     {% include 'components/bootstrap.html' %}
 </head>
-<body onload="loadPage('admin', 'load')">
+<body onload="loadPage('student', 'load')">
 <div class="all-site">
         <div class="page">
-            <div class="controls">{% include 'admin/navbar.html' %}</div>
+            <div class="controls">{% include 'student/navbar.html' %}</div>
             <div id="wrapper"></div>
         </div>
         {% include 'components/wave.html' %}

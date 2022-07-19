@@ -13,7 +13,6 @@ from Dairy.crud_models import CRUDAdapter
 from Dairy.crud_models import ApiBase
 from Dairy.pages import PagesAdapter, ApiPage
 
-
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
@@ -26,7 +25,6 @@ def execute(body: ApiBase, model: str, method: str):
     cls = crudadapter.clss[model]()
     func = getattr(cls, method)
     return func(body)
-
 
 
 '''  login and register stuff  '''
@@ -75,8 +73,8 @@ def admin_page(request: Request, current_user=Depends(get_current_user)):
 
 @app.get('/student')
 def student_profile(request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse('student/profile.html', {"request": request,
-                                                               "email": current_user.email})
+    return templates.TemplateResponse('student.html', {"request": request,
+                                                       "email": current_user.email})
 
 
 @app.get('/teacher')
@@ -104,7 +102,6 @@ def add_lesson(body: ApiPage, request: Request, current_user=Depends(get_current
 
 ''' DB urls'''
 
-
 # @app.post("/change_user_password")
 # def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
 #     return change_user_password(email=current_user.email, body=body)
@@ -113,7 +110,6 @@ def add_lesson(body: ApiPage, request: Request, current_user=Depends(get_current
 # @app.post('/change_user_email')
 # def change_email(body: ApiChangeEmail):
 #     return change_user_email(body=body)
-
 
 
 ''' download urls'''

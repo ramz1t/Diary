@@ -1,17 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap');
-
 /** {*/
 /*    outline: solid 1px red;*/
 /*}*/
-
-:root {
-    --dairy-color: #004d00;
-    --nav-width: 290px;
-}
-
-body {
-    font-family: 'Montserrat', sans-serif !important;
-}
 
 .card-custom {
     padding: 0.6vw;
@@ -35,20 +24,6 @@ body {
     justify-content: center;
 }
 
-
-.bi-people {
-    padding-right: 12px;
-}
-
-.bi-person {
-    padding-right: 12px;
-}
-
-.page {
-    display: flex;
-    flex-direction: row;
-}
-
 .content-grid {
     margin-top: 2rem;
     display: grid;
@@ -69,13 +44,6 @@ body {
 .content-element {
     width: 100%;
     margin: 0 auto;
-}
-
-#wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 1rem;
 }
 
 .wave-container {
@@ -118,9 +86,6 @@ body {
     padding-right: 15px;
 }
 
-.icon-custom {
-    padding-right: 15px;
-}
 
 .type-choose {
     display: inline-block;
@@ -131,15 +96,6 @@ body {
     padding-bottom: 15px;
 }
 
-.navbar-button {
-    background: none;
-    border: none;
-}
-
-.navbar-icon {
-    padding-left: 25px;
-    padding-right: 5px;
-}
 
 .controls {
     position: fixed;
@@ -180,13 +136,6 @@ body {
 
 .dropdown-custom {
     width: 12rem;
-}
-
-.all-site {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 100vh;
 }
 
 .dropbtn {
@@ -287,10 +236,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.btn:focus {
-    box-shadow: none !important;
 }
 
 .unsaved {

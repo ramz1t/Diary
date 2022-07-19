@@ -15,7 +15,8 @@ async function addGroup() {
     if (response.ok) {
         document.location.reload(true);
     } else {
-        alert('error');
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }
 
@@ -44,7 +45,8 @@ async function addStudentKey() {
     if (response.ok) {
         document.location.reload(true);
     } else {
-        alert('error');
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }
 
@@ -67,7 +69,8 @@ async function addTeacherKey() {
     if (response.ok) {
         document.location.reload(true);
     } else {
-        alert('error');
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }
 
@@ -77,11 +80,6 @@ function downloadGroup(group) {
 
 async function downloadTeachers() {
     window.open('/download_teachers', '_blank')
-}
-
-
-async function manageGroups() {
-    window.open('/admin/managegroups', '_self')
 }
 
 async function addSubject() {
@@ -108,7 +106,8 @@ async function addSubject() {
     if (response.ok) {
         document.location.reload(true);
     } else {
-        alert('error');
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }
 
@@ -128,7 +127,8 @@ async function addSchool() {
     if (response.ok) {
         document.location.reload(true);
     } else {
-        alert('error');
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }
 
@@ -162,8 +162,8 @@ async function addClass() {
     if (response.ok) {
         document.location.reload(true);
     } else {
-        var text = await response.json();
-        alert(text);
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }
 
@@ -217,6 +217,9 @@ async function addLesson(day_number) {
         var text = await response.text();
         day.insertAdjacentHTML('beforeend', text);
         document.getElementById(`day-${day_number}-lessons-count`).innerText = parseInt(lesson_number) + 1;
+    } else {
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }
 

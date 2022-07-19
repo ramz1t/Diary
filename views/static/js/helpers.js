@@ -58,6 +58,7 @@ async function loadPage(type, page) {
     } else {
         document.cookie = "page=" + page;
     }
+    console.log(type, page);
     if (page !== undefined) {
         var response = await fetch('/load_page', {
             method: 'POST',
@@ -77,6 +78,19 @@ async function loadPage(type, page) {
             response = await response.text();
             wrapper.innerHTML = '';
             wrapper.innerHTML = response;
+        } else {
+            checkCredentials(response.status)
         }
     }
+}
+
+function checkCredentials(status) {
+    if (status === 401) {
+        logout()
+    }
+}
+
+async function alertError(response) {
+    var text = await response.text();
+    alert(text);
 }

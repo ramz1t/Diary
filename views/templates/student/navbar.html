@@ -1,7 +1,7 @@
 <div class="flex-shrink-0 p-3 bg-white">
     <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
         <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
-        <span style="padding-left: 15px" class="fs-5 fw-semibold">logged in to acc {{ email }}</span>
+        <span style="padding-left: 15px" class="fs-5 fw-semibold">Diary</span>
     </a>
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
@@ -71,7 +71,8 @@
             <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="/admin/change_password" class="link-dark rounded">Change password</a></li>
-                    <li><a class="link-dark rounded" onclick="logout()">Log out</a></li>
+                    <li><button class="navbar-button" onclick="loadPage('student', 'telegram')"><i class="bi bi-telegram navbar-icon"></i>TelegramBot</button></li>
+                    <li><button class="navbar-button" onclick="logout()"><i class="bi bi-envelope navbar-icon"></i>Log out</button></li>
                 </ul>
             </div>
         </li>

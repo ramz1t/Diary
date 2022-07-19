@@ -15,7 +15,7 @@ async function login() {
     if (response.ok) {
         window.open('/' + type, '_self');
     } else {
-        alert(response.status);
+        await alertError(response);
     }
     if (type === 'admin') {
         document.cookie = "school_id=" + email;

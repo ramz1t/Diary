@@ -1,0 +1,19 @@
+.controls {
+    position: fixed;
+    width: calc(var(--nav-width) - 40px);
+    margin-right: 2rem;
+}
+
+.btn:focus {
+    box-shadow: none !important;
+}
+
+.navbar-button {
+    background: none;
+    border: none;
+}
+
+.navbar-icon {
+    padding-left: 25px;
+    padding-right: 5px;
+}
