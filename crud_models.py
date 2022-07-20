@@ -137,14 +137,15 @@ class Admin(CRUDBase):
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Admin created')
 
     def get(self, body: ApiBase):
-        pass
+        with Sessions() as session:
+            return session.query(DBAdmin).filter_by(id=body.id).first()
 
     def delete(self, body: ApiBase):
         return 'admin deleted' + body.email
 
     def link_school(self, body: ApiBase):
         with Sessions() as session:
-            admin = session.query(DBAdmin).filter_by(id=body.id).first()
+            admin = self.get(body)
             if admin is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='school or profile not found')
             admin.school_id = body.school_id

@@ -224,7 +224,6 @@ async function addLesson(day_number) {
 }
 
 async function loadSchedule(group_name, group_id) {
-    console.log(group_id, group_name);
     if (group_name === 'load') {
         group_id = $.cookie("group");
     } else {
@@ -240,6 +239,8 @@ async function addLessonToDB(day_i, lesson_i) {
         alert('choose lesson');
         return;
     }
+    var lesson_id = document.getElementById(`lesson-${day_i}-${lesson_i}_id`).innerText;
+    var group_id = $.cookie("group");
     document.getElementById(`btn-${day_i}-${lesson_i}`).classList.remove('unsaved');
     document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-minus');
     document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-check');
