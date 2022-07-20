@@ -203,8 +203,8 @@ async function addLesson(day_number) {
     var response = await fetch('/add_lesson', {
         method: 'POST',
         headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json'
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             'day_i': day_number,
@@ -254,5 +254,51 @@ async function deleteLesson(day_i) {
         var footer = document.getElementById(`footer-${day_i}`);
         footer.removeChild(footer.lastElementChild);
         footer.lastElementChild.setAttribute('style', 'width: 100%');
+    }
+}
+
+async function searchSchool() {
+    var name = document.getElementById('name').value;
+    var city = document.getElementById('city').value;
+    var response = await fetch('/search_school', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'name': name,
+            'city': city
+        })
+    });
+    if (response.ok) {
+        document.getElementById('result-wrapper').innerHTML = await response.text();
+    } else {
+        checkCredentials(response.status);
+        await alertError(response);
+    }
+}
+
+async function linkSchool(school_id, school_number) {
+    if (!window.confirm(`Are you sure to link profile to school ${school_number}?`)) {
+        return;
+    }
+    var user_id = document.getElementById('db_id').innerText;
+    var response = await fetch('/execute/admin/link_school', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'id': user_id,
+            'school_id': school_id
+        })
+    });
+    if (response.ok) {
+        alert('linked');
+    } else {
+        checkCredentials(response.status);
+        await alertError(response);
     }
 }

@@ -5,6 +5,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.responses import JSONResponse
+
 from Dairy.files.export import write_student_keys, write_teacher_keys
 from Dairy.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Dairy.models.day import AddLesson
@@ -68,22 +70,29 @@ def login_for_access_token(usertype, response: Response, form_data: OAuth2Passwo
 
 @app.get('/admin')
 def admin_page(request: Request, current_user=Depends(get_current_user)):
-    return templates.TemplateResponse('admin.html', {"request": request})
+    if current_user.__tablename__ != 'admins':
+        return JSONResponse(status_code=status.HTTP_403_FORBIDDEN, content='no access with this usertype')
+    return templates.TemplateResponse('admin.html', {"request": request,
+                                                     "user_id": current_user.id})
 
 
 @app.get('/student')
 def student_profile(request: Request, current_user=Depends(get_current_user)):
+    if current_user.__tablename__ != 'students':
+        return JSONResponse(status_code=status.HTTP_403_FORBIDDEN, content='no access with this usertype')
     return templates.TemplateResponse('student.html', {"request": request,
-                                                       "email": current_user.email})
+                                                       "user_id": current_user.id})
 
 
 @app.get('/teacher')
 def teacher_profile(request: Request, current_user=Depends(get_current_user)):
+    if current_user.__tablename__ != 'teachers':
+        return JSONResponse(status_code=status.HTTP_403_FORBIDDEN, content='no access with this usertype')
     return templates.TemplateResponse('teacher/profile.html', {"request": request,
-                                                               "email": current_user.email})
+                                                               "user_id": current_user.id})
 
 
-@app.post('/load_page/')
+@app.patch('/load_page/')
 def load_page(body: ApiPage, request: Request):
     try:
         return pagesadapter.pages[body.page]().export(body=body, request=request)
@@ -92,12 +101,18 @@ def load_page(body: ApiPage, request: Request):
 
 
 @app.post('/add_lesson')
-def add_lesson(body: ApiPage, request: Request, current_user=Depends(get_current_user)):
+def add_lesson(body: ApiPage, request: Request):
     classes = crudadapter.clss['cls']().get(body)
     return templates.TemplateResponse('admin/class.html', {"request": request,
                                                            "day_i": body.day_i,
                                                            "lesson_i": body.lesson_i + 1,
                                                            "classes": classes})
+
+
+@app.post('/search_school')
+def search_school(body: ApiBase, request: Request):
+    data = crudadapter.clss['school']().find(body)
+    return templates.TemplateResponse('admin/school_card.html', {"request": request, "school_data": data})
 
 
 ''' DB urls'''

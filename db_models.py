@@ -31,6 +31,7 @@ class DBAdmin(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String)
     password = Column(String)
+    school_id = Column(Integer)
 
 
 class DBClassesRelationship(Base):

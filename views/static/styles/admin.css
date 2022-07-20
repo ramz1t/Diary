@@ -25,10 +25,8 @@
 }
 
 .content-grid {
-    margin-top: 2rem;
     display: grid;
     gap: 2rem;
-    width: calc(100vw - var(--nav-width));
 }
 
 .schedule-wrapper {
@@ -225,11 +223,6 @@
     align-items: center;
     justify-content: center;
     padding-top: 15vh;
-}
-
-.change {
-    margin-top: 2rem;
-    width: calc(100vw - var(--nav-width))
 }
 
 .center-form {

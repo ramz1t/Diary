@@ -23,6 +23,11 @@ body {
     margin-right: 1rem;
 }
 
+.content-wrapper {
+    width: calc(100vw - var(--nav-width));
+    margin-top: 2rem;
+}
+
 .page {
     display: flex;
     flex-direction: row;

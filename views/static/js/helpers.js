@@ -58,10 +58,9 @@ async function loadPage(type, page) {
     } else {
         document.cookie = "page=" + page;
     }
-    console.log(type, page);
     if (page !== undefined) {
         var response = await fetch('/load_page', {
-            method: 'POST',
+            method: 'PATCH',
 
             headers: {
                 'accept': 'application/json',
