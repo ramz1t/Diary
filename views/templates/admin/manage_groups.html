@@ -5,7 +5,7 @@
             <h1 onclick="showDropdown()" class="dropbtn" id="group">group</h1>
             <div id="class-dropdown" class="class-dropdown-content">
                 {% for group in groups %}
-                <a onclick="loadSchedule('{{group.name}}', '{{group.id}}')">{{ group.name }}</a>
+                <a onclick="loadSchedule('{{group[1]}}', '{{group[0]}}')">{{ group[1] }}</a>
                 {% endfor %}
                 <p style="display: none" id="group_id"></p>
             </div>
@@ -13,52 +13,6 @@
     </div>
     <br>
     <div class="schedule" id="schedule-wrapper">
-        {% for day_i in range(days|length) %}
-        <div class="day">
-            <p style="display: none" id="day-{{day_i}}-lessons-count">-1</p>
-            <div class="day-title">
-                <h3>{{ days[day_i] }}</h3>
-            </div>
-            <div class="day-body" id="day-{{day_i}}">
-                {% for lesson_i in range(0) %}
-                <div class="choose-class">
-                    <div class="lesson-number"><h3 class="lesson-number-h">{{lesson_i + 1}}</h3></div>
-                    <div class="dropdown">
-                        <a class="btn dropdown-toggle dropdown-custom" href="#" role="button"
-                           id="lesson-{{day_i}}-{{lesson_i}}"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-<!--                            class name from db data[day_i][lesson_i]-->
-                        </a>
-                        <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
-                            {% for class in classes %}
-                            <li><a class="dropdown-item"
-                                   onclick="setValue('lesson-{{day_i}}-{{lesson_i}}',
-                                                    '{{ class.subject }}',
-                                                    '{{ class.id }}')">{{
-                                class.subject }}</a></li>
-                            {% endfor %}
-                        </ul>
-                        <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_id"></p>
-                    </div>
-                    <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB()" class="submit-lesson">
-                        <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-check"></i>
-                    </button>
-                </div>
-                {% endfor %}
-                {% if 0>0 %}
-<!--                change to data[day_i]|length-->
-                <div id="footer-{{day_i}}" class="choose-class">
-                    <button style="width: 55%" onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
-                    <button style="width: auto" onclick="deleteLesson('{{ day_i}}')" class="del-lesson"><i
-                            class="bi bi-trash3"></i>
-                        last lesson
-                    </button>
-                </div>
-                {% else %}
-                <button onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
+
     </div>
 </div>

@@ -9,7 +9,7 @@ from fastapi import status
 from abc import abstractmethod, ABC
 
 from Dairy.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
-    DBClassesRelationship
+    DBClassesRelationship, DBScheduleClass
 from Dairy.logic.auth import get_password_hash
 
 
@@ -25,13 +25,15 @@ class ApiBase(BaseModel):
     subject_id: Optional[int]
     teacher_id: Optional[int]
     group: Optional[str]
-    day_number: Optional[str]
+    day_number: Optional[int]
     name: Optional[str]
     surname: Optional[str]
     city: Optional[str]
     key: Optional[str]
     school_id: Optional[int]
     user_id: Optional[int]
+    lesson_number: Optional[int]
+    lesson_id: Optional[int]
 
 
 class KeyBase(ABC):
@@ -232,8 +234,9 @@ class Subject(CRUDBase):
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Subject added')
 
-    def get(self, body: ApiBase):
-        pass
+    def get(self, id: int):
+        with Sessions() as session:
+            return session.query(DBSubject).filter_by(id=id).first().name
 
     def get_subjects(self, body: ApiBase):
         with Sessions() as session:
@@ -283,7 +286,8 @@ class Group(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            if not session.query(DBGroup).filter_by(name=body.name, school_db_id=Admin().get(body).school_id).first() is None:
+            if not session.query(DBGroup).filter_by(name=body.name,
+                                                    school_db_id=Admin().get(body).school_id).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
             group = DBGroup(name=body.name)
             print(body)
@@ -310,11 +314,6 @@ class Group(CRUDBase):
                 return data
             except AttributeError:
                 return []
-
-    def get_all_students_from_group(self, body: ApiBase):
-        with Sessions() as session:
-            group = session.query(DBGroup).filter_by(name=body.group).first()
-            return group.students
 
 
 class Cls(CRUDBase):
@@ -347,6 +346,44 @@ class Cls(CRUDBase):
         pass
 
 
+class ScheduleClass(CRUDBase):
+
+    def create(self, body: ApiBase):
+        with Sessions() as session:
+            schedule_class = DBScheduleClass(day_number=body.day_number, class_number=body.lesson_number,
+                                             group_id=body.group_id, class_id=body.lesson_id)
+            session.add(schedule_class)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='added')
+
+    def get(self, body: ApiBase):
+        pass
+
+    def delete(self, body: ApiBase):
+        with Sessions() as session:
+            schedule_class = session.query(DBScheduleClass).filter_by(day_number=body.day_number,
+                                                                      class_number=body.lesson_number,
+                                                                      group_id=body.group_id).first()
+            session.delete(schedule_class)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content='deleted')
+
+    def get_schedule(self, group_id: int):
+        with Sessions() as session:
+            group = session.query(DBGroup).filter_by(id=group_id).first()
+            data = []
+            for day_i in range(5):
+                today_classes = group.classes.filter_by(day_number=day_i).all()
+                day = []
+                for lesson_i in range(len(set([cls.class_number for cls in today_classes]))):
+                    cls = session.query(DBScheduleClass).filter_by(day_number=day_i, class_number=lesson_i,
+                                                                   group_id=group_id).first()
+                    name = Subject().get(cls.class_id)
+                    day.append(name)
+                data.append(day)
+        return data
+
+
 class CRUDAdapter:
     _clss = {'student': Student,
              'admin': Admin,
@@ -356,7 +393,8 @@ class CRUDAdapter:
              'teacherkey': TeacherKey,
              'school': School,
              'group': Group,
-             'cls': Cls}
+             'cls': Cls,
+             'scheduleclass': ScheduleClass}
 
     @property
     def clss(self):

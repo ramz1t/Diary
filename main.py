@@ -113,7 +113,16 @@ def add_lesson(body: ApiPage, request: Request):
 @app.post('/search_school')
 def search_school(body: ApiBase, request: Request):
     data = crudadapter.clss['school']().find(body)
-    return templates.TemplateResponse('admin/school_card.html', {"request": request, "school_data": data})
+    return templates.TemplateResponse('admin/school_card.html', {"request": request, "school_data": data, })
+
+
+@app.patch('/load_schedule/{group_id}')
+def load_schedule(body: ApiPage, group_id, request: Request):
+    days_titles = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    classes = crudadapter.clss['cls']().get(body)
+    data = crudadapter.clss['scheduleclass']().get_schedule(group_id)
+    return templates.TemplateResponse('admin/schedule.html', {"request": request, "data": data, "classes": classes,
+                                                              "days": days_titles})
 
 
 ''' DB urls'''

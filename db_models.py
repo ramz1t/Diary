@@ -44,21 +44,14 @@ class DBClassesRelationship(Base):
     school_db_id = Column(Integer, ForeignKey('schools.id'))
 
 
-class DBDay(Base):
-    __tablename__ = 'days'
-    __table_args__ = {'extend_existing': True}
-    id = Column(Integer, primary_key=True)
-    group_id = Column(Integer, ForeignKey('groups.id'))
-    day_number = Column(Integer)
-    #classes = relatisonship('ScheduleClass')
-
-
 class DBScheduleClass(Base):
     __tablename__ = 'scheduleclasses'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     class_number = Column(Integer)
+    day_number = Column(Integer)
     class_id = Column(Integer)
+    group_id = Column(Integer, ForeignKey('groups.id'))
 
 
 class DBGroup(Base):
@@ -68,7 +61,7 @@ class DBGroup(Base):
     name = Column(String)
     students = relationship("DBStudent")
     school_db_id = Column(Integer, ForeignKey('schools.id'))
-    #days = relationship("Day")
+    classes = relationship("DBScheduleClass", lazy='dynamic')
     # tasks: relationship(Task)
 
 

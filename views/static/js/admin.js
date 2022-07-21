@@ -173,13 +173,23 @@ async function addLesson(day_number) {
 async function loadSchedule(group_name, group_id) {
     if (group_name === 'load') {
         group_id = localStorage.getItem('schedule_group_id');
+        group_name = localStorage.getItem('schedule_group_name');
     } else {
         localStorage.setItem('schedule_group_name', group_name);
         localStorage.setItem('schedule_group_id', group_id);
     }
-    if (group_id !== null) {
+    if (group_id !== null && group_name !== null) {
         document.getElementById('group').innerHTML = localStorage.getItem('schedule_group_name');
-        console.log('loading', group_name, group_id);
+        let data = {"user_id": localStorage.getItem('user_id')};
+        let response = await callServer(`/load_schedule/${group_id}`, data, 'PATCH');
+        if (response.ok) {
+            let wrapper = document.getElementById('schedule-wrapper');
+            response = await response.text();
+            wrapper.innerHTML = '';
+            wrapper.innerHTML = response;
+        } else {
+            checkCredentials(response.status)
+        }
     }
 }
 
@@ -188,22 +198,45 @@ async function addLessonToDB(day_i, lesson_i) {
         alert('choose lesson');
         return;
     }
-    var lesson_id = document.getElementById(`lesson-${day_i}-${lesson_i}_id`).innerText;
-    var group_id = localStorage.getItem('group_id');
-    document.getElementById(`btn-${day_i}-${lesson_i}`).classList.remove('unsaved');
-    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-minus');
-    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-check');
+    let lesson_id = document.getElementById(`lesson-${day_i}-${lesson_i}_id`).innerText;
+    let group_id = localStorage.getItem('schedule_group_id');
+    let data = {
+        'lesson_id': lesson_id,
+        'group_id': group_id,
+        'day_number': day_i,
+        'lesson_number': lesson_i
+    };
+    let response = await callServer('/execute/scheduleclass/create', data, 'POST');
+    if (response.ok) {
+        document.getElementById(`btn-${day_i}-${lesson_i}`).classList.remove('unsaved');
+        document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-minus');
+        document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-check');
+    } else {
+        checkCredentials(response.status)
+    }
 }
 
 async function deleteLesson(day_i) {
-    var day = document.getElementById(`day-${day_i}`);
-    day.removeChild(day.children[day.childElementCount - 2]);
-    var lesson_counter = document.getElementById(`day-${day_i}-lessons-count`);
-    lesson_counter.innerText = parseInt(lesson_counter.innerText) - 1;
-    if (day.childElementCount === 1) {
-        var footer = document.getElementById(`footer-${day_i}`);
-        footer.removeChild(footer.lastElementChild);
-        footer.lastElementChild.setAttribute('style', 'width: 100%');
+    let lesson_counter = document.getElementById(`day-${day_i}-lessons-count`);
+    let day = document.getElementById(`day-${day_i}`);
+    let group_id = localStorage.getItem('schedule_group_id');
+    let data = {
+        'day_number': day_i,
+        'lesson_number': lesson_counter.innerText,
+        'group_id': group_id
+    };
+    console.log(data);
+    let response = await callServer('/execute/scheduleclass/delete', data, 'POST');
+    if (response.ok) {
+        day.removeChild(day.children[day.childElementCount - 2]);
+        lesson_counter.innerText = parseInt(lesson_counter.innerText) - 1;
+        if (day.childElementCount === 1) {
+            let footer = document.getElementById(`footer-${day_i}`);
+            footer.removeChild(footer.lastElementChild);
+            footer.lastElementChild.setAttribute('style', 'width: 100%');
+        }
+    } else {
+        checkCredentials(response.status);
     }
 }
 
@@ -211,9 +244,9 @@ async function searchSchool() {
     let name = document.getElementById('name').value;
     let city = document.getElementById('city').value;
     let data = {
-            'name': name,
-            'city': city
-        };
+        'name': name,
+        'city': city
+    };
     let response = await callServer('/search_school', data, 'POST');
     if (response.ok) {
         document.getElementById('result-wrapper').innerHTML = await response.text();
