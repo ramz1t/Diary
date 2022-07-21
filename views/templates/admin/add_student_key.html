@@ -14,7 +14,7 @@
         <div class="form-check">
             <input class="form-check-input" type="radio" name="group"
                    id="{{ group.name }}-radio" value="{{ group.name }}">
-            <label class="form-check-label" for="{{ group.name }}-radio">{{ group.name }}</label>
+            <label class="form-check-label" for="{{ group.name }}-radio">{{ group[1] }}</label>
         </div>
         <br>
         {% endfor %}

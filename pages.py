@@ -20,10 +20,10 @@ class ApiPage(BaseModel):
     page: Optional[str]
     day_i: Optional[int]
     lesson_i: Optional[int]
+    user_id: Optional[int]
 
 
 class PageBase(ABC):
-
     USERTYPE = None
 
     @abstractmethod
@@ -92,7 +92,8 @@ class SchoolPage(PageBase):
         subjects = clss['subject'].get_subjects(self, body)
         classes = clss['cls'].get(self, body)
         availability = clss['school'].get(self, body)
-        data = {"request": request, "number": body.school_id, "availability": availability,
+        data = {"request": request, "number": clss['school']().school_name(clss['admin']().get(body).school_id),
+                "availability": availability,
                 "subjects": sorted(subjects, key=lambda x: x.name),
                 "teachers": sorted(teachers, key=lambda x: x.surname), "groups": groups,
                 "classes": classes}
@@ -138,8 +139,8 @@ class ExportTeacherKeys(PageBase):
         data = {"request": request, "availability": availability}
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
-class PagesAdapter:
 
+class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
               'export_teacher_keys': ExportTeacherKeys,

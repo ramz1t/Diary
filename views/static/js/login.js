@@ -1,5 +1,5 @@
 async function login() {
-    var type = $.cookie("type");
+    var type = localStorage.getItem('type');
     var pass = document.getElementById("password").value;
     var email = document.getElementById("email").value;
     var response = await fetch('/token/' + type, {

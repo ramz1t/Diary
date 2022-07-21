@@ -31,7 +31,7 @@ class ApiBase(BaseModel):
     city: Optional[str]
     key: Optional[str]
     school_id: Optional[int]
-    id: Optional[int]
+    user_id: Optional[int]
 
 
 class KeyBase(ABC):
@@ -55,7 +55,7 @@ class StudentKey(KeyBase):
         with Sessions() as session:
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
             key = DBKey(value=value, name=body.name, surname=body.surname, group=body.group,
-                        school_id=body.school_id)
+                        school_id=School().school_name(Admin().get(body).school_id))
             session.add(key)
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
@@ -73,12 +73,13 @@ class StudentKey(KeyBase):
 
     def get_student_keys(self, body: ApiBase):
         with Sessions() as session:
-            keys = session.query(DBKey).filter_by(school_id=body.school_id).all()
+            keys = session.query(DBKey).filter_by(school_id=School().school_name(Admin().get(body).school_id)).all()
             return keys
 
     def get_student_keys_for_export(self, body: ApiBase):
         with Sessions() as session:
-            keys_for_export = session.query(DBKey).filter_by(school_id=body.school_id).all()
+            keys_for_export = session.query(DBKey).filter_by(
+                school_id=School().school_name(Admin().get(body).school_id)).all()
             return set([key.group for key in keys_for_export])
 
 
@@ -88,7 +89,7 @@ class TeacherKey(KeyBase):
         with Sessions() as session:
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
             key = DBTeacherKey(value=value, name=body.name, surname=body.surname,
-                               school_id=body.school_id)
+                               school_id=School().school_name(Admin().get(body).school_id))
             session.add(key)
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
@@ -106,7 +107,8 @@ class TeacherKey(KeyBase):
 
     def get_teacher_keys(self, body: ApiBase):
         with Sessions() as session:
-            keys = session.query(DBTeacherKey).filter_by(school_id=body.school_id).all()
+            keys = session.query(DBTeacherKey).filter_by(
+                school_id=School().school_name(Admin().get(body).school_id)).all()
             return keys
 
 
@@ -130,15 +132,16 @@ class Admin(CRUDBase):
     def create(self, body: ApiBase):
         with Sessions() as session:
             if not session.query(DBAdmin).filter_by(email=body.email).first() is None:
-                return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
+                print('name already in use')
+                return
             admin = DBAdmin(email=body.email, password=get_password_hash(body.password))
             session.add(admin)
             session.commit()
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Admin created')
+            print('admin created')
 
     def get(self, body: ApiBase):
         with Sessions() as session:
-            return session.query(DBAdmin).filter_by(id=body.id).first()
+            return session.query(DBAdmin).filter_by(id=body.user_id).first()
 
     def delete(self, body: ApiBase):
         return 'admin deleted' + body.email
@@ -152,6 +155,10 @@ class Admin(CRUDBase):
             session.add(admin)
             session.commit()
         return JSONResponse(status_code=status.HTTP_200_OK, content=f'profile linked to school')
+
+    def check_link(self, user_id) -> bool:
+        with Sessions() as session:
+            return session.query(DBAdmin).filter_by(id=user_id).first().school_id is not None
 
 
 class Student(CRUDBase, StudentKey):
@@ -188,9 +195,9 @@ class Teacher(CRUDBase, TeacherKey):
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong key')
             if not session.query(Teacher).filter_by(email=body.email).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
-            teacher = DBTeacher(email=body.email, password=get_password_hash(body.password), name=body.name,
-                                surname=body.surname, school_id=body.school_id)
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            teacher = DBTeacher(email=body.email, password=get_password_hash(body.password), name=key.name,
+                                surname=key.surname, school_id=key.school_id)
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             school.teachers.append(teacher)
             session.add(school)
             session.commit()
@@ -205,7 +212,7 @@ class Teacher(CRUDBase, TeacherKey):
 
     def get_teachers(self, body: ApiBase):
         with Sessions() as session:
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             try:
                 return school.teachers
             except AttributeError:
@@ -219,7 +226,7 @@ class Subject(CRUDBase):
             if session.query(DBSubject).filter_by(name=body.name).first() is not None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Subject already in db')
             subject = DBSubject(name=body.name, type=body.type)
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             school.subjects.append(subject)
             session.add(school)
             session.commit()
@@ -230,7 +237,7 @@ class Subject(CRUDBase):
 
     def get_subjects(self, body: ApiBase):
         with Sessions() as session:
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             try:
                 return school.subjects
             except AttributeError:
@@ -253,7 +260,12 @@ class School(CRUDBase):
 
     def get(self, body: ApiBase):
         with Sessions() as session:
-            return session.query(DBSchool).filter_by(name=body.school_id).first() is not None
+            print(body)
+            return session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first() is not None
+
+    def school_name(self, school_id):
+        with Sessions() as session:
+            return session.query(DBSchool).filter_by(id=school_id).first().name
 
     def delete(self, body: ApiBase):
         pass
@@ -271,10 +283,11 @@ class Group(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            if not session.query(DBGroup).filter_by(name=body.name, school_id=body.school_id).first() is None:
+            if not session.query(DBGroup).filter_by(name=body.name, school_db_id=Admin().get(body).school_id).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
-            group = DBGroup(name=body.name, school_id=body.school_id)
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            group = DBGroup(name=body.name)
+            print(body)
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             school.groups.append(group)
             session.add(school)
             session.commit()
@@ -288,9 +301,13 @@ class Group(CRUDBase):
 
     def get_groups(self, body: ApiBase):
         with Sessions() as session:
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             try:
-                return school.groups
+                groups = school.groups
+                data = []
+                for group in groups:
+                    data.append([group.id, group.name, len(group.students)])
+                return data
             except AttributeError:
                 return []
 
@@ -305,7 +322,7 @@ class Cls(CRUDBase):
     def create(self, body: ApiBase):
         with Sessions() as session:
             cls = DBClassesRelationship(group_id=body.group_id, subject_id=body.subject_id, teacher_id=body.teacher_id)
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             school.classes.append(cls)
             session.add(school)
             session.commit()
@@ -313,7 +330,7 @@ class Cls(CRUDBase):
 
     def get(self, body: ApiBase):
         with Sessions() as session:
-            school = session.query(DBSchool).filter_by(name=body.school_id).first()
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             classes = school.classes
             result = []
             for cls in classes:

@@ -4,6 +4,7 @@
         <span style="padding-left: 15px" class="fs-5 fw-semibold">Admin Panel</span>
     </a>
     <ul class="list-unstyled ps-0">
+        {% if link %}
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#home-collapse" aria-expanded="false">
@@ -97,7 +98,7 @@
                     </li>
                     <li>
                         <button class="navbar-button" onclick="loadPage('admin', 'school_link')"><i
-                                class="bi bi-link-45deg navbar-icon"></i></i>Link to school
+                                class="bi bi-link-45deg navbar-icon"></i>Link to school
                         </button>
                     </li>
                 </ul>
@@ -129,5 +130,15 @@
                 </ul>
             </div>
         </li>
+        {% else %}
+        <li class="mb-1">
+            <button class="navbar-button" onclick="loadPage('admin', 'school_link')"><i
+                    class="bi bi-link-45deg icon-custom"></i>Link to school
+            </button>
+            <button class="navbar-button" onclick="logout()"><i
+                    class="bi bi-box-arrow-right icon-custom"></i>Log out
+            </button>
+        </li>
+        {% endif %}
     </ul>
 </div>

@@ -1,5 +1,5 @@
 async function submit() {
-    var type = $.cookie("type");
+    var type = localStorage.getItem('type');
     var pass = document.getElementById("password").value;
     var subpass = document.getElementById("repeatpassword").value;
     var email = document.getElementById("email").value;

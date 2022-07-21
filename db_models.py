@@ -66,10 +66,9 @@ class DBGroup(Base):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    school_id = Column(Integer)
     students = relationship("DBStudent")
     school_db_id = Column(Integer, ForeignKey('schools.id'))
-    #classes = relationship("Day")
+    #days = relationship("Day")
     # tasks: relationship(Task)
 
 

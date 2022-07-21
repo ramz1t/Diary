@@ -21,8 +21,9 @@
             <tbody>
             {% for group in groups %}
             <tr>
-                <th scope="row">{{ group.id }}</th>
-                <td>{{ group.name }}</td>
+                <th scope="row">{{ group[0] }}</th>
+                <td>{{ group[1] }}</td>
+                <td>{{ group[2] }}</td>
             </tr>
             {% endfor %}
             </tbody>

@@ -1,7 +1,42 @@
+async function callServer(url, data, method) {
+    return await fetch(url, {
+        method: method,
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+}
+
+function executeScripts(page) {
+    if (page === 'manage_groups') {
+        loadSchedule('load', '0');
+    }
+}
+
+function writeStorage(data) {
+    for (let i = 0; i < data.length; i++) {
+        localStorage.setItem(data[i][0], data[i][1]);
+    }
+}
+
 function logout() {
-    var type = $.cookie("type");
+    var type = localStorage.getItem('type')
     window.open(`/${type}/login`, '_self');
     document.cookie = 'access_token=; expires=-1;';
+}
+
+function checkCredentials(status) {
+    if (status === 401) {
+        alert('Your session has expired, please log in again');
+        logout()
+    }
+}
+
+async function alertError(response) {
+    var text = await response.text();
+    alert(text);
 }
 
 async function changePassword() {
@@ -52,44 +87,27 @@ async function changeEmail() {
 }
 
 async function loadPage(type, page) {
-    var school_id = $.cookie("school_id");
+    let user_id = localStorage.getItem('user_id');
     if (page === 'load') {
-        page = $.cookie("page");
+        page = localStorage.getItem('page');
     } else {
-        document.cookie = "page=" + page;
+        localStorage.setItem('page', page);
     }
-    if (page !== undefined) {
-        var response = await fetch('/load_page', {
-            method: 'PATCH',
-
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'school_id': school_id,
-                'type': type,
-                'page': page
-            })
-        });
+    if (page !== null) {
+        let data = {
+            'user_id': user_id,
+            'type': type,
+            'page': page
+        };
+        let response = await callServer('/load_page/', data, 'PATCH');
         if (response.ok) {
-            var wrapper = document.getElementById('wrapper');
+            let wrapper = document.getElementById('wrapper');
             response = await response.text();
             wrapper.innerHTML = '';
             wrapper.innerHTML = response;
         } else {
             checkCredentials(response.status)
         }
+        executeScripts(page);
     }
-}
-
-function checkCredentials(status) {
-    if (status === 401) {
-        logout()
-    }
-}
-
-async function alertError(response) {
-    var text = await response.text();
-    alert(text);
 }

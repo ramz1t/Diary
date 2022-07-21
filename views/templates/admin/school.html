@@ -10,7 +10,7 @@
         </div>
         <button class="btn btn-login-custom text-light" onclick="addSchool()">Add school</button>
         {% elif availability == True %}
-        <h1>Manage school №{{ number}}</h1>
+        <h1>Manage school №{{ number }}</h1>
         <br>
         <div class="dropdowns">
             <div class="dropdown">
@@ -20,7 +20,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {% for group in groups %}
-                    <li><a class="dropdown-item" onclick="setValue('group', '{{ group.name }}', '{{group.id}}')" >{{ group.name }}</a></li>
+                    <li><a class="dropdown-item" onclick="setValue('group', '{{ group[1] }}', '{{group[0]}}')" >{{ group[1] }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

@@ -73,6 +73,7 @@ def admin_page(request: Request, current_user=Depends(get_current_user)):
     if current_user.__tablename__ != 'admins':
         return JSONResponse(status_code=status.HTTP_403_FORBIDDEN, content='no access with this usertype')
     return templates.TemplateResponse('admin.html', {"request": request,
+                                                     "link": crudadapter.clss['admin']().check_link(current_user.id),
                                                      "user_id": current_user.id})
 
 
