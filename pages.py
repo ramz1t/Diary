@@ -150,6 +150,14 @@ class SchoolLinkPage(PageBase):
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 
+class MyDairy(PageBase):
+    USERTYPE = 'student'
+
+    def export(self, body: ApiPage, request):
+        data = {"request": request, "number": clss['school']().school_name(clss['admin']().get(body).school_id)}
+        return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -159,7 +167,8 @@ class PagesAdapter:
               'school': SchoolPage,
               'add_subject': AddSubjectPage,
               'manage_groups': ManageGroups,
-              'school_link': SchoolLinkPage}
+              'school_link': SchoolLinkPage,
+              'my_dairy': MyDairy}
 
     @property
     def pages(self):
