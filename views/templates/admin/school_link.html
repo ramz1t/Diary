@@ -1,4 +1,5 @@
 <div class="content-wrapper">
+    {% if link == False %}
     <h1>Link admin profile to school</h1>
     <br>
     <div style="width: 30%">
@@ -16,4 +17,7 @@
         <h5 style="margin-top: 1rem">Search result:</h5>
         <div id="result-wrapper"></div>
     </div>
+    {% else %}
+    <h1>You have been linked to school № {{number}}</h1>
+    {% endif %}
 </div>

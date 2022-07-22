@@ -269,7 +269,10 @@ class School(CRUDBase):
 
     def school_name(self, school_id):
         with Sessions() as session:
-            return session.query(DBSchool).filter_by(id=school_id).first().name
+            school = session.query(DBSchool).filter_by(id=school_id).first()
+            if school is not None:
+                return school.name
+            return
 
     def delete(self, body: ApiBase):
         pass
