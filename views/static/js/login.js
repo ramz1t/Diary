@@ -25,3 +25,9 @@ async function login() {
 function openRegisterPage(type) {
     window.open(`/${type}/register`, '_self')
 }
+
+addEventListener('keyup', function (e) {
+    if(e.keyCode === 13){
+        login();
+    }
+})
