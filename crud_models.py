@@ -263,7 +263,6 @@ class School(CRUDBase):
 
     def get(self, body: ApiBase):
         with Sessions() as session:
-            print(body)
             return session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first() is not None
 
     def school_name(self, school_id):
@@ -290,7 +289,6 @@ class Group(CRUDBase):
                                                     school_db_id=Admin().get(body).school_id).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
             group = DBGroup(name=body.name)
-            print(body)
             school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             school.groups.append(group)
             session.add(school)
@@ -339,7 +337,8 @@ class Cls(CRUDBase):
                 result.append({"id": cls.id,
                                "group": group.name,
                                "subject": subject.name,
-                               "teacher": f'{teacher.surname} {teacher.name}'})
+                               "teacher": f'{teacher.surname} {teacher.name}',
+                               "subject_id": cls.subject_id})
             return result
 
     def delete(self, body: ApiBase):
@@ -350,8 +349,15 @@ class ScheduleClass(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            schedule_class = DBScheduleClass(day_number=body.day_number, class_number=body.lesson_number,
-                                             group_id=body.group_id, class_id=body.lesson_id)
+            if session.query(DBScheduleClass).filter_by(day_number=body.day_number, class_number=body.lesson_number,
+                                                        group_id=body.group_id).first() is None:
+                schedule_class = DBScheduleClass(day_number=body.day_number, class_number=body.lesson_number,
+                                                 group_id=body.group_id, class_id=body.lesson_id)
+            else:
+                schedule_class = session.query(DBScheduleClass).filter_by(day_number=body.day_number,
+                                                                          class_number=body.lesson_number,
+                                                                          group_id=body.group_id).first()
+                schedule_class.class_id = body.lesson_id
             session.add(schedule_class)
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='added')

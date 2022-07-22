@@ -206,6 +206,7 @@ async function addLessonToDB(day_i, lesson_i) {
         'day_number': day_i,
         'lesson_number': lesson_i
     };
+    console.log(data);
     let response = await callServer('/execute/scheduleclass/create', data, 'POST');
     if (response.ok) {
         document.getElementById(`btn-${day_i}-${lesson_i}`).classList.remove('unsaved');
