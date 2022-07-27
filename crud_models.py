@@ -206,8 +206,10 @@ class Teacher(CRUDBase, TeacherKey):
             self.delete_key(body)
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Teacher created')
 
-    def get(self, body: ApiBase):
-        pass
+    def get(self, id: int):
+        with Sessions() as session:
+            teacher = session.query(DBTeacher).filter_by(id=id).first()
+            return teacher.surname + ' ' + teacher.name
 
     def delete(self, body: ApiBase):
         return 'teacher deleted'
@@ -346,6 +348,10 @@ class Cls(CRUDBase):
                                "subject_id": cls.subject_id})
             return result
 
+    def get_one(self, id: int):
+        with Sessions() as session:
+            return session.query(DBClassesRelationship).filter_by(id=id).first()
+
     def delete(self, body: ApiBase):
         pass
 
@@ -389,8 +395,10 @@ class ScheduleClass(CRUDBase):
                 for lesson_i in range(len(set([cls.class_number for cls in today_classes]))):
                     cls = session.query(DBScheduleClass).filter_by(day_number=day_i, class_number=lesson_i,
                                                                    group_id=group_id).first()
-                    name = Subject().get(cls.class_id)
-                    day.append(name)
+                    db_cls = Cls().get_one(cls.class_id)
+                    name = Subject().get(db_cls.subject_id)
+                    teacher = Teacher().get(db_cls.teacher_id)
+                    day.append({'name': name, 'teacher': teacher, 'class_id': db_cls.id})
                 data.append(day)
         return data
 

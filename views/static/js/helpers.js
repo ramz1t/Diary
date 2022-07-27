@@ -35,8 +35,9 @@ function checkCredentials(status) {
 }
 
 async function alertError(response) {
-    var text = await response.text();
-    alert(text);
+    if (!response.ok) {
+        alert(await response.text());
+    }
 }
 
 async function changePassword() {

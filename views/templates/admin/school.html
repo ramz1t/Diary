@@ -1,15 +1,5 @@
 <div class="content-grid content-wrapper" id="classes-manager">
     <div class="content-element" id="classes">
-        {% if availability == False %}
-        <h1>School №{{ number}} is not available</h1>
-        <br>
-        <div class="form-floating mb-3">
-
-            <input type="text" class="form-control" id="city" placeholder="Name">
-            <label for="city"><i class="bi bi-geo-alt icon-custom"></i>School city</label>
-        </div>
-        <button class="btn btn-login-custom text-light" onclick="addSchool()">Add school</button>
-        {% elif availability == True %}
         <h1>Manage school №{{ number }}</h1>
         <br>
         <div class="dropdowns">
@@ -48,9 +38,6 @@
             </div>
         </div>
         <button class="btn btn-login-custom text-light" onclick="addClass()">Add class</button>
-        {% else %}
-        <h1>Error</h1>
-        {% endif %}
     </div>
     <div class="content-element">
         <h1>All classes</h1>

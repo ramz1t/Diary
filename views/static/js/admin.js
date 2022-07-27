@@ -103,6 +103,28 @@ function setValue(type, value, id) {
     document.getElementById(type + '_id').innerText = id;
 }
 
+function turnGreen(day_i, lesson_i) {
+    document.getElementById(`btn-${day_i}-${lesson_i}`).classList.remove('unsaved');
+    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-minus');
+    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-check');
+}
+
+function turnRed(day_i, lesson_i) {
+    document.getElementById(`btn-${day_i}-${lesson_i}`).classList.add('unsaved');
+    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-minus');
+    document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-check');
+}
+
+function checkSave(day_i, lesson_i) {
+    let local_class_id = document.getElementById(`lesson-${day_i}-${lesson_i}_id`).innerText;
+    let db_class_id = document.getElementById(`lesson-${day_i}-${lesson_i}_db_id`).innerText;
+    if (local_class_id !== db_class_id) {
+        turnRed(day_i, lesson_i)
+    } else {
+        turnGreen(day_i, lesson_i)
+    }
+}
+
 async function addClass() {
     let user_id = localStorage.getItem('user_id');
     let group = document.getElementById('group').innerText.trim();
@@ -209,11 +231,10 @@ async function addLessonToDB(day_i, lesson_i) {
     console.log(data);
     let response = await callServer('/execute/scheduleclass/create', data, 'POST');
     if (response.ok) {
-        document.getElementById(`btn-${day_i}-${lesson_i}`).classList.remove('unsaved');
-        document.getElementById(`icon-${day_i}-${lesson_i}`).classList.remove('bi-cloud-minus');
-        document.getElementById(`icon-${day_i}-${lesson_i}`).classList.add('bi-cloud-check');
+        turnGreen(day_i, lesson_i);
+        document.getElementById(`lesson-${day_i}-${lesson_i}_db_id`).innerText = lesson_id;
     } else {
-        checkCredentials(response.status)
+        checkCredentials(response.status);
     }
 }
 

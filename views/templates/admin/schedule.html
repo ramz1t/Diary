@@ -12,18 +12,19 @@
                 <a class="btn dropdown-toggle dropdown-custom" href="#" role="button"
                    id="lesson-{{day_i}}-{{lesson_i}}"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    {{data[day_i][lesson_i]}}
+                    {{data[day_i][lesson_i].name}}
                 </a>
                 <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
                     {% for class in classes %}
                     <li><a class="dropdown-item"
                            onclick="setValue('lesson-{{day_i}}-{{lesson_i}}',
                                                     '{{ class.subject }}',
-                                                    '{{ class.subject_id }}')">{{
+                                                    '{{ class.id }}'); checkSave('{{day_i}}', '{{lesson_i}}')">{{
                         class.subject }}</a></li>
                     {% endfor %}
                 </ul>
                 <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_id"></p>
+                <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_db_id">{{ data[day_i][lesson_i].class_id }}</p>
             </div>
             <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')" class="submit-lesson">
                 <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-check"></i>
