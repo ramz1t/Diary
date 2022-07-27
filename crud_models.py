@@ -254,12 +254,14 @@ class School(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            if session.query(DBSchool).filter_by(name=body.school_id).first() is not None:
-                return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='School already created')
-            school = DBSchool(name=body.school_id, city=body.city)
+            if session.query(DBSchool).filter_by(name=body.name, city=body.city).first() is not None:
+                print('school already in db')
+                return
+            school = DBSchool(name=body.name, city=body.city)
             session.add(school)
             session.commit()
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='School created')
+        print('school created')
+        return
 
     def get(self, body: ApiBase):
         with Sessions() as session:
