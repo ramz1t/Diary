@@ -90,9 +90,9 @@ async function changeEmail() {
 async function loadPage(type, page) {
     let user_id = localStorage.getItem('user_id');
     if (page === 'load') {
-        page = localStorage.getItem('page');
+        page = localStorage.getItem(`${type}_page`);
     } else {
-        localStorage.setItem('page', page);
+        localStorage.setItem(`${type}_page`, page);
     }
     if (page !== null) {
         let data = {
