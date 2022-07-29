@@ -94,9 +94,9 @@ def teacher_profile(request: Request, current_user=Depends(get_current_user)):
 
 
 @app.patch('/load_page/')
-def load_page(body: ApiPage, request: Request):
+def load_page(body: ApiPage, request: Request, current_user=Depends(get_current_user)):
     try:
-        return pagesadapter.pages[body.page]().export(body=body, request=request)
+        return pagesadapter.pages[body.page]().export(body=body, request=request, current_user=current_user)
     except KeyError:
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', {'request': request})
 
@@ -116,8 +116,8 @@ def search_school(body: ApiBase, request: Request):
     return templates.TemplateResponse('admin/school_card.html', {"request": request, "school_data": data, })
 
 
-@app.patch('/load_schedule/{group_id}')
-def load_schedule(body: ApiPage, group_id, request: Request):
+@app.patch('/load_schedule')
+def load_schedule(body: ApiPage, group_id: int, request: Request):
     days_titles = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     classes = crudadapter.clss['cls']().get(body)
     data = crudadapter.clss['scheduleclass']().get_schedule(group_id)
@@ -154,6 +154,11 @@ def download_teachers(current_user=Depends(get_current_user)):
     return FileResponse(f'./files/teachers.txt',
                         media_type='application/octet-stream',
                         filename='teachers')
+
+
+@app.get('/weather_photo')
+def get_weather_photo(weather: str):
+    return FileResponse(f'./views/static/photos/weather/{weather}.jpg')
 
 
 if __name__ == '__main__':

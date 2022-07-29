@@ -1,3 +1,4 @@
+import os
 from abc import abstractmethod, ABC
 from typing import Optional
 
@@ -9,10 +10,12 @@ from starlette.templating import Jinja2Templates
 from Dairy.crud_models import CRUDAdapter
 from Dairy.data.data import Sessions
 from Dairy.func.helpers import verify_user_type
+from pyowm import OWM
 
 clss = CRUDAdapter().clss
 templates = Jinja2Templates(directory="views/templates")
-
+owm = OWM(os.getenv('OWM_KEY'))
+mgr = owm.weather_manager()
 
 class ApiPage(BaseModel):
     school_id: Optional[int]
@@ -27,14 +30,14 @@ class PageBase(ABC):
     USERTYPE = None
 
     @abstractmethod
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         raise NotImplementedError
 
 
 class AddStudentKeyPage(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -47,7 +50,7 @@ class AddStudentKeyPage(PageBase):
 class ExportStudentKeysPage(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -59,7 +62,7 @@ class ExportStudentKeysPage(PageBase):
 class AddGroupPage(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -71,7 +74,7 @@ class AddGroupPage(PageBase):
 class AddTeacherKey(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -83,7 +86,7 @@ class AddTeacherKey(PageBase):
 class SchoolPage(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -103,7 +106,7 @@ class SchoolPage(PageBase):
 class AddSubjectPage(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -115,7 +118,7 @@ class AddSubjectPage(PageBase):
 class ManageGroups(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -130,7 +133,7 @@ class ManageGroups(PageBase):
 class ExportTeacherKeys(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
@@ -143,7 +146,7 @@ class ExportTeacherKeys(PageBase):
 class SchoolLinkPage(PageBase):
     USERTYPE = 'admin'
 
-    def export(self, body: ApiPage, request):
+    def export(self, body: ApiPage, request, current_user):
         link = clss['admin'].check_link(self, body.user_id)
         data = {"request": request, 'link': link,
                 "number": clss['school']().school_name(clss['admin']().get(body).school_id)}
@@ -153,8 +156,15 @@ class SchoolLinkPage(PageBase):
 class MyDairy(PageBase):
     USERTYPE = 'student'
 
-    def export(self, body: ApiPage, request):
-        data = {"request": request, "number": clss['school']().school_name(clss['admin']().get(body).school_id)}
+    def export(self, body: ApiPage, request, current_user):
+        school_city = clss['school'].get_city(self, id=clss['group'].get(self, id=current_user.group_id).school_db_id)
+        try:
+            weather = mgr.weather_at_place(school_city).weather.detailed_status
+        except:
+            weather = 'none'
+        print(weather)
+        data = {"request": request, "number": clss['school']().school_name(clss['admin']().get(body).school_id),
+                'weather': weather}
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 

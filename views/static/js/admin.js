@@ -203,7 +203,7 @@ async function loadSchedule(group_name, group_id) {
     if (group_id !== null && group_name !== null) {
         document.getElementById('group').innerHTML = localStorage.getItem('schedule_group_name');
         let data = {"user_id": localStorage.getItem('user_id')};
-        let response = await callServer(`/load_schedule/${group_id}`, data, 'PATCH');
+        let response = await callServer(`/load_schedule?group_id=${group_id}`, data, 'PATCH');
         if (response.ok) {
             let wrapper = document.getElementById('schedule-wrapper');
             response = await response.text();

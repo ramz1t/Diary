@@ -269,11 +269,18 @@ class School(CRUDBase):
         with Sessions() as session:
             return session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first() is not None
 
-    def school_name(self, school_id):
+    def school_name(self, school_id: int):
         with Sessions() as session:
             school = session.query(DBSchool).filter_by(id=school_id).first()
             if school is not None:
                 return school.name
+            return
+
+    def get_city(self, id: int):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(id=id).first()
+            if school is not None:
+                return school.city
             return
 
     def delete(self, body: ApiBase):
@@ -302,8 +309,9 @@ class Group(CRUDBase):
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Group created successfully')
 
-    def get(self, body: ApiBase):
-        pass
+    def get(self, id: int):
+        with Sessions() as session:
+            return session.query(DBGroup).filter_by(id=id).first()
 
     def delete(self, body: ApiBase):
         pass
