@@ -259,7 +259,7 @@ class School(CRUDBase):
             if session.query(DBSchool).filter_by(name=body.name, city=body.city).first() is not None:
                 print('school already in db')
                 return
-            school = DBSchool(name=body.name, city=body.city)
+            school = DBSchool(name=body.name, city=body.city.capitalize())
             session.add(school)
             session.commit()
         print('school created')
@@ -281,7 +281,7 @@ class School(CRUDBase):
 
     def find(self, body: ApiBase):
         with Sessions() as session:
-            school = session.query(DBSchool).filter_by(name=body.name, city=body.city).first()
+            school = session.query(DBSchool).filter_by(name=body.name, city=body.city.capitalize()).first()
             school_info = ['No school found']
             if school is not None:
                 school_info = [school.name, school.city, school.id]

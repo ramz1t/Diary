@@ -2,14 +2,15 @@ async function login() {
     var type = localStorage.getItem('type');
     var pass = document.getElementById("password").value;
     var email = document.getElementById("email").value;
-    var response = await fetch('/token/' + type, {
+    var response = await fetch('/token', {
         method: 'POST',
         headers: {
             'accept': 'application/json'
         },
         body: new URLSearchParams({
             'username': email,
-            'password': pass
+            'password': pass,
+            'client_id': type
         })
     });
     if (response.ok) {
