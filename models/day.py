@@ -9,7 +9,7 @@ class Day(Base):
     id = Column(Integer, primary_key=True)
     group_id = Column(Integer, ForeignKey('groups.id'))
     day_number = Column(Integer)
-    #classes = relatisonship('ScheduleClass')
+    # classes = relatisonship('ScheduleClass')
 
 
 class ApiDay(BaseModel):

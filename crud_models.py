@@ -56,7 +56,7 @@ class StudentKey(KeyBase):
     def add_key(self, body: ApiBase):
         with Sessions() as session:
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
-            key = DBKey(value=value, name=body.name, surname=body.surname, group=body.group,
+            key = DBKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(), group=body.group,
                         school_id=School().school_name(Admin().get(body).school_id))
             session.add(key)
             session.commit()
@@ -90,7 +90,7 @@ class TeacherKey(KeyBase):
     def add_key(self, body: ApiBase):
         with Sessions() as session:
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
-            key = DBTeacherKey(value=value, name=body.name, surname=body.surname,
+            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(),
                                school_id=School().school_name(Admin().get(body).school_id))
             session.add(key)
             session.commit()
@@ -256,7 +256,7 @@ class School(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            if session.query(DBSchool).filter_by(name=body.name, city=body.city).first() is not None:
+            if session.query(DBSchool).filter_by(name=body.name, city=body.city.capitalize()).first() is not None:
                 print('school already in db')
                 return
             school = DBSchool(name=body.name, city=body.city.capitalize())
@@ -351,8 +351,8 @@ class Cls(CRUDBase):
                 teacher = session.query(DBTeacher).filter_by(id=cls.teacher_id).first()
                 result.append({"id": cls.id,
                                "group": group.name,
-                               "subject": subject.name,
-                               "teacher": f'{teacher.surname} {teacher.name}',
+                               "subject": subject.name.capitalize(),
+                               "teacher": f'{teacher.surname.capitalize()} {teacher.name.capitalize()}',
                                "subject_id": cls.subject_id})
             return result
 
@@ -406,7 +406,7 @@ class ScheduleClass(CRUDBase):
                     db_cls = Cls().get_one(cls.class_id)
                     name = Subject().get(db_cls.subject_id)
                     teacher = Teacher().get(db_cls.teacher_id)
-                    day.append({'name': name, 'teacher': teacher, 'class_id': db_cls.id})
+                    day.append({'name': name.capitalize(), 'teacher': teacher.capitalize(), 'class_id': db_cls.id})
                 data.append(day)
         return data
 
