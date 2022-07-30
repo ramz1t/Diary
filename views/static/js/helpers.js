@@ -29,16 +29,14 @@ function logout() {
 
 function checkCredentials(status) {
     if (status === 401) {
-        alert('Your session has expired, please log in again');
-        logout()
+        Swal.fire({
+            text: 'Your session has expired, please log in again'
+        });
+        logout();
     }
 }
 
-async function alertError(response) {
-    if (!response.ok) {
-        alert(await response.text());
-    }
-}
+
 
 async function changePassword() {
     var type = $.cookie("type");
@@ -84,7 +82,7 @@ async function changeEmail() {
 
     });
     var text = await response.json();
-    alert(text)
+    alert(text);
 }
 
 async function loadPage(type, page) {

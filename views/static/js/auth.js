@@ -5,15 +5,23 @@ async function submit() {
     var email = document.getElementById("email").value;
     var key = document.getElementById("secretkey").value;
     if (email.search("@") === -1 || email === "") {
-        alert('Not email')
+        Swal.fire({
+            text: 'Not Email'
+        })
         return;
     }
     if (pass === "") {
-        alert('Not password')
+        Swal.fire({
+            text: 'Not password'
+        })
         return;
     }
     if (pass !== subpass) {
-        alert('miss match')
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Miss match'
+        })
         return;
     }
 
@@ -31,7 +39,10 @@ async function submit() {
     });
 
     if (response.ok) {
-        alert('created');
+        Swal.fire({
+            icon: 'success',
+            text: 'Created!'
+        })
     } else {
         await alertError(response);
     }

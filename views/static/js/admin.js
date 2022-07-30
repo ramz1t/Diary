@@ -131,7 +131,11 @@ async function addClass() {
     let subject = document.getElementById('subject').innerText.trim();
     let teacher = document.getElementById('teacher').innerText.trim();
     if (group === 'Choose group' || subject === 'Choose subject' || teacher === 'Choose teacher') {
-        alert('not enough info');
+        Swal.fire({
+            icon: 'question',
+            title: 'Sorry',
+            text: 'not enough info'
+        })
         return;
     }
     let data = {
@@ -167,12 +171,15 @@ window.onclick = function (event) {
 
 async function addLesson(day_number) {
     let id = localStorage.getItem('user_id');
-    console.log(id);
     let day = document.getElementById(`day-${day_number}`);
     let lesson_number = document.getElementById(`day-${day_number}-lessons-count`).innerText;
     if (lesson_number !== '-1') {
         if (document.getElementById(`btn-${day_number}-${lesson_number}`).classList.contains('unsaved')) {
-            alert('last lesson not saved');
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'last lesson not saved'
+            })
             return;
         }
     }
@@ -217,7 +224,11 @@ async function loadSchedule(group_name, group_id) {
 
 async function addLessonToDB(day_i, lesson_i) {
     if (document.getElementById(`lesson-${day_i}-${lesson_i}`).innerText === '') {
-        alert('choose lesson');
+        Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'choose lesson'
+            })
         return;
     }
     let lesson_id = document.getElementById(`lesson-${day_i}-${lesson_i}_id`).innerText;
@@ -228,7 +239,6 @@ async function addLessonToDB(day_i, lesson_i) {
         'day_number': day_i,
         'lesson_number': lesson_i
     };
-    console.log(data);
     let response = await callServer('/execute/scheduleclass/create', data, 'POST');
     if (response.ok) {
         turnGreen(day_i, lesson_i);
@@ -247,7 +257,6 @@ async function deleteLesson(day_i) {
         'lesson_number': lesson_counter.innerText,
         'group_id': group_id
     };
-    console.log(data);
     let response = await callServer('/execute/scheduleclass/delete', data, 'POST');
     if (response.ok) {
         day.removeChild(day.children[day.childElementCount - 2]);
@@ -289,7 +298,11 @@ async function linkSchool(school_id, school_number) {
     };
     let response = await callServer('/execute/admin/link_school', data, 'POST');
     if (response.ok) {
-        alert('linked');
+        Swal.fire({
+            icon: 'success',
+            title: 'Done',
+            text: 'Linked'
+        })
         window.location.reload(true);
     } else {
         checkCredentials(response.status);
