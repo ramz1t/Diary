@@ -7,9 +7,9 @@ from starlette import status
 from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 
-from Dairy.crud_models import CRUDAdapter
-from Dairy.data.data import Sessions
-from Dairy.func.helpers import verify_user_type
+from Diary.crud_models import CRUDAdapter
+from Diary.data.data import Sessions
+from Diary.func.helpers import verify_user_type
 from pyowm import OWM
 
 clss = CRUDAdapter().clss

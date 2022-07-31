@@ -1,6 +1,5 @@
-
-from Dairy.data.data import Sessions
-from Dairy.db_models import DBKey, DBTeacherKey
+from Diary.data.data import Sessions
+from Diary.db_models import DBKey, DBTeacherKey
 
 
 def write_student_keys(group: str, school_id: int):

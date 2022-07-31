@@ -1,5 +1,5 @@
-from Dairy.data.data import Sessions
-from Dairy.db_models import DBAdmin, DBStudent, DBTeacher
+from Diary.data.data import Sessions
+from Diary.db_models import DBAdmin, DBStudent, DBTeacher
 
 
 def get_user_by_email(email: str, type: str):

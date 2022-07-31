@@ -11,8 +11,8 @@ from fastapi import HTTPException
 from fastapi import status
 from typing import Optional
 from typing import Dict
-from Dairy.models.token import TokenData
-from Dairy.func.db_user_find import get_user_by_email
+from Diary.models.token import TokenData
+from Diary.func.db_user_find import get_user_by_email
 from dotenv import load_dotenv
 import os
 

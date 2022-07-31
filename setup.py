@@ -1,4 +1,4 @@
-from Dairy.crud_models import ApiBase, CRUDAdapter
+from Diary.crud_models import ApiBase, CRUDAdapter
 
 adapter = CRUDAdapter()
 

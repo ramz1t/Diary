@@ -4,11 +4,11 @@ from jose import jwt, JWTError
 from starlette import status
 from starlette.responses import JSONResponse
 
-from Dairy.func.db_user_find import get_user_by_email
-from Dairy.logic.auth import verify_password, get_password_hash, SECRET_KEY, ALGORITHM
+from Diary.func.db_user_find import get_user_by_email
+from Diary.logic.auth import verify_password, get_password_hash, SECRET_KEY, ALGORITHM
 
 # from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
-from Dairy.data.data import Sessions
+from Diary.data.data import Sessions
 
 
 # def change_user_password(email, body: ApiChangePassword):
@@ -32,7 +32,7 @@ from Dairy.data.data import Sessions
 #             return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')
 #         else:
 #             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old email is not correct')
-from Dairy.models.token import TokenData
+from Diary.models.token import TokenData
 
 
 def verify_user_type(usertype, request) -> bool:
