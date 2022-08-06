@@ -9,6 +9,7 @@ from logic.auth import verify_password, get_password_hash, SECRET_KEY, ALGORITHM
 
 # from models.admin import ApiChangePassword, ApiChangeEmail
 from data.data import Sessions
+from models.token import TokenData
 
 
 # def change_user_password(email, body: ApiChangePassword):
@@ -32,7 +33,6 @@ from data.data import Sessions
 #             return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')
 #         else:
 #             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old email is not correct')
-from Diary.models.token import TokenData
 
 
 def verify_user_type(usertype, request) -> bool:

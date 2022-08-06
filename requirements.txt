@@ -6,3 +6,4 @@ pyowm
 passlib
 python-jose
 python-dotenv
+jinja2
