@@ -1,1 +1,1 @@
-web: bundle exec rails server -p 8000
+web: uvicorn example:app
