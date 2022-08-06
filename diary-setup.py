@@ -1,4 +1,4 @@
-from Diary.crud_models import ApiBase, CRUDAdapter
+from crud_models import ApiBase, CRUDAdapter
 
 adapter = CRUDAdapter()
 
