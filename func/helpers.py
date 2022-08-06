@@ -4,11 +4,11 @@ from jose import jwt, JWTError
 from starlette import status
 from starlette.responses import JSONResponse
 
-from Diary.func.db_user_find import get_user_by_email
-from Diary.logic.auth import verify_password, get_password_hash, SECRET_KEY, ALGORITHM
+from func.db_user_find import get_user_by_email
+from logic.auth import verify_password, get_password_hash, SECRET_KEY, ALGORITHM
 
-# from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
-from Diary.data.data import Sessions
+# from models.admin import ApiChangePassword, ApiChangeEmail
+from data.data import Sessions
 
 
 # def change_user_password(email, body: ApiChangePassword):

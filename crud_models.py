@@ -3,14 +3,14 @@ from typing import Optional, Union
 
 from pydantic import BaseModel
 
-from Diary.data.data import Sessions, symbols
+from data.data import Sessions, symbols
 from fastapi.responses import JSONResponse
 from fastapi import status
 from abc import abstractmethod, ABC
 
-from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
+from db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass
-from Diary.logic.auth import get_password_hash
+from logic.auth import get_password_hash
 
 
 class ApiBase(BaseModel):
