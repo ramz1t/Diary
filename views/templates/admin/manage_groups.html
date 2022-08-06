@@ -1,0 +1,18 @@
+<div class="content-wrapper">
+    <div style="display: flex; flex-direction: row">
+        <h1 style="padding-right: 1rem">Edit schedule of </h1>
+        <div class="class-dropdown">
+            <h1 onclick="showDropdown()" class="dropbtn" id="group">group</h1>
+            <div id="class-dropdown" class="class-dropdown-content">
+                {% for group in groups %}
+                <a onclick="loadSchedule('{{group[1]}}', '{{group[0]}}')">{{ group[1] }}</a>
+                {% endfor %}
+                <p style="display: none" id="group_id"></p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="schedule" id="schedule-wrapper">
+
+    </div>
+</div>

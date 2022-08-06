@@ -1,0 +1,68 @@
+<div class="content-grid content-wrapper" id="classes-manager">
+    <div class="content-element" id="classes">
+        <h1>Manage school №{{ number }}</h1>
+        <br>
+        <div class="dropdowns">
+            <div class="dropdown">
+                <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="group"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose group
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for group in groups %}
+                    <li><a class="dropdown-item" onclick="setValue('group', '{{ group[1] }}', '{{group[0]}}')" >{{ group[1] }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="subject"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose subject
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for subject in subjects %}
+                    <li><a class="dropdown-item" onclick="setValue('subject', '{{ subject.name }}', '{{subject.id}}')" >{{ subject.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="btn dropdown-toggle dropdown-custom" href="#" role="button" id="teacher"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose teacher
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for teacher in teachers %}
+                    <li><a class="dropdown-item" onclick="setValue('teacher', '{{ teacher.surname }} {{teacher.name}}', '{{teacher.id}}')" >{{teacher.surname}} {{ teacher.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <button class="btn btn-login-custom text-light" onclick="addClass()">Add class</button>
+    </div>
+    <div class="content-element">
+        <h1>All classes</h1>
+        <table class="table keys">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Group</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Teacher</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for class in classes %}
+            <tr>
+                <th scope="row">{{ class.id }}</th>
+                <td>{{ class.group }}</td>
+                <td>{{ class.subject }}</td>
+                <td>{{ class.teacher }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<p style="display: none" class="info" id="group_id"></p>
+<p style="display: none" class="info" id="teacher_id"></p>
+<p style="display: none" class="info" id="subject_id"></p>

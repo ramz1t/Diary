@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <script type="text/javascript" src="{{ url_for('static', path='js/helpers.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', path='js/login.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/login.css') }}">
+    {% include 'components/bootstrap.html' %}
 </head>
 <body>
-<form>
-    <p>login</p>
-    <input id="email" type="text">
-    <p>password</p>
-    <input id="password" type="password">
-    <br>
-    <br>
-
-</form>
-<button onclick="login()">Login</button>
+<div class="page-flex">
+    <div class="page-flex-element">
+        <img id="logo" src="{{ url_for('static', path='photos/dairy.png') }}">
+    </div>
+    <div class="page-flex-element" id="card-div">
+        <div class="card shadow-lg" style="width: 30rem;">
+            <div class="card-body">
+                <p class="text-center fs-3 fw-bolder">Login ({{ usertype }})</p>
+            </div>
+            <div class="card-custom">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                    <label for="email"><i class="bi bi-envelope icon-custom"></i>Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" placeholder="password">
+                    <label for="password"><i class="bi bi-key icon-custom"></i>Password</label>
+                </div>
+                <div class="btn-custom">
+                    <button onclick="login()" type="button" class="btn btn-login-custom text-light">Login</button>
+                </div>
+            </div>
+            <div class="hadnt" id="footer">
+                <a class="link text-decoration-none" onclick="openRegisterPage($.cookie('type'))">I don't have an
+                    account</a>
+            </div>
+            <div class="change-type">
+                <a href="/">Choose user type</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>
+<script>
+    var type = $.cookie('type');
+    if (type === 'admin') {
+        document.getElementById('footer').innerHTML = '';
+    }
+</script>

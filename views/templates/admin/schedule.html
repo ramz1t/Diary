@@ -1,0 +1,47 @@
+{% for day_i in range(days|length) %}
+<div class="day">
+    <p style="display: none" id="day-{{day_i}}-lessons-count">{{data[day_i]|length - 1}}</p>
+    <div class="day-title">
+        <h3>{{ days[day_i] }}</h3>
+    </div>
+    <div class="day-body" id="day-{{day_i}}">
+        {% for lesson_i in range(data[day_i]|length) %}
+        <div class="choose-class">
+            <div class="lesson-number"><h3 class="lesson-number-h">{{lesson_i + 1}}</h3></div>
+            <div class="dropdown">
+                <a class="btn dropdown-toggle dropdown-custom" href="#" role="button"
+                   id="lesson-{{day_i}}-{{lesson_i}}"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    {{data[day_i][lesson_i].name}}
+                </a>
+                <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
+                    {% for class in classes %}
+                    <li><a class="dropdown-item"
+                           onclick="setValue('lesson-{{day_i}}-{{lesson_i}}',
+                                                    '{{ class.subject }}',
+                                                    '{{ class.id }}'); checkSave('{{day_i}}', '{{lesson_i}}')">{{
+                        class.subject }}</a></li>
+                    {% endfor %}
+                </ul>
+                <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_id"></p>
+                <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_db_id">{{ data[day_i][lesson_i].class_id }}</p>
+            </div>
+            <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')" class="submit-lesson">
+                <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-check"></i>
+            </button>
+        </div>
+        {% endfor %}
+        {% if data[day_i]|length > 0 %}
+        <div id="footer-{{day_i}}" class="choose-class">
+            <button style="width: 55%" onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
+            <button style="width: auto" onclick="deleteLesson('{{ day_i}}')" class="del-lesson"><i
+                    class="bi bi-trash3"></i>
+                last lesson
+            </button>
+        </div>
+        {% else %}
+        <button onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}

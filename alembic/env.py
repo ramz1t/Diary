@@ -8,14 +8,10 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 from data.data import Base
-from models.admin import Admin
-from models.teacher import Teacher
-from models.student import Student
-from models.group import Group
 from models.mark import Mark
 from models.task import Task
-from models.school import School
-
+from models.day import Day, ScheduleClass
+from db_models import *
 config = context.config
 
 # Interpret the config file for Python logging.
@@ -29,7 +25,7 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
+# other values from the config, defined by the needs of .env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.

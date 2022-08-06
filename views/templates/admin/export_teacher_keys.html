@@ -1,0 +1,18 @@
+<div class="content-grid content-wrapper">
+    <div class="content-element ">
+        <h1>Export teachers' keys</h1>
+        <br>
+        {% if availability %}
+        <div class="for-export">
+            <div class="form-floating mb-3 export-btn">
+                <button class="download" id="export" onclick="downloadTeachers()">
+                    <i class="bi bi-cloud-arrow-down icon-custom"></i>Teacher's keys
+                </button>
+                <br>
+            </div>
+        </div>
+        {% else %}
+        <h3>No keys available for export</h3>
+        {% endif %}
+    </div>
+</div>

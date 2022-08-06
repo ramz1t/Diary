@@ -1,0 +1,38 @@
+<div class="content-grid content-wrapper">
+    <div class="content-element">
+        <h1>Add key</h1>
+        <br>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="name" placeholder="Name">
+            <label for="name"><i class="bi bi-person"></i>Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="surname" placeholder="Surname">
+            <label for="surname"><i class="bi bi-person"></i>Surname</label>
+        </div>
+        <button class="btn btn-login-custom text-light" onclick="addTeacherKey()">Add key</button>
+    </div>
+    <div class="content-element">
+        <h1>Available keys</h1>
+        <table class="table keys">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Key</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for key in keys %}
+            <tr>
+                <th scope="row">{{ key.id }}</th>
+                <td>{{ key.value }}</td>
+                <td>{{ key.surname }}</td>
+                <td>{{ key.name }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

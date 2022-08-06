@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    {% include 'components/bootstrap.html' %}
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin panel</title>
+    <script type="text/javascript" src="{{ url_for('static', path='js/admin.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/admin.css') }}">
+
+</head>
+<body onload="loadPage('admin', 'load'); writeStorage([ ['user_id', '{{user_id}}'] ])">
+<p style="display: none" id="db_id">{{user_id}}</p>
+<div class="all-site">
+        <div class="page">
+            <div class="controls">{% include 'admin/navbar.html' %}</div>
+            <div id="wrapper"></div>
+        </div>
+        {% include 'components/wave.html' %}
+</div>
+</body>
+</html>

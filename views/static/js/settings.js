@@ -1,0 +1,1 @@
+let localStorage = window.localStorage;

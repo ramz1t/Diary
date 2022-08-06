@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <script type="text/javascript" src="{{ url_for('static', path='js/settings.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/sitelayout.css') }}">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student's panel</title>
+    <script type="text/javascript" src="{{ url_for('static', path='js/helpers.js') }}"></script>
+<!--    <script type="text/javascript" src="{{ url_for('static', path='js/student.js') }}"></script>-->
+<!--    <link rel="stylesheet" href="{{ url_for('static', path='styles/student.css') }}">-->
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/navbar.css') }}">
+    {% include 'components/bootstrap.html' %}
+</head>
+<body onload="loadPage('student', 'load')">
+<div class="all-site">
+        <div class="page">
+            <div class="controls">{% include 'student/navbar.html' %}</div>
+            <div id="wrapper"></div>
+        </div>
+        {% include 'components/wave.html' %}
+</div>
+</body>
+</html>

@@ -1,0 +1,237 @@
+/** {*/
+/*    outline: solid 1px red;*/
+/*}*/
+
+.card-custom {
+    padding: 0.6vw;
+}
+
+.card {
+    float: right;
+    right: 10vw;
+    top: 10vw;
+}
+
+.btn-login-custom {
+    background-color: var(--dairy-color) !important;
+    width: 100%;
+}
+
+.btn-custom {
+    margin: auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-grid {
+    display: grid;
+    gap: 2rem;
+}
+
+.schedule-wrapper {
+    width: calc(100vw - var(--nav-width));
+}
+
+@media (min-width: 1200px) {
+    .content-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.content-element {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.wave-container {
+    background: #ffffff;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.wave-container > svg {
+    display: block;
+}
+
+@keyframes animateWave {
+    0% {
+        transform: scale(1, 0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.wave-container > svg {
+    display: block;
+    transform-origin: bottom;
+    animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.download {
+    width: 80px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background: var(--dairy-color);
+    color: white;
+}
+
+.for-export {
+    display: inline-block;
+    padding-right: 15px;
+}
+
+
+.type-choose {
+    display: inline-block;
+    padding-right: 30px;
+}
+
+.type-controls{
+    padding-bottom: 15px;
+}
+
+
+.controls {
+    position: fixed;
+    width: calc(var(--nav-width) - 40px);
+    margin-right: 2rem;
+}
+
+.dropdowns {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+}
+
+.dropdown-custom {
+    background: none;
+    border-color: black !important;
+}
+
+.day {
+    border: black 1px;
+}
+
+.day-body {
+    padding: 0.5rem;
+    border: solid 1px black;
+    border-radius: 5px;
+    display: grid;
+    gap: 7px
+}
+
+.choose-class {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dropdown-custom {
+    width: 12rem;
+}
+
+.dropbtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.class-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.class-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.class-dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.class-dropdown-content a:hover {
+    background-color: #ddd
+}
+
+.show {
+    display:block;
+}
+
+.schedule {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    width: 97%;
+}
+
+.add-lesson {
+    background: var(--dairy-color);
+    border: none;
+    border-radius: .25rem;
+    color: white;
+    margin-top: 15px;
+    padding: 7px;
+}
+
+.del-lesson {
+    background: none;
+    color: red;
+    border: 1px solid red;
+    border-radius: .25rem;
+    margin-top: 15px;
+    padding: 7px;
+}
+
+.submit-lesson {
+    height: 38px;
+    width: 38px;
+    background: none;
+    border: solid 1px green;
+    border-radius: .25rem;
+    color: green;
+}
+
+.lesson-number {
+    display: flex;
+    align-items: flex-end;
+}
+
+.lesson-number-h {
+    margin-bottom: 0;
+    min-width: 30px;
+}
+
+.dropdown-toggle::after {
+    border: none !important;
+}
+
+#change-pass{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 15vh;
+}
+
+.center-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.unsaved {
+    color: red;
+    border-color: red;
+}

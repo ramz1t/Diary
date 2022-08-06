@@ -1,0 +1,144 @@
+<div class="flex-shrink-0 p-3 bg-white">
+    <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+        <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
+        <span style="padding-left: 15px" class="fs-5 fw-semibold">Admin Panel</span>
+    </a>
+    <ul class="list-unstyled ps-0">
+        {% if link %}
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#home-collapse" aria-expanded="false">
+                <i class="bi bi-people icon-custom"></i>Groups
+            </button>
+            <div class="collapse show" id="home-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'add_group')"><i
+                                class="bi bi-plus navbar-icon"></i>Add
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'manage_groups')"><i
+                                class="bi bi-plus navbar-icon"></i>Schedule
+                        </button>
+                    </li>
+                    <li class="border-top my-3"></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#dashboard-collapse" aria-expanded="false">
+                <i class="bi bi-key icon-custom"></i>Student's keys
+            </button>
+            <div class="collapse" id="dashboard-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'add_student_key')"><i
+                                class="bi bi-plus navbar-icon"></i>Add
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'export_student_keys')"><i
+                                class="bi bi-send navbar-icon"></i>Export
+                        </button>
+                    </li>
+                    <li class="border-top my-3"></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#teachers-collapse" aria-expanded="false">
+                <i class="bi bi-key icon-custom"></i>Teacher's keys
+            </button>
+            <div class="collapse" id="teachers-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'add_teacher_key')"><i
+                                class="bi bi-plus navbar-icon"></i>Add
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'export_teacher_keys')"><i
+                                class="bi bi-send navbar-icon"></i>Export
+                        </button>
+                    </li>
+                    <li class="border-top my-3"></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#subjects-collapse" aria-expanded="false">
+                <i class="bi bi-book icon-custom"></i>Subjects
+            </button>
+            <div class="collapse" id="subjects-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'add_subject')"><i
+                                class="bi bi-plus navbar-icon"></i>Add
+                        </button>
+                    </li>
+                    <li class="border-top my-3"></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#school-collapse" aria-expanded="false">
+                <i class="bi bi-house-door icon-custom"></i>School
+            </button>
+            <div class="collapse" id="school-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'school')"><i
+                                class="bi bi-kanban navbar-icon"></i>Manage classes
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'school_link')"><i
+                                class="bi bi-link-45deg navbar-icon"></i>Link to school
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="border-top my-3"></li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#account-collapse" aria-expanded="false">
+                <i class="bi bi-person-circle icon-custom"></i>Account
+            </button>
+            <div class="collapse" id="account-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_password')"><i
+                                class="bi bi-lock navbar-icon"></i>Change password
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_email')"><i
+                                class="bi bi-envelope navbar-icon"></i>Change email
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="logout()"><i
+                                class="bi bi-box-arrow-right navbar-icon"></i>Log out
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        {% else %}
+        <li class="mb-1">
+            <button class="navbar-button" onclick="loadPage('admin', 'school_link')"><i
+                    class="bi bi-link-45deg icon-custom"></i>Link to school
+            </button>
+            <button class="navbar-button" onclick="logout()"><i
+                    class="bi bi-box-arrow-right icon-custom"></i>Log out
+            </button>
+        </li>
+        {% endif %}
+    </ul>
+</div>

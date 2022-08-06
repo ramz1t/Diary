@@ -1,0 +1,23 @@
+<div class="content-wrapper">
+    {% if link == False %}
+    <h1>Link admin profile to school</h1>
+    <br>
+    <div style="width: 30%">
+        <div style="display: flex; flex-direction: row; gap: 1rem">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" placeholder="name">
+                <label for="name">Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="city" placeholder="city">
+                <label for="city">City</label>
+            </div>
+        </div>
+        <button class="btn btn-login-custom text-light" onclick="searchSchool()">Search</button>
+        <h5 style="margin-top: 1rem">Search result:</h5>
+        <div id="result-wrapper"></div>
+    </div>
+    {% else %}
+    <h1>You have been linked to school № {{number}}</h1>
+    {% endif %}
+</div>

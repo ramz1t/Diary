@@ -1,5 +1,13 @@
-from models.admin import ApiAdmin
-from logic.admin import create_new_admin
+from Diary.crud_models import ApiBase, CRUDAdapter
 
-admin = ApiAdmin(email='1534', password='admin')
-create_new_admin(admin)
+adapter = CRUDAdapter()
+
+type = input('Choose model\n')
+if type.lower() == 'admin':
+    admin = ApiBase(email=input('email: '), password=input('password: '))
+    adapter.clss['admin']().create(admin)
+elif type.lower() == 'school':
+    school = ApiBase(name=input('name: '), city=input('city: '))
+    adapter.clss['school']().create(school)
+else:
+    print('incorrect model name')

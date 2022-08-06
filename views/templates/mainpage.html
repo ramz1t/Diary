@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose</title>
+    <script type="text/javascript" src="{{ url_for('static', path='js/choose.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/mainpage.css') }}">
+    {% include 'components/bootstrap.html' %}
+</head>
+<body>
+<div class="page-flex">
+    <div class="page-flex-element">
+        <img alt="logo" id="logo" src="{{ url_for('static', path='photos/dairy.png') }}">
+    </div>
+    <div class="page-flex-element" id="card-div">
+        <div class="card shadow-lg" style="width: 30rem;">
+            <div class="card-body">
+                <p class="text-center fs-3 fw-bolder">Please choose user type</p>
+                <div class="form-floating mb-3">
+                    <button onclick="choose('student')" type="button" class="btn btn-login-custom text-light">student
+                    </button>
+                </div>
+                <div class="form-floating mb-3">
+                    <button onclick="choose('teacher')" type="button" class="btn btn-login-custom text-light">teacher
+                    </button>
+                </div>
+                <div class="form-floating mb-3">
+                    <button onclick="choose('admin')" type="button" class="btn btn-login-custom text-light">admin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

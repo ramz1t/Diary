@@ -1,0 +1,44 @@
+<div class="content-grid content-wrapper">
+    <div class="content-element ">
+        <h1>Add subject</h1>
+        <br>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="subject" placeholder="Subject">
+            <label for="subject"><i class="bi bi-book icon-custom"></i>Subject</label>
+        </div>
+        <div class="form-check type-controls">
+            <div class="type-choose">
+                <input class="form-check-input" type="radio" name="type"
+                       id="L" value="L">
+                <label class="form-check-label" for="L">Lesson</label>
+            </div>
+            <div class="type-choose">
+                <input class="form-check-input" type="radio" name="type"
+                       id="C" value="C">
+                <label class="form-check-label" for="C">Optional cource</label>
+            </div>
+        </div>
+        <button class="btn btn-login-custom text-light" onclick="addSubject()">Add subject</button>
+    </div>
+    <div class="content-element">
+        <h1>All subjects in school</h1>
+        <table class="table keys">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sub in subjects %}
+            <tr>
+                <th scope="row">{{ sub.id }}</th>
+                <td>{{ sub.name }}</td>
+                <td>{{ sub.type }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

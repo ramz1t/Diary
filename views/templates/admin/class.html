@@ -1,0 +1,29 @@
+<div class="choose-class">
+    <div class="lesson-number"><h3 class="lesson-number-h">{{ lesson_i + 1 }}</h3></div>
+    <div class="dropdown">
+        <a class="btn dropdown-toggle dropdown-custom" href="#" role="button"
+           id="lesson-{{ day_i }}-{{ lesson_i }}"
+           data-bs-toggle="dropdown" aria-expanded="false">
+        </a>
+        <ul class="dropdown-menu subjects-dropdown" aria-labelledby="dropdownMenuLink">
+            {% for class in classes %}
+            <li><a class="dropdown-item"
+                   onclick="setValue('lesson-{{ day_i }}-{{ lesson_i }}',
+                                                    '{{ class.subject }}',
+                                                    '{{ class.id }}')">{{
+                class.subject }}</a></li>
+            {% endfor %}
+        </ul>
+        <p style="display: none" id="lesson-{{ day_i }}-{{ lesson_i }}_id"></p>
+    </div>
+    <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')"
+            class="submit-lesson unsaved">
+        <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-minus"></i>
+    </button>
+</div>
+<div id="footer-{{day_i}}" class="choose-class">
+    <button style="width: 55%" onclick="addLesson('{{ day_i }}')" class="add-lesson">Add lesson</button>
+    <button style="width: auto" onclick="deleteLesson('{{ day_i}}')" class="del-lesson"><i class="bi bi-trash3"></i>
+        last lesson
+    </button>
+</div>
