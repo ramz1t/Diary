@@ -31,10 +31,12 @@
                     <button onclick="login()" type="button" class="btn btn-login-custom text-light">Login</button>
                 </div>
             </div>
+            {% if usertype != 'admin' %}
             <div class="hadnt" id="footer">
-                <a class="link text-decoration-none" onclick="openRegisterPage($.cookie('type'))">I don't have an
+                <a class="link text-decoration-none" href="/{{usertype}}/register">I don't have an
                     account</a>
             </div>
+            {% endif %}
             <div class="change-type">
                 <a href="/">Choose user type</a>
             </div>
@@ -44,9 +46,3 @@
 </div>
 </body>
 </html>
-<script>
-    var type = $.cookie('type');
-    if (type === 'admin') {
-        document.getElementById('footer').innerHTML = '';
-    }
-</script>
