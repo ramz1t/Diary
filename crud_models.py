@@ -56,7 +56,9 @@ class StudentKey(KeyBase):
     def add_key(self, body: ApiBase):
         with Sessions() as session:
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
-            key = DBKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(), group=body.group,
+            name = ' '.join([name.capitalize() for name in body.name.split()])
+            surname = ' '.join([surname.capitalize() for surname in body.surname.split()])
+            key = DBKey(value=value, name=name, surname=surname, group=body.group,
                         school_id=School().school_name(Admin().get(body).school_id))
             session.add(key)
             session.commit()
