@@ -323,7 +323,7 @@ class Group(CRUDBase):
                 groups = school.groups
                 data = []
                 for group in groups:
-                    data.append([group.id, group.name, len(group.students)])
+                    data.append({'id': group.id, 'name': group.name, 'student_count': len(group.students)})
                 return data
             except AttributeError:
                 return []
