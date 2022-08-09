@@ -1,8 +1,9 @@
 async function login() {
-    var type = localStorage.getItem('type');
-    var pass = document.getElementById("password").value;
-    var email = document.getElementById("email").value;
-    var response = await fetch('/token', {
+    const type = localStorage.getItem('type');
+    const pass = document.getElementById("password").value;
+    const email = document.getElementById("email").value;
+    const remember = $('#remember_me').is(':checked');
+    const response = await fetch('/token', {
         method: 'POST',
         headers: {
             'accept': 'application/json'
@@ -10,7 +11,8 @@ async function login() {
         body: new URLSearchParams({
             'username': email,
             'password': pass,
-            'client_id': type
+            'client_id': type,
+            'client_secret': remember
         })
     });
     if (response.ok) {
@@ -21,10 +23,6 @@ async function login() {
     if (type === 'admin') {
         document.cookie = "school_id=" + email;
     }
-}
-
-function openRegisterPage(type) {
-    window.open(`/${type}/register`, '_self')
 }
 
 addEventListener('keyup', function (e) {

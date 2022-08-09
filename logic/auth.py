@@ -26,11 +26,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class OAuth2PasswordBearerWithCookie(OAuth2):
     def __init__(
-        self,
-        tokenUrl: str,
-        scheme_name: Optional[str] = None,
-        scopes: Optional[Dict[str, str]] = None,
-        auto_error: bool = True,
+            self,
+            tokenUrl: str,
+            scheme_name: Optional[str] = None,
+            scopes: Optional[Dict[str, str]] = None,
+            auto_error: bool = True,
     ):
         if not scopes:
             scopes = {}
@@ -81,6 +81,16 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 
 oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="token")
+
+
+def validate_token(token: str):
+    if token is None:
+        return False, None
+    try:
+        payload = jwt.decode(token.split()[1], SECRET_KEY, algorithms=[ALGORITHM])
+        return True, payload.get('type')
+    except JWTError:
+        return False, None
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):

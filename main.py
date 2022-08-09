@@ -5,10 +5,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, RedirectResponse
 
 from Diary.files.export import write_student_keys, write_teacher_keys
-from Diary.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
+from Diary.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user, \
+    validate_token
 from Diary.models.day import AddLesson
 from Diary.models.token import Token
 from Diary.crud_models import CRUDAdapter
@@ -34,6 +35,9 @@ def execute(body: ApiBase, model: str, method: str):
 
 @app.get('/')
 def main_page(request: Request):
+    token_valid, type = validate_token(request.cookies.get('access_token'))
+    if token_valid:
+        return RedirectResponse(f'/{type}')
     return templates.TemplateResponse('mainpage.html', {"request": request})
 
 
@@ -57,11 +61,12 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    REMEMBER_ME = form_data.client_secret
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES if REMEMBER_ME == 'false' else 365 * 24 * 60)
     access_token = create_access_token(
         data={"sub": user.email, "type": form_data.client_id}, expires_delta=access_token_expires
     )
-    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
+    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=False)
     return {"access_token": access_token, "token_type": "bearer"}
 
 

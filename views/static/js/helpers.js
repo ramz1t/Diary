@@ -22,9 +22,10 @@ function writeStorage(data) {
 }
 
 function logout() {
-    var type = localStorage.getItem('type')
+    const type = localStorage.getItem('type');
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.open(`/${type}/login`, '_self');
-    document.cookie = 'access_token=; expires=-1;';
+
 }
 
 function checkCredentials(status) {
