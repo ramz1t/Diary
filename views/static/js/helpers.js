@@ -29,11 +29,13 @@ function logout() {
 }
 
 function checkCredentials(status) {
+    const timeout = 2000;
     if (status === 401) {
         Swal.fire({
-            text: 'Your session has expired, please log in again'
+            text: 'Your session has expired, please log in again',
+            timer: timeout
         });
-        logout();
+        setTimeout(logout, timeout)
     }
 }
 
