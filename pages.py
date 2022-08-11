@@ -24,6 +24,7 @@ class ApiPage(BaseModel):
     day_i: Optional[int]
     lesson_i: Optional[int]
     user_id: Optional[int]
+    group_id: Optional[int]
 
 
 class PageBase(ABC):
@@ -90,10 +91,10 @@ class SchoolPage(PageBase):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
-        teachers = clss['teacher'].get_teachers(self, body)
-        groups = clss['group'].get_groups(self, body)
-        subjects = clss['subject'].get_subjects(self, body)
-        classes = clss['cls'].get(self, body)
+        teachers = clss['teacher']().get_teachers(body)
+        groups = clss['group']().get_groups(body)
+        subjects = clss['subject']().get_subjects(body)
+        classes = clss['cls']().get(body)
         availability = clss['school'].get(self, body)
         data = {"request": request, "number": clss['school']().school_name(clss['admin']().get(body).school_id),
                 "availability": availability,
@@ -122,8 +123,8 @@ class ManageGroups(PageBase):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
-        classes = clss['cls'].get(self, body)
-        groups = clss['group'].get_groups(self, body)
+        classes = clss['cls']().get(body)
+        groups = clss['group']().get_groups(body)
         days_titles = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         data = {"request": request, "classes": sorted(classes, key=lambda x: x['subject']), "groups": groups,
                 "days": days_titles}

@@ -342,21 +342,30 @@ class Cls(CRUDBase):
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='class created')
 
+    def make_result(self, classes, session):
+        result = []
+        for cls in classes:
+            group = session.query(DBGroup).filter_by(id=cls.group_id).first()
+            subject = session.query(DBSubject).filter_by(id=cls.subject_id).first()
+            teacher = session.query(DBTeacher).filter_by(id=cls.teacher_id).first()
+            result.append({"id": cls.id,
+                           "group": group.name,
+                           "subject": subject.name.capitalize(),
+                           "teacher": f'{teacher.surname.capitalize()} {teacher.name.capitalize()}',
+                           "subject_id": cls.subject_id})
+        return result
+
     def get(self, body: ApiBase):
         with Sessions() as session:
             school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             classes = school.classes
-            result = []
-            for cls in classes:
-                group = session.query(DBGroup).filter_by(id=cls.group_id).first()
-                subject = session.query(DBSubject).filter_by(id=cls.subject_id).first()
-                teacher = session.query(DBTeacher).filter_by(id=cls.teacher_id).first()
-                result.append({"id": cls.id,
-                               "group": group.name,
-                               "subject": subject.name.capitalize(),
-                               "teacher": f'{teacher.surname.capitalize()} {teacher.name.capitalize()}',
-                               "subject_id": cls.subject_id})
-            return result
+            return self.make_result(classes, session)
+
+    def for_schedule(self, body: ApiBase):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
+            classes = school.classes.filter_by(group_id=body.group_id).all()
+            return self.make_result(classes, session)
 
     def get_one(self, id: int):
         with Sessions() as session:

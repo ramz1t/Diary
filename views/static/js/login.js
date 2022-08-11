@@ -20,9 +20,6 @@ async function login() {
     } else {
         await alertError(response);
     }
-    if (type === 'admin') {
-        document.cookie = "school_id=" + email;
-    }
 }
 
 addEventListener('keyup', function (e) {

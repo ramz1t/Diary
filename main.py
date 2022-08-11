@@ -94,8 +94,8 @@ def student_profile(request: Request, current_user=Depends(get_current_user)):
 def teacher_profile(request: Request, current_user=Depends(get_current_user)):
     if current_user.__tablename__ != 'teachers':
         return JSONResponse(status_code=status.HTTP_403_FORBIDDEN, content='no access with this usertype')
-    return templates.TemplateResponse('teacher/profile.html', {"request": request,
-                                                               "user_id": current_user.id})
+    return templates.TemplateResponse('teacher.html', {"request": request,
+                                                       "user_id": current_user.id})
 
 
 @app.patch('/load_page/')
@@ -108,7 +108,8 @@ def load_page(body: ApiPage, request: Request, current_user=Depends(get_current_
 
 @app.post('/add_lesson')
 def add_lesson(body: ApiPage, request: Request):
-    classes = crudadapter.clss['cls']().get(body)
+    classes = crudadapter.clss['cls']().for_schedule(body)
+    print(classes)
     return templates.TemplateResponse('admin/class.html', {"request": request,
                                                            "day_i": body.day_i,
                                                            "lesson_i": body.lesson_i + 1,
@@ -122,9 +123,9 @@ def search_school(body: ApiBase, request: Request):
 
 
 @app.patch('/load_schedule')
-def load_schedule(body: ApiPage, group_id: int, request: Request):
+def load_schedule(body: ApiBase, group_id: int, request: Request):
     days_titles = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-    classes = crudadapter.clss['cls']().get(body)
+    classes = crudadapter.clss['cls']().for_schedule(body)
     data = crudadapter.clss['scheduleclass']().get_schedule(group_id)
     return templates.TemplateResponse('admin/schedule.html', {"request": request, "data": data, "classes": classes,
                                                               "days": days_titles})

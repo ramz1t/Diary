@@ -186,7 +186,8 @@ async function addLesson(day_number) {
     let data = {
         'day_i': day_number,
         'lesson_i': lesson_number,
-        'user_id': id
+        'user_id': id,
+        'group_id': localStorage.getItem('schedule_group_id')
     };
     let response = await callServer('/add_lesson', data, 'POST');
     if (response.ok) {
@@ -209,7 +210,7 @@ async function loadSchedule(group_name, group_id) {
     }
     if (group_id !== null && group_name !== null) {
         document.getElementById('group').innerHTML = localStorage.getItem('schedule_group_name');
-        let data = {"user_id": localStorage.getItem('user_id')};
+        let data = {"user_id": localStorage.getItem('user_id'), 'group_id': group_id};
         let response = await callServer(`/load_schedule?group_id=${group_id}`, data, 'PATCH');
         if (response.ok) {
             let wrapper = document.getElementById('schedule-wrapper');

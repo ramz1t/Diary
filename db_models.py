@@ -74,7 +74,7 @@ class DBSchool(Base):
     groups = relationship('DBGroup')
     subjects = relationship('DBSubject')
     teachers = relationship('DBTeacher')
-    classes = relationship('DBClassesRelationship')
+    classes = relationship('DBClassesRelationship', lazy='dynamic')
 
 
 class DBStudent(Base):

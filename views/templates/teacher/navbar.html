@@ -4,17 +4,10 @@
         <span style="padding-left: 15px" class="fs-5 fw-semibold">Teacher Panel</span>
     </a>
     <ul class="list-unstyled ps-0">
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#home-collapse" aria-expanded="false">develop
+        <li>
+            <button class="navbar-button" onclick="loadPage('teacher', 'classes')"><i
+                    class="bi bi-journal-bookmark icon-custom"></i>My schedule
             </button>
-            <div class="collapse show" id="home-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
-                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
-                    <li class="border-top my-3"></li>
-                </ul>
-            </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
@@ -22,8 +15,12 @@
             </button>
             <div class="collapse" id="dashboard-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
-                    <li><button class="navbar-button" onclick="loadPage()"></i>develop</button></li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage()">develop</button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage()"></i>develop</button>
+                    </li>
                     <li class="border-top my-3"></li>
                 </ul>
             </div>
@@ -35,8 +32,12 @@
             </button>
             <div class="collapse" id="teachers-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
-                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage()">develop</button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage()">develop</button>
+                    </li>
                     <li class="border-top my-3"></li>
                 </ul>
             </div>
@@ -47,7 +48,9 @@
             </button>
             <div class="collapse" id="subjects-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage()">develop</button></li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage()">develop</button>
+                    </li>
                     <li class="border-top my-3"></li>
                 </ul>
             </div>
@@ -59,7 +62,9 @@
             </button>
             <div class="collapse" id="school-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage()"></i>develop</button></li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage()"></i>develop</button>
+                    </li>
                 </ul>
             </div>
         </li>
@@ -71,9 +76,21 @@
             </button>
             <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                    <li><button class="navbar-button" onclick="loadPage('admin', 'change_password')"><i class="bi bi-lock navbar-icon"></i>Change password</button></li>
-                    <li><button class="navbar-button" onclick="loadPage('admin', 'change_email')"><i class="bi bi-envelope"></i>Change email</button></li>
-                    <li><button class="navbar-button" onclick="logout()"><i class="bi bi-box-arrow-right navbar-icon"></i>Log out</button></li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_password')"><i
+                                class="bi bi-lock navbar-icon"></i>Change password
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_email')"><i
+                                class="bi bi-envelope"></i>Change email
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="logout()"><i
+                                class="bi bi-box-arrow-right navbar-icon"></i>Log out
+                        </button>
+                    </li>
                 </ul>
             </div>
         </li>
