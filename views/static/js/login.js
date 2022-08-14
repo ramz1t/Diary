@@ -18,12 +18,16 @@ async function login() {
     if (response.ok) {
         window.open('/' + type, '_self');
     } else {
-        await alertError(response);
+        document.getElementById('s1mple').style = "position: absolute; padding-top: 15%; padding-left: 40%; display: block";
+        setTimeout(() => {
+            document.getElementById('s1mple').style = "display: none";
+        }, 2000)
+        // await alertError(response);
     }
 }
 
 addEventListener('keyup', function (e) {
-    if(e.keyCode === 13){
+    if (e.keyCode === 13) {
         login();
     }
 })
