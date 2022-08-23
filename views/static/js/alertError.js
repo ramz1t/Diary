@@ -4,7 +4,8 @@ async function alertError(response) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: response.text()
+            text: await response.text()
         })
+        throw `error ${response.status}`
     }
 }

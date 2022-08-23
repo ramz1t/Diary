@@ -36,7 +36,9 @@ function checkCredentials(status) {
             timer: timeout
         });
         setTimeout(logout, timeout)
+        throw 'credentials error 401'
     }
+
 }
 
 
@@ -112,4 +114,13 @@ async function loadPage(type, page) {
         }
         executeScripts(page);
     }
+}
+
+function deleteFromDB(id, model) {
+    callServer(`/${model}/delete`, {'id': id}, 'POST').then((response) => {
+        checkCredentials(response.status);
+        alertError(response);
+    }).then(() => {
+        window.location.reload(true)
+    })
 }

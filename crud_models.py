@@ -35,6 +35,7 @@ class ApiBase(BaseModel):
     user_id: Optional[int]
     lesson_number: Optional[int]
     lesson_id: Optional[int]
+    id: Optional[int]
 
 
 class KeyBase(ABC):
@@ -329,6 +330,7 @@ class Group(CRUDBase):
                 Cls().delete(cls.id)
             session.delete(group)
             session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content='deleted')
 
     def get_groups(self, body: ApiBase):
         with Sessions() as session:

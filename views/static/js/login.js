@@ -18,11 +18,11 @@ async function login() {
     if (response.ok) {
         window.open('/' + type, '_self');
     } else {
-        document.getElementById('s1mple').style = "position: absolute; padding-top: 15%; padding-left: 40%; display: block";
-        setTimeout(() => {
-            document.getElementById('s1mple').style = "display: none";
-        }, 2000)
-        // await alertError(response);
+        // document.getElementById('s1mple').style = "position: absolute; padding-top: 15%; padding-left: 40%; display: block";
+        // setTimeout(() => {
+        //     document.getElementById('s1mple').style = "display: none";
+        // }, 2000)
+        await alertError(response);
     }
 }
 

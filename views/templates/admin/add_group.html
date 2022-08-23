@@ -21,6 +21,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Number of students</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +30,7 @@
                 <th scope="row">{{ group.id }}</th>
                 <td>{{ group.name }}</td>
                 <td>{{ group.student_count }}</td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ group.id }}', 'group')" class="bi bi-trash3"></i></td>
             </tr>
             {% endfor %}
             </tbody>
