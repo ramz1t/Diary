@@ -130,6 +130,10 @@ def load_schedule(body: ApiBase, group_id: int, request: Request):
     return templates.TemplateResponse('admin/schedule.html', {"request": request, "data": data, "classes": classes,
                                                               "days": days_titles})
 
+@app.post('/upgrade_groups')
+def upgrade_groups(body: ApiBase):
+    return crudadapter.clss['group']().upgrade(body)
+
 
 ''' DB urls'''
 

@@ -310,3 +310,15 @@ async function linkSchool(school_id, school_number) {
         await alertError(response);
     }
 }
+
+function upgradeGroups() {
+    if (!window.confirm('Are you sure')) return;
+    let data = {'user_id': localStorage.getItem('user_id')}
+    callServer('/upgrade_groups', data, 'POST').then((response) => {
+        if (response.ok) {
+            window.location.reload(true);
+        } else {
+            alert('error');
+        }
+    })
+}

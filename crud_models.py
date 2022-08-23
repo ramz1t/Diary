@@ -11,6 +11,7 @@ from abc import abstractmethod, ABC
 from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass
 from Diary.logic.auth import get_password_hash
+import re
 
 
 class ApiBase(BaseModel):
@@ -126,8 +127,8 @@ class CRUDBase(ABC):
     def get(self, body: ApiBase):
         raise NotImplementedError
 
-    @abstractmethod
-    def delete(self, body: ApiBase):
+    @staticmethod
+    def delete(id: int):
         raise NotImplementedError
 
 
@@ -147,8 +148,8 @@ class Admin(CRUDBase):
         with Sessions() as session:
             return session.query(DBAdmin).filter_by(id=body.user_id).first()
 
-    def delete(self, body: ApiBase):
-        return 'admin deleted' + body.email
+    def delete(id: int):
+        pass
 
     def link_school(self, body: ApiBase):
         with Sessions() as session:
@@ -186,8 +187,9 @@ class Student(CRUDBase, StudentKey):
     def get(self, body: ApiBase):
         pass
 
-    def delete(self, body: ApiBase):
-        return 'student deleted'
+    @staticmethod
+    def delete(id: int):
+        pass
 
 
 class Teacher(CRUDBase, TeacherKey):
@@ -213,8 +215,9 @@ class Teacher(CRUDBase, TeacherKey):
             teacher = session.query(DBTeacher).filter_by(id=id).first()
             return teacher.surname + ' ' + teacher.name
 
-    def delete(self, body: ApiBase):
-        return 'teacher deleted'
+    @staticmethod
+    def delete(id: int):
+        pass
 
     def get_teachers(self, body: ApiBase):
         with Sessions() as session:
@@ -250,7 +253,8 @@ class Subject(CRUDBase):
             except AttributeError:
                 return []
 
-    def delete(self, body: ApiBase):
+    @staticmethod
+    def delete(id: int):
         pass
 
 
@@ -285,7 +289,8 @@ class School(CRUDBase):
                 return school.city
             return
 
-    def delete(self, body: ApiBase):
+    @staticmethod
+    def delete(id: int):
         pass
 
     def find(self, body: ApiBase):
@@ -315,8 +320,15 @@ class Group(CRUDBase):
         with Sessions() as session:
             return session.query(DBGroup).filter_by(id=id).first()
 
-    def delete(self, body: ApiBase):
-        pass
+    @staticmethod
+    def delete(id: int):
+        with Sessions() as session:
+            group = session.query(DBGroup).filter_by(id=id).first()
+            classes = session.query(DBClassesRelationship).filter_by(group_id=group.id).all()
+            for cls in classes:
+                Cls().delete(cls.id)
+            session.delete(group)
+            session.commit()
 
     def get_groups(self, body: ApiBase):
         with Sessions() as session:
@@ -329,6 +341,23 @@ class Group(CRUDBase):
                 return data
             except AttributeError:
                 return []
+
+    def upgrade(self, body: ApiBase):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
+            for group in school.groups:
+                for index, letter in enumerate(group.name, 0):
+                    if letter.isalpha():
+                        res = [group.name[:index], group.name[index:]]
+                num = int(res[0]) + 1
+                if num > 11:
+                    self.delete(group.id)
+                else:
+                    group.name = ''.join((str(num), res[1]))
+                    print(group.name)
+                    session.add(group)
+                    session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content='upgraded')
 
 
 class Cls(CRUDBase):
@@ -345,13 +374,14 @@ class Cls(CRUDBase):
     def make_result(self, classes, session):
         result = []
         for cls in classes:
+            print(cls.group_id)
             group = session.query(DBGroup).filter_by(id=cls.group_id).first()
             subject = session.query(DBSubject).filter_by(id=cls.subject_id).first()
             teacher = session.query(DBTeacher).filter_by(id=cls.teacher_id).first()
             result.append({"id": cls.id,
                            "group": group.name,
-                           "subject": subject.name.capitalize(),
-                           "teacher": f'{teacher.surname.capitalize()} {teacher.name.capitalize()}',
+                           "subject": subject.name,
+                           "teacher": f'{teacher.surname} {teacher.name}',
                            "subject_id": cls.subject_id})
         return result
 
@@ -371,8 +401,12 @@ class Cls(CRUDBase):
         with Sessions() as session:
             return session.query(DBClassesRelationship).filter_by(id=id).first()
 
-    def delete(self, body: ApiBase):
-        pass
+    @staticmethod
+    def delete(id: int):
+        with Sessions() as session:
+            cls = session.query(DBClassesRelationship).filter_by(id=id).first()
+            session.delete(cls)
+            session.commit()
 
 
 class ScheduleClass(CRUDBase):
