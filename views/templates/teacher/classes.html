@@ -1,3 +1,23 @@
 <div class="content-wrapper">
     <h1>Classes</h1>
+    <div class="grid column-5">
+        {% for day in classes_data %}
+        <div>
+            <h3>{{day.day_name}}</h3>
+            <div class="day-card">
+                {% for lesson in day.lessons %}
+                <div class="flex-row allign-center">
+                    <h5>{{lesson.lesson_number}}</h5>
+                    {% if lesson|length > 1 %}
+                    <h5>{{lesson.subject_name}}</h5>
+                    <h5 class="group-icon">{{lesson.group_name}}</h5>
+                    <i class="bi bi-arrow-right"></i>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {%endfor%}
+    </div>
 </div>
+

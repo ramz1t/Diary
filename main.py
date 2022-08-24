@@ -131,6 +131,10 @@ def load_schedule(body: ApiBase, group_id: int, request: Request):
                                                               "days": days_titles})
 
 
+@app.patch('/load_teacher_classes')
+def load_teacher_classes(teacher_id: int):
+    return teacher_id
+
 @app.post('/upgrade_groups')
 def upgrade_groups(body: ApiBase):
     return crudadapter.clss['group']().upgrade(body)

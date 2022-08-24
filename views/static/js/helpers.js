@@ -117,10 +117,9 @@ async function loadPage(type, page) {
 }
 
 function deleteFromDB(id, model) {
-    callServer(`/${model}/delete`, {'id': id}, 'POST').then((response) => {
+    callServer(`/${model}/delete`, {'id': id}, 'POST').then(async (response) => {
         checkCredentials(response.status);
-        alertError(response);
-    }).then(() => {
+        await alertError(response);
         window.location.reload(true)
     })
 }

@@ -21,6 +21,7 @@
                 <th scope="col">Key</th>
                 <th scope="col">Surname</th>
                 <th scope="col">Name</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                 <td>{{ key.value }}</td>
                 <td>{{ key.surname }}</td>
                 <td>{{ key.name }}</td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ key.id }}', 'teacherkey')" class="bi bi-trash3"></i></td>
             </tr>
             {% endfor %}
             </tbody>

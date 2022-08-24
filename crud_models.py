@@ -88,6 +88,13 @@ class StudentKey(KeyBase):
                 school_id=School().school_name(Admin().get(body).school_id)).all()
             return set([key.group for key in keys_for_export])
 
+    @staticmethod
+    def delete(id: int):
+        with Sessions() as session:
+            key = session.query(DBKey).filter_by(id=id).first()
+            session.delete(key)
+            session.commit()
+
 
 class TeacherKey(KeyBase):
 
@@ -116,6 +123,13 @@ class TeacherKey(KeyBase):
             keys = session.query(DBTeacherKey).filter_by(
                 school_id=School().school_name(Admin().get(body).school_id)).all()
             return keys
+
+    @staticmethod
+    def delete(id: int):
+        with Sessions() as session:
+            key = session.query(DBTeacherKey).filter_by(id=id).first()
+            session.delete(key)
+            session.commit()
 
 
 class CRUDBase(ABC):
@@ -256,7 +270,10 @@ class Subject(CRUDBase):
 
     @staticmethod
     def delete(id: int):
-        pass
+        with Sessions() as session:
+            subject = session.query(DBSubject).filter_by(id=id).first()
+            session.delete(subject)
+            session.commit()
 
 
 class School(CRUDBase):
@@ -356,7 +373,6 @@ class Group(CRUDBase):
                     self.delete(group.id)
                 else:
                     group.name = ''.join((str(num), res[1]))
-                    print(group.name)
                     session.add(group)
                     session.commit()
         return JSONResponse(status_code=status.HTTP_200_OK, content='upgraded')
@@ -376,7 +392,6 @@ class Cls(CRUDBase):
     def make_result(self, classes, session):
         result = []
         for cls in classes:
-            print(cls.group_id)
             group = session.query(DBGroup).filter_by(id=cls.group_id).first()
             subject = session.query(DBSubject).filter_by(id=cls.subject_id).first()
             teacher = session.query(DBTeacher).filter_by(id=cls.teacher_id).first()
@@ -398,6 +413,35 @@ class Cls(CRUDBase):
             school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             classes = school.classes.filter_by(group_id=body.group_id).all()
             return self.make_result(classes, session)
+
+    @staticmethod
+    def for_teacher(teacher_id: int):
+        with Sessions() as session:
+            res = []
+            classes_ids = [cls.id for cls in
+                           session.query(DBClassesRelationship).filter_by(teacher_id=teacher_id).all()]
+            for day_i in range(5):
+                day_data = {'day_name': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][day_i], 'lessons': []}
+                for lesson_i in range(10):
+                    lesson_found = False
+                    for class_id in classes_ids:
+                        cls = session.query(DBScheduleClass).filter_by(day_number=day_i,
+                                                                       class_number=lesson_i,
+                                                                       class_id=class_id).first()
+                        if cls is not None:
+                            lesson_found = True
+                            db_cls = session.query(DBClassesRelationship).filter_by(id=class_id).first()
+                            group_name = Group().get(db_cls.group_id).name
+                            subject_name = Subject().get(db_cls.subject_id)
+                            class_data = {'subject_name': subject_name, 'group_name': group_name, 'lesson_number': lesson_i + 1}
+                            day_data['lessons'].append(class_data)
+                        if lesson_found:
+                            break
+                    if not lesson_found:
+                        day_data['lessons'].append({'lesson_number': lesson_i + 1})
+                        pass
+                res.append(day_data)
+            return res
 
     def get_one(self, id: int):
         with Sessions() as session:

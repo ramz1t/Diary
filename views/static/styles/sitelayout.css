@@ -36,3 +36,22 @@ body {
 .icon-custom {
     padding-right: 15px;
 }
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+}
+
+.allign-center {
+    align-items: center;
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.column-5 {
+    grid-template-columns: repeat(5, 1fr);
+}

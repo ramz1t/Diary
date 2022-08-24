@@ -169,6 +169,15 @@ class MyDairy(PageBase):
         return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
 
 
+class TeacherClassesPage(PageBase):
+    USERTYPE = 'teacher'
+
+    def export(self, body: ApiPage, request, current_user):
+        classes = clss['cls'].for_teacher(current_user.id)
+        data = {"request": request, 'classes_data': classes}
+        return templates.TemplateResponse(f'{body.type}/{body.page}.html', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -179,7 +188,8 @@ class PagesAdapter:
               'add_subject': AddSubjectPage,
               'manage_groups': ManageGroups,
               'school_link': SchoolLinkPage,
-              'my_dairy': MyDairy}
+              'my_dairy': MyDairy,
+              'classes': TeacherClassesPage}
 
     @property
     def pages(self):
