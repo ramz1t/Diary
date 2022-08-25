@@ -61,7 +61,7 @@ class StudentKey(KeyBase):
             name = ' '.join([name.capitalize() for name in body.name.split()])
             surname = ' '.join([surname.capitalize() for surname in body.surname.split()])
             key = DBKey(value=value, name=name, surname=surname, group=body.group,
-                        school_id=School().school_name(Admin().get(body).school_id))
+                        school_id=School.school_name(Admin().get(body).school_id))
             session.add(key)
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
@@ -79,13 +79,13 @@ class StudentKey(KeyBase):
 
     def get_student_keys(self, body: ApiBase):
         with Sessions() as session:
-            keys = session.query(DBKey).filter_by(school_id=School().school_name(Admin().get(body).school_id)).all()
+            keys = session.query(DBKey).filter_by(school_id=School.school_name(Admin().get(body).school_id)).all()
             return keys
 
     def get_student_keys_for_export(self, body: ApiBase):
         with Sessions() as session:
             keys_for_export = session.query(DBKey).filter_by(
-                school_id=School().school_name(Admin().get(body).school_id)).all()
+                school_id=School.school_name(Admin().get(body).school_id)).all()
             return set([key.group for key in keys_for_export])
 
     @staticmethod
@@ -102,7 +102,7 @@ class TeacherKey(KeyBase):
         with Sessions() as session:
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
             key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(),
-                               school_id=School().school_name(Admin().get(body).school_id))
+                               school_id=School.school_name(Admin().get(body).school_id))
             session.add(key)
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
@@ -121,7 +121,7 @@ class TeacherKey(KeyBase):
     def get_teacher_keys(self, body: ApiBase):
         with Sessions() as session:
             keys = session.query(DBTeacherKey).filter_by(
-                school_id=School().school_name(Admin().get(body).school_id)).all()
+                school_id=School.school_name(Admin().get(body).school_id)).all()
             return keys
 
     @staticmethod
@@ -293,7 +293,8 @@ class School(CRUDBase):
         with Sessions() as session:
             return session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first() is not None
 
-    def school_name(self, school_id: int):
+    @staticmethod
+    def school_name(school_id: int):
         with Sessions() as session:
             school = session.query(DBSchool).filter_by(id=school_id).first()
             if school is not None:

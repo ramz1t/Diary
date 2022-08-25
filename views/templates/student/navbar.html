@@ -4,7 +4,8 @@
     </a>
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" onclick="loadPage('student', 'my_dairy')">
+            <button class="btn btn-toggle align-items-center rounded collapsed"
+                    onclick="loadPage('student', 'my_dairy')">
                 My Dairy
             </button>
         </li>
@@ -61,12 +62,32 @@
                 Account
             </button>
             <div class="collapse" id="account-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/change_password" class="link-dark rounded"><i
-                                class="bi bi-lock navbar-icon"></i>Change password</a></li>
-                    <li><button class="navbar-button" onclick="loadPage('student', 'telegram')"><i class="bi bi-telegram navbar-icon"></i>TelegramBot</button></li>
-                    <li><button class="navbar-button" onclick="logout()"><i
-                    class="bi bi-box-arrow-right icon-custom"></i>Log out</button></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('student', 'student_profile_info')"><i
+                                class="bi bi-info-lg navbar-icon"></i>Profile info
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_password')"><i
+                                class="bi bi-lock navbar-icon"></i>Change password
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_email')"><i
+                                class="bi bi-envelope navbar-icon"></i>Change email
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('student', 'telegram')"><i
+                                class="bi bi-telegram navbar-icon"></i>TelegramBot
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="logout()"><i
+                                class="bi bi-box-arrow-right navbar-icon"></i>Log out
+                        </button>
+                    </li>
                 </ul>
             </div>
         </li>

@@ -99,11 +99,9 @@ async function loadPage(type, page) {
     }
     if (page !== null) {
         let data = {
-            'user_id': user_id,
-            'type': type,
-            'page': page
+            'user_id': user_id
         };
-        let response = await callServer('/load_page/', data, 'PATCH');
+        let response = await callServer(`/load_page/?page=${page}&type=${type}`, data, 'PATCH');
         if (response.ok) {
             let wrapper = document.getElementById('wrapper');
             response = await response.text();

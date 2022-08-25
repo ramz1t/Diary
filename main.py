@@ -99,11 +99,11 @@ def teacher_profile(request: Request, current_user=Depends(get_current_user)):
 
 
 @app.patch('/load_page/')
-def load_page(body: ApiPage, request: Request, current_user=Depends(get_current_user)):
+def load_page(body: ApiPage, page: str, type: str, request: Request, current_user=Depends(get_current_user)):
     try:
-        return pagesadapter.pages[body.page]().export(body=body, request=request, current_user=current_user)
+        return pagesadapter.pages[page]().export(body=body, request=request, current_user=current_user)
     except KeyError:
-        return templates.TemplateResponse(f'{body.type}/{body.page}.html', {'request': request})
+        return templates.TemplateResponse(f'{type}/{page}.html', {'request': request})
 
 
 @app.post('/add_lesson')
@@ -131,9 +131,9 @@ def load_schedule(body: ApiBase, group_id: int, request: Request):
                                                               "days": days_titles})
 
 
-@app.patch('/load_teacher_classes')
+@app.get('/load_teacher_classes')
 def load_teacher_classes(teacher_id: int):
-    return teacher_id
+    return crudadapter.clss['cls'].for_teacher(teacher_id)
 
 @app.post('/upgrade_groups')
 def upgrade_groups(body: ApiBase):
