@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.responses import JSONResponse, RedirectResponse
 
 from Diary.files.export import write_student_keys, write_teacher_keys
+from Diary.func.helpers import check_date, make_dates_for_week, get_title
 from Diary.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user, \
     validate_token
 from Diary.models.day import AddLesson
@@ -135,6 +136,7 @@ def load_schedule(body: ApiBase, group_id: int, request: Request):
 def load_teacher_classes(teacher_id: int):
     return crudadapter.clss['cls'].for_teacher(teacher_id)
 
+
 @app.post('/upgrade_groups')
 def upgrade_groups(body: ApiBase):
     return crudadapter.clss['group']().upgrade(body)
@@ -179,6 +181,52 @@ def download_teachers(current_user=Depends(get_current_user)):
 @app.get('/weather_photo')
 def get_weather_photo(weather: str):
     return FileResponse(f'./views/static/photos/weather/{weather}.jpg')
+
+
+@app.get('/load_diary')
+def load_diary(date: str, current_user=Depends(get_current_user)):
+    data = {
+        'has_classes': check_date(date),
+        'title': get_title(date),
+        'classes': [
+            {'number': 1,
+             'teacher': 'Babenko Grigory',
+             'subject': 'Algebra',
+             'hw': 'numbers 1-3, prepare for test',
+             'mark': 3
+             },
+            {'number': 2,
+             'teacher': 'Chirikov Igor',
+             'subject': 'PE',
+             'hw': 'none as always',
+             'mark': ''
+             },
+            {'number': 3,
+             'teacher': 'Gusev Alexey',
+             'subject': 'It',
+             'hw': 'stepik pro course',
+             'mark': 3
+             },
+            {'number': 4,
+             'teacher': 'Babenko Grigory',
+             'subject': 'Geometry',
+             'hw': 'youtu.be/aaadfa, read 5-6 pages',
+             'mark': ''
+             },
+            {'number': 5,
+             'teacher': 'Antonova Elena',
+             'subject': 'Russian',
+             'hw': '',
+             'mark': ''
+             },
+        ]
+    }
+    return data
+
+
+@app.get('/get_dates_for_next_week')
+def get_dates(date: str, type: str):
+    return make_dates_for_week(date, type=type)
 
 
 if __name__ == '__main__':

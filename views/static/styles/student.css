@@ -1,0 +1,49 @@
+#diary-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.diary {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+h3, h6, p {
+    margin-bottom: 0 !important;
+}
+
+.initials {
+    color: lightgrey;
+    font-size: 15px;
+}
+
+.day-choose {
+    width: fit-content;
+}
+
+.splitter {
+    border-right: 1px solid black;
+}
+
+.homework {
+    height: fit-content;
+}
+
+.mark {
+    min-width: 28px;
+    background: none !important;
+}
+
+.lesson-info {
+    min-width: 180px;
+}
+
+.lesson-n {
+    min-width: 32px;
+}
+
+.poiner {
+    cursor: pointer;
+}

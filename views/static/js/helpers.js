@@ -12,6 +12,8 @@ async function callServer(url, data, method) {
 function executeScripts(page) {
     if (page === 'manage_groups') {
         loadSchedule('load', '0');
+    } else if (page === 'my_diary') {
+        loadDiary('load');
     }
 }
 

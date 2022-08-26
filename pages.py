@@ -9,13 +9,15 @@ from starlette.templating import Jinja2Templates
 
 from Diary.crud_models import CRUDAdapter
 from Diary.data.data import Sessions
-from Diary.func.helpers import verify_user_type
+from Diary.func.helpers import verify_user_type, make_dates_for_week
 from pyowm import OWM
+from datetime import datetime, timedelta
 
 clss = CRUDAdapter().clss
 templates = Jinja2Templates(directory="views/templates")
 owm = OWM(os.getenv('OWM_KEY'))
 mgr = owm.weather_manager()
+
 
 class ApiPage(BaseModel):
     school_id: Optional[int]
@@ -164,7 +166,7 @@ class SchoolLinkPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
-class MyDairy(PageBase):
+class MyDiary(PageBase):
     USERTYPE = 'student'
     FILE_NAME = 'my_diary.html'
 
@@ -175,8 +177,9 @@ class MyDairy(PageBase):
         except:
             weather = 'none'
         print(weather)
-        data = {"request": request, "number": clss['school'].school_name(clss['admin']().get(body).school_id),
-                'weather': weather}
+        today = datetime.today()
+        dates = make_dates_for_week(today)
+        data = {"request": request, 'weather': weather, 'dates': dates}
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
@@ -244,7 +247,7 @@ class PagesAdapter:
               'add_subject': AddSubjectPage,
               'manage_groups': ManageGroups,
               'school_link': SchoolLinkPage,
-              'my_dairy': MyDairy,
+              'my_diary': MyDiary,
               'classes': TeacherClassesPage,
               'admin_profile_info': AdminInfoPage,
               'teacher_profile_info': TeacherInfoPage,

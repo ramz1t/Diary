@@ -1,15 +1,16 @@
+import datetime
+
 from fastapi import HTTPException
 from fastapi.security.utils import get_authorization_scheme_param
 from jose import jwt, JWTError
 from starlette import status
 from starlette.responses import JSONResponse
-
+from datetime import date
 from Diary.func.db_user_find import get_user_by_email
 from Diary.logic.auth import verify_password, get_password_hash, SECRET_KEY, ALGORITHM
 
 # from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
 from Diary.data.data import Sessions
-
 
 # def change_user_password(email, body: ApiChangePassword):
 #     with Sessions() as session:
@@ -52,3 +53,46 @@ def verify_user_type(usertype, request) -> bool:
         raise credentials_exception
     token_usertype = payload.get('type')
     return usertype == token_usertype
+
+
+def make_datetime_from_str(date: str):
+    date = list(map(int, date.split('-')))
+    date_c = datetime.date(year=date[0], month=date[1], day=date[2])
+    return date_c
+
+
+def check_date(date: str):
+    date = list(map(int, date.split('-')))
+    summer_start = datetime.date(year=date[0], month=6, day=1)
+    summer_end = datetime.date(year=date[0], month=8, day=31)
+    date_c = datetime.date(year=date[0], month=date[1], day=date[2])
+    return not summer_start <= date_c <= summer_end
+
+
+def make_dates_for_week(date, type: str = None):
+    if isinstance(date, str):
+        date = make_datetime_from_str(date)
+        if type == 'next':
+            date += datetime.timedelta(days=7)
+        elif type == 'back':
+            date -= datetime.timedelta(days=7)
+    today_i = date.weekday()
+    start_day = date - datetime.timedelta(days=today_i)
+    dates = []
+    for i in range(5):
+        date = start_day.strftime('%Y-%m-%d')
+        day = start_day.strftime('%d')
+        name = ['mon', 'tue', 'wed', 'thu', 'fri'][start_day.weekday()]
+        dates.append({'date': date, 'day': day, 'name': name})
+        start_day += datetime.timedelta(days=1)
+    return dates
+
+
+def get_title(date):
+    date = make_datetime_from_str(date)
+    month = \
+        ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
+         'December'][int(date.strftime('%m')) - 1]
+    day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][date.weekday()]
+    num = date.strftime("%d")
+    return f'{num if not num.startswith("0") else num[1]}th of {month}, {day}'
