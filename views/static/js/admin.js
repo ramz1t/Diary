@@ -317,8 +317,13 @@ function upgradeGroups() {
     callServer('/upgrade_groups', data, 'POST').then((response) => {
         if (response.ok) {
             window.location.reload(true);
-        } else {
-            alert('error');
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error!'
+            })
         }
     })
 }
