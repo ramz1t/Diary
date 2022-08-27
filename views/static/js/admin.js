@@ -312,18 +312,45 @@ async function linkSchool(school_id, school_number) {
 }
 
 function upgradeGroups() {
-    if (!window.confirm('Are you sure')) return;
     let data = {'user_id': localStorage.getItem('user_id')}
-    callServer('/upgrade_groups', data, 'POST').then((response) => {
-        if (response.ok) {
-            window.location.reload(true);
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, level up classes',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed){
+            callServer('/upgrade_groups', data, 'POST').then((response) => {
+            if (response.ok) {
+                window.location.reload(true);
+            }
+            else {
+                Swal.DismissReason.cancel
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error!'
+                })
+            }
+        })
         }
         else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Error!'
-            })
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Data is safe :)',
+                'error'
+            )
         }
     })
 }
