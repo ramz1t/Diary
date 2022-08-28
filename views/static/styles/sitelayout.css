@@ -84,3 +84,10 @@ body {
     color: white;
     padding: 7px;
 }
+
+.eye {
+    position: absolute;
+    float: right;
+    margin-left: 90%;
+    margin-top: 18px;
+}

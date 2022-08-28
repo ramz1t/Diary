@@ -125,19 +125,18 @@ function deleteFromDB(id, model) {
 }
 
 function hideShow() {
-    var x = document.getElementById('password')
-    var y = document.getElementById('show')
-    var z = document.getElementById('hide')
-    if(x.type === 'password') {
-        x.type = 'text';
-        y.style.display = 'none';
-        z.style.display = 'block';
-
+    var input_fields = $('.pass_input');
+    var eyes = $('.eye-btn');
+    if(input_fields[0].type === 'password') {
+        for (let i = 0; i < input_fields.length; i++) {
+            input_fields[i].type = 'text';
+            eyes[i].classList.replace('bi-eye-slash', 'bi-eye');
+        }
     }
-
     else{
-        x.type = 'password';
-        y.style.display = 'block';
-        z.style.display = 'none';
+        for (let i = 0; i < input_fields.length; i++) {
+            input_fields[i].type = 'password';
+            eyes[i].classList.replace('bi-eye', 'bi-eye-slash');
+        }
     }
 }
