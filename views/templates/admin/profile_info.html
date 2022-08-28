@@ -1,6 +1,11 @@
 <div class="content-wrapper">
-    <h1>Profile info</h1>
-    <br>
-    <h5>Email: {{info.email}}</h5>
-    <h5>Connected to school №{{info.school}}</h5>
+    <div class="card shadow-lg round-border" style="width: 30rem;">
+        <div class="card-body">
+            <p class="text-center fs-3 fw-bolder">Profile info</p>
+        </div>
+        <div class="card-custom p-10">
+            <h5><i class="bi bi-envelope-check icon-custom"></i><b>Email:</b> {{info.email}}</h5>
+            <h5><i class="bi bi-link icon-custom"></i><b>Connected to school №</b>{{info.school}}</h5>
+        </div>
+    </div>
 </div>
