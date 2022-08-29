@@ -143,8 +143,8 @@ def upgrade_groups(body: ApiBase):
 
 
 @app.post('/{model}/delete')
-def delete_from_db(body: ApiBase, model: str):
-    return crudadapter.clss[model].delete(body.id)
+def delete_from_db(id: int, model: str):
+    return crudadapter.clss[model].delete(id)
 
 
 ''' DB urls'''

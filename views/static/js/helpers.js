@@ -119,11 +119,39 @@ async function loadPage(type, page) {
 }
 
 function deleteFromDB(id, model) {
-    callServer(`/${model}/delete`, {'id': id}, 'POST').then(async (response) => {
-        checkCredentials(response.status);
-        await alertError(response);
-        window.location.reload(true)
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
     })
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed){
+            callServer(`/${model}/delete?id=${id}`, {}, 'POST').then(async (response) => {
+                checkCredentials(response.status);
+                await alertError(response);
+                window.location.reload(true)
+    })
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Data is safe :)',
+                'error'
+            )
+        }
+    })
+
 }
 
 function hideShow() {
