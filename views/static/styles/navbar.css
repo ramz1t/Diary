@@ -2,6 +2,8 @@
     position: fixed;
     width: calc(var(--nav-width) - 40px);
     margin-right: 2rem;
+    background-color: white;
+    min-height: 100vh;
 }
 
 .btn:focus {

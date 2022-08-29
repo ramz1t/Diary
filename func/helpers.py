@@ -7,10 +7,9 @@ from starlette import status
 from starlette.responses import JSONResponse
 from datetime import date
 from Diary.func.db_user_find import get_user_by_email
-from Diary.logic.auth import verify_password, get_password_hash, SECRET_KEY, ALGORITHM
-
+from Diary.logic.auth import SECRET_KEY, ALGORITHM
 # from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
-from Diary.data.data import Sessions
+from Diary.data.data import Sessions, YEAR_END, YEAR_START, TODAY
 
 # def change_user_password(email, body: ApiChangePassword):
 #     with Sessions() as session:
@@ -62,11 +61,8 @@ def make_datetime_from_str(date: str):
 
 
 def check_date(date: str):
-    date = list(map(int, date.split('-')))
-    summer_start = datetime.date(year=date[0], month=6, day=1)
-    summer_end = datetime.date(year=date[0], month=8, day=31)
-    date_c = datetime.date(year=date[0], month=date[1], day=date[2])
-    return not summer_start <= date_c <= summer_end
+    date = make_datetime_from_str(date)
+    return YEAR_START <= date <= YEAR_END
 
 
 def make_dates_for_week(date, type: str = None):
@@ -96,3 +92,17 @@ def get_title(date):
     day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][date.weekday()]
     num = date.strftime("%d")
     return f'{num if not num.startswith("0") else num[1]}th of {month}, {day}'
+
+
+def teaching_days_dates(days_indexes):
+    dates = []
+    current_day = YEAR_START - datetime.timedelta(days=YEAR_START.weekday())
+    while current_day < TODAY + datetime.timedelta(days=90):
+        if current_day >= YEAR_START:
+            for index in days_indexes:
+                if index == current_day.weekday():
+                    dates.append({'long': current_day.strftime("%Y-%m-%d"), 'short': current_day.strftime('%d')})
+        current_day += datetime.timedelta(days=1)
+    return dates
+
+

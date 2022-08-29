@@ -10,6 +10,7 @@ from abc import abstractmethod, ABC
 
 from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass
+from Diary.func.helpers import teaching_days_dates
 from Diary.logic.auth import get_password_hash
 import re
 
@@ -163,6 +164,7 @@ class Admin(CRUDBase):
         with Sessions() as session:
             return session.query(DBAdmin).filter_by(id=body.user_id).first()
 
+    @staticmethod
     def delete(id: int):
         pass
 
@@ -256,7 +258,8 @@ class Subject(CRUDBase):
             session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Subject added')
 
-    def get(self, id: int):
+    @staticmethod
+    def get(id: int):
         with Sessions() as session:
             return session.query(DBSubject).filter_by(id=id).first().name
 
@@ -450,18 +453,14 @@ class Cls(CRUDBase):
             return res
 
     @staticmethod
-    def get_teacher_classes_days(teacher_id: int, group_id: int, subject_id: int):
+    def get_teacher_classes_days(class_id: int):
         with Sessions() as session:
             res = []
-            classes_ids = [cls.id for cls in
-                           session.query(DBClassesRelationship).filter_by(teacher_id=teacher_id, group_id=group_id,
-                                                                          subject_id=subject_id).all()]
             for day_i in range(5):
-                for class_id in classes_ids:
-                    classes = session.query(DBScheduleClass).filter_by(day_number=day_i,
-                                                                       class_id=class_id).all()
-                    for cls in classes:
-                        res.append(cls.day_number)
+                classes = session.query(DBScheduleClass).filter_by(day_number=day_i, class_id=class_id).all()
+                for cls in classes:
+                    if cls is not None:
+                        res.append(day_i)
             return res
 
     def get_one(self, id: int):
@@ -531,7 +530,9 @@ class Book:
             res = {}
             group = session.query(DBGroup).filter_by(id=group_id).first()
             if group is not None:
-                res.update({'name': group.name, 'students_count': 0, 'dates': [], 'students': [], 'hw': []})
+                dates = teaching_days_dates(Cls.get_teacher_classes_days(class_id))
+                subject = Subject().get(Cls().get_one(class_id).subject_id)
+                res.update({'name': group.name, 'subject': subject, 'students_count': 0, 'dates': dates, 'students': [], 'hw': []})
                 try:
                     res['students_count'] = len(group.students)
                     students = sorted(group.students, key=lambda x: x.surname)

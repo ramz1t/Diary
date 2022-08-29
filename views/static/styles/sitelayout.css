@@ -95,3 +95,8 @@ body {
 .pointer {
     cursor: pointer;
 }
+
+.sticky {
+    position: fixed;
+    background-color: white;
+}

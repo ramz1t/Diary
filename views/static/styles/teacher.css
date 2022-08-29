@@ -11,3 +11,23 @@
     color: dimgrey
 }
 
+h1 {
+    margin-bottom: 0 !important;
+}
+
+th, td {
+    border: solid 1px black;
+    padding: 5px;
+}
+
+.tr {
+    height: 35px;
+}
+
+.square {
+    min-width: 35px;
+}
+
+.book-student-ns {
+    min-width: 250px;
+}

@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.responses import JSONResponse, RedirectResponse
 
 from Diary.files.export import write_student_keys, write_teacher_keys
-from Diary.func.helpers import check_date, make_dates_for_week, get_title
+from Diary.func.helpers import check_date, make_dates_for_week, get_title, teaching_days_dates
 from Diary.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user, \
     validate_token
 from Diary.models.day import AddLesson
@@ -233,9 +233,11 @@ def get_dates(date: str, type: str):
 def class_book(group_id: int, class_id: int):
     return crudadapter.clss['book'].make(group_id, class_id)
 
+
 @app.get('/test')
-def test(group_id: int, current_user=Depends(get_current_user)):
-    return crudadapter.clss['cls'].get_teacher_classes_days(group_id=group_id, teacher_id=current_user.id, subject_id=1)
+def test(class_id: int):
+    dates = crudadapter.clss['cls'].get_teacher_classes_days(class_id=class_id)
+    return teaching_days_dates(dates)
 
 
 if __name__ == '__main__':
