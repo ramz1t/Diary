@@ -14,6 +14,8 @@ function executeScripts(page) {
         loadSchedule('load', '0');
     } else if (page === 'my_diary') {
         loadDiary('load');
+    } else if (page === 'group_book') {
+        openClassBook('load')
     }
 }
 

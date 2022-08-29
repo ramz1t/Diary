@@ -5,13 +5,15 @@
         <div>
             <h3>{{day.day_name}}</h3>
             <div class="day-card">
-                {% for lesson in day.lessons %}
+                {% for i in range(day.last_lesson_number) %}
                 <div class="flex-row allign-center">
-                    <h5>{{lesson.lesson_number}}</h5>
-                    {% if lesson|length > 1 %}
-                    <h5>{{lesson.subject_name}}</h5>
-                    <h5 class="group-icon">{{lesson.group_name}}</h5>
-                    <i class="bi bi-arrow-right"></i>
+                    <h5>{{day.lessons[i].lesson_number}}</h5>
+                    {% if day.lessons[i]|length > 1 %}
+                    <h5>{{day.lessons[i].subject_name}}</h5>
+                    <h5 class="group-icon">{{day.lessons[i].group_name}}</h5>
+                    <i onclick="loadPage('teacher', 'group_book'); localStorage.setItem('book_group_id', '{{day.lessons[i].group_id}}');
+                                                                   localStorage.setItem('book_class_id', '{{day.lessons[i].class_id}}')"
+                       class="bi bi-arrow-right pointer"></i>
                     {% endif %}
                 </div>
                 {% endfor %}

@@ -229,5 +229,14 @@ def get_dates(date: str, type: str):
     return make_dates_for_week(date, type=type)
 
 
+@app.get('/class_book')
+def class_book(group_id: int, class_id: int):
+    return crudadapter.clss['book'].make(group_id, class_id)
+
+@app.get('/test')
+def test(group_id: int, current_user=Depends(get_current_user)):
+    return crudadapter.clss['cls'].get_teacher_classes_days(group_id=group_id, teacher_id=current_user.id, subject_id=1)
+
+
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    uvicorn.run("__main__:app", host='127.0.0.1', port=8000, reload=True)

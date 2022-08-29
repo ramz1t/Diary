@@ -422,7 +422,8 @@ class Cls(CRUDBase):
             classes_ids = [cls.id for cls in
                            session.query(DBClassesRelationship).filter_by(teacher_id=teacher_id).all()]
             for day_i in range(5):
-                day_data = {'day_name': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][day_i], 'lessons': []}
+                day_data = {'day_name': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][day_i],
+                            'lessons_count': 0, 'last_lesson_number': 0, 'lessons': []}
                 for lesson_i in range(10):
                     lesson_found = False
                     for class_id in classes_ids:
@@ -431,10 +432,14 @@ class Cls(CRUDBase):
                                                                        class_id=class_id).first()
                         if cls is not None:
                             lesson_found = True
+                            day_data['lessons_count'] += 1
+                            day_data['last_lesson_number'] = lesson_i + 1
                             db_cls = session.query(DBClassesRelationship).filter_by(id=class_id).first()
                             group_name = Group().get(db_cls.group_id).name
                             subject_name = Subject().get(db_cls.subject_id)
-                            class_data = {'subject_name': subject_name, 'group_name': group_name, 'lesson_number': lesson_i + 1}
+                            class_data = {'subject_name': subject_name, 'group_name': group_name,
+                                          'group_id': db_cls.group_id, 'lesson_number': lesson_i + 1,
+                                          'class_id': class_id}
                             day_data['lessons'].append(class_data)
                         if lesson_found:
                             break
@@ -442,6 +447,21 @@ class Cls(CRUDBase):
                         day_data['lessons'].append({'lesson_number': lesson_i + 1})
                         pass
                 res.append(day_data)
+            return res
+
+    @staticmethod
+    def get_teacher_classes_days(teacher_id: int, group_id: int, subject_id: int):
+        with Sessions() as session:
+            res = []
+            classes_ids = [cls.id for cls in
+                           session.query(DBClassesRelationship).filter_by(teacher_id=teacher_id, group_id=group_id,
+                                                                          subject_id=subject_id).all()]
+            for day_i in range(5):
+                for class_id in classes_ids:
+                    classes = session.query(DBScheduleClass).filter_by(day_number=day_i,
+                                                                       class_id=class_id).all()
+                    for cls in classes:
+                        res.append(cls.day_number)
             return res
 
     def get_one(self, id: int):
@@ -503,6 +523,29 @@ class ScheduleClass(CRUDBase):
         return data
 
 
+class Book:
+
+    @staticmethod
+    def make(group_id: int, class_id: int):
+        with Sessions() as session:
+            res = {}
+            group = session.query(DBGroup).filter_by(id=group_id).first()
+            if group is not None:
+                res.update({'name': group.name, 'students_count': 0, 'dates': [], 'students': [], 'hw': []})
+                try:
+                    res['students_count'] = len(group.students)
+                    students = sorted(group.students, key=lambda x: x.surname)
+                    for number, student in enumerate(students):
+                        res['students'].append(
+                            {'number': number + 1, 'name': student.name, 'surname': student.surname,
+                             'marks': {'avg': 0, 'all': []}})
+                except KeyError:
+                    pass
+            else:
+                res = {'no group with this id'}
+        return res
+
+
 class CRUDAdapter:
     _clss = {'student': Student,
              'admin': Admin,
@@ -513,7 +556,8 @@ class CRUDAdapter:
              'school': School,
              'group': Group,
              'cls': Cls,
-             'scheduleclass': ScheduleClass}
+             'scheduleclass': ScheduleClass,
+             'book': Book}
 
     @property
     def clss(self):
