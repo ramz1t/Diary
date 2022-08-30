@@ -185,43 +185,7 @@ def get_weather_photo(weather: str):
 
 @app.get('/load_diary')
 def load_diary(date: str, current_user=Depends(get_current_user)):
-    data = {
-        'has_classes': check_date(date),
-        'title': get_title(date),
-        'classes': [
-            {'number': 1,
-             'teacher': 'Babenko Grigory',
-             'subject': 'Algebra',
-             'hw': 'numbers 1-3, prepare for test',
-             'mark': 3
-             },
-            {'number': 2,
-             'teacher': 'Chirikov Igor',
-             'subject': 'PE',
-             'hw': 'none as always',
-             'mark': ''
-             },
-            {'number': 3,
-             'teacher': 'Gusev Alexey',
-             'subject': 'It',
-             'hw': 'stepik pro course',
-             'mark': 3
-             },
-            {'number': 4,
-             'teacher': 'Babenko Grigory',
-             'subject': 'Geometry',
-             'hw': 'youtu.be/aaadfa, read 5-6 pages',
-             'mark': ''
-             },
-            {'number': 5,
-             'teacher': 'Antonova Elena',
-             'subject': 'Russian',
-             'hw': '',
-             'mark': ''
-             },
-        ]
-    }
-    return data
+    return crudadapter.clss['book'].make_day(date, current_user)
 
 
 @app.get('/get_dates_for_next_week')
@@ -231,7 +195,7 @@ def get_dates(date: str, type: str):
 
 @app.get('/class_book')
 def class_book(group_id: int, class_id: int):
-    return crudadapter.clss['book'].make(group_id, class_id)
+    return crudadapter.clss['book'].make_class(group_id, class_id)
 
 
 @app.get('/test')

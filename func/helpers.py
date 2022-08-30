@@ -97,7 +97,7 @@ def get_title(date):
 def teaching_days_dates(days_indexes):
     dates = []
     current_day = YEAR_START - datetime.timedelta(days=YEAR_START.weekday())
-    while current_day < TODAY + datetime.timedelta(days=90):
+    while current_day < TODAY + datetime.timedelta(days=110):
         if current_day >= YEAR_START:
             for index in days_indexes:
                 if index == current_day.weekday():
@@ -106,3 +106,6 @@ def teaching_days_dates(days_indexes):
     return dates
 
 
+def get_day_index_from_date(date: str):
+    date = make_datetime_from_str(date)
+    return date.weekday()

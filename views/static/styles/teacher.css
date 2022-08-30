@@ -5,6 +5,10 @@
     display: grid;
 }
 
+body {
+    counter-reset: sticky;
+}
+
 .group-icon {
     border: 2px solid dimgrey;
     border-radius: 5px;
@@ -24,6 +28,10 @@ th, td {
     height: 35px;
 }
 
+table {
+    overflow-x: scroll;
+}
+
 .square {
     min-width: 35px;
 }
@@ -31,3 +39,15 @@ th, td {
 .book-student-ns {
     min-width: 250px;
 }
+
+th {
+    background-color: #e5e5e5;
+}
+
+/*.absolute {*/
+/*    position: absolute;*/
+/*    left: 274px;*/
+/*    border-top-width: 1px;*/
+/*    margin-top: -1px;*/
+/*    top: auto;*/
+/*}*/

@@ -10,7 +10,7 @@ from abc import abstractmethod, ABC
 
 from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass
-from Diary.func.helpers import teaching_days_dates
+from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date
 from Diary.logic.auth import get_password_hash
 import re
 
@@ -463,7 +463,8 @@ class Cls(CRUDBase):
                         res.append(day_i)
             return res
 
-    def get_one(self, id: int):
+    @staticmethod
+    def get_one(id: int):
         with Sessions() as session:
             return session.query(DBClassesRelationship).filter_by(id=id).first()
 
@@ -514,7 +515,7 @@ class ScheduleClass(CRUDBase):
                 for lesson_i in range(len(set([cls.class_number for cls in today_classes]))):
                     cls = session.query(DBScheduleClass).filter_by(day_number=day_i, class_number=lesson_i,
                                                                    group_id=group_id).first()
-                    db_cls = Cls().get_one(cls.class_id)
+                    db_cls = Cls.get_one(cls.class_id)
                     name = Subject().get(db_cls.subject_id)
                     teacher = Teacher().get(db_cls.teacher_id)
                     day.append({'name': name.capitalize(), 'teacher': teacher.capitalize(), 'class_id': db_cls.id})
@@ -525,26 +526,46 @@ class ScheduleClass(CRUDBase):
 class Book:
 
     @staticmethod
-    def make(group_id: int, class_id: int):
+    def make_class(group_id: int, class_id: int):
         with Sessions() as session:
             res = {}
             group = session.query(DBGroup).filter_by(id=group_id).first()
             if group is not None:
                 dates = teaching_days_dates(Cls.get_teacher_classes_days(class_id))
-                subject = Subject().get(Cls().get_one(class_id).subject_id)
+                subject = Subject().get(Cls.get_one(class_id).subject_id)
                 res.update({'name': group.name, 'subject': subject, 'students_count': 0, 'dates': dates, 'students': [], 'hw': []})
                 try:
                     res['students_count'] = len(group.students)
                     students = sorted(group.students, key=lambda x: x.surname)
                     for number, student in enumerate(students):
                         res['students'].append(
-                            {'number': number + 1, 'name': student.name, 'surname': student.surname,
+                            {'id': student.id, 'number': number + 1, 'name': student.name, 'surname': student.surname,
                              'marks': {'avg': 0, 'all': []}})
                 except KeyError:
                     pass
             else:
                 res = {'no group with this id'}
         return res
+
+    @staticmethod
+    def make_day(date: str, current_user: DBStudent):
+        day = {
+            'has_classes': check_date(date),
+            'title': get_title(date),
+            'classes': [],
+        }
+        with Sessions() as session:
+            group = session.query(DBGroup).filter_by(id=current_user.group_id).first()
+            day_i = get_day_index_from_date(date)
+            schedule_classes = session.query(DBScheduleClass).filter_by(group_id=group.id, day_number=day_i).all()
+            schedule_classes = sorted(schedule_classes, key=lambda x: x.class_number)
+            for cls in schedule_classes:
+                db_cls = Cls.get_one(cls.class_id)
+                number = cls.class_number + 1
+                teacher = Teacher().get(db_cls.teacher_id)
+                subject = Subject.get(db_cls.subject_id)
+                day['classes'].append({'number': number, 'teacher': teacher, 'subject': subject, 'hw': '', 'mark': ''})
+        return day
 
 
 class CRUDAdapter:
