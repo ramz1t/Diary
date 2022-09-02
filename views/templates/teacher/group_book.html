@@ -1,18 +1,18 @@
 <div class="content-wrapper" id="book-wrapper">
-    <div id="modal-container">
+    <div class="none" id="modal-container">
         <div id="mark-modal" class="round-border p-10" data-mark="">
             <p id="student_name">Surname Name</p>
             <p id="mark_date">2022-09-01</p>
 
             <div class="flex-row allign-center">
                 <div class="grid column-5">
-                    <button id="mark-2" class="diary-btn square">2</button>
-                    <button id="mark-3" class="diary-btn">3</button>
-                    <button id="mark-4" class="diary-btn">4</button>
-                    <button id="mark-5" class="diary-btn">5</button>
+                    <button onclick="placeMark(2)" id="mark-2" class="diary-btn square">2</button>
+                    <button onclick="placeMark(3)" id="mark-3" class="diary-btn">3</button>
+                    <button onclick="placeMark(4)" id="mark-4" class="diary-btn">4</button>
+                    <button onclick="placeMark(5)" id="mark-5" class="diary-btn">5</button>
                 </div>
-                <i class="bi bi-check-lg pointer" style="color: green"></i>
-                <i class="bi bi-x-lg pointer" style="color: red"></i>
+                <i onclick="sendMark()" class="bi bi-check-lg pointer green" style="color: green"></i>
+                <i onclick="dismissMark()" class="bi bi-x-lg pointer red"></i>
             </div>
         </div>
     </div>

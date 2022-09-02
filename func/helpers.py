@@ -109,3 +109,7 @@ def teaching_days_dates(days_indexes):
 def get_day_index_from_date(date: str):
     date = make_datetime_from_str(date)
     return date.weekday()
+
+
+def get_current_time():
+    return datetime.datetime.now().strftime("%d/%m/%y %H:%M")

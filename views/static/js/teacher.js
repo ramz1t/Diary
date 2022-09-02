@@ -24,10 +24,17 @@ function openClassBook() {
                               </td>`
             for (let j = 0; j < book.dates.length; j++) {
                 // mark cells
-                row.innerHTML += `<td class="pointer mark-click-target-area" 
+                const date = book.dates[j].long
+                let mark = book.students[i].marks.all[date];
+                if (mark === undefined) {
+                    mark = '';
+                }
+                row.innerHTML += `<td id="${book.students[i].id}-${book.dates[j].long}"
+                                    class="pointer mark-click-target-area" 
                                     data-student-id ="${book.students[i].id}" 
                                     data-date = "${book.dates[j].long}"
                                     data-initials = "${book.students[i].surname} ${book.students[i].name}">
+                                    ${mark}
                                   </td>`
             }
             row.innerHTML += `<td>${book.students[i].marks.avg}</td>`
@@ -45,11 +52,49 @@ function addMark(e) {
         const studentId = parseInt(e.target.dataset.studentId);
         const date = e.target.dataset.date;
         const name = e.target.dataset.initials;
-        const y = e.clientY + window.scrollY;
-        const x = e.clientX + window.scrollX;
+        const y = e.clientY + window.scrollY - (e.clientY + window.scrollY - 105) % 35;
+        let x = e.clientX + window.scrollX - (e.clientX + window.scrollX - 260) % 35 + 35;
+        if (window.screen.width + window.scrollX - x < 315) {
+            x -= 350
+        }
         modalWindow.style.left = `${x}px`;
         modalWindow.style.top = `${y}px`;
+        const modal = document.getElementById('mark-modal');
+        modal.setAttribute('data-modal-date', date);
+        modal.setAttribute('data-modal-student-id', studentId);
         document.getElementById('student_name').innerText = name;
         document.getElementById('mark_date').innerText = date;
+        modalWindow.classList.remove('none');
     }
+}
+
+function placeMark(mark) {
+    const modal = document.getElementById('mark-modal');
+    modal.setAttribute('data-mark', mark);
+    console.log(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
+    const cell = document.getElementById(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
+    cell.innerText = mark;
+    cell.classList.add('red');
+}
+
+function dismissMark() {
+    const modal = document.getElementById('mark-modal');
+    const cell = document.getElementById(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
+    cell.innerText = '';
+    cell.classList.remove('red');
+    document.getElementById('modal-container').classList.add('none');
+}
+
+function sendMark() {
+    const modal = document.getElementById('mark-modal');
+    const date = modal.dataset.modalDate;
+    const mark = modal.dataset.mark;
+    const studentId = modal.dataset.modalStudentId;
+    const data = {'date': date, 'mark': mark, 'student_id': studentId, 'subject_id': localStorage.getItem('book_class_id')}
+    callServer('/execute/mark/create', data, 'POST').then((response) => {
+        const p = alertError(response);
+        checkCredentials(response);
+        document.getElementById('modal-container').classList.add('none');
+        document.getElementById(`${studentId}-${date}`).classList.remove('red');
+    });
 }

@@ -2,6 +2,7 @@ from random import randint
 from typing import Optional, Union
 
 from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
 
 from Diary.data.data import Sessions, symbols
 from fastapi.responses import JSONResponse
@@ -9,13 +10,64 @@ from fastapi import status
 from abc import abstractmethod, ABC
 
 from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
-    DBClassesRelationship, DBScheduleClass
-from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date
+    DBClassesRelationship, DBScheduleClass, DBMark
+from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time
 from Diary.logic.auth import get_password_hash
 import re
 
 
-class ApiBase(BaseModel):
+@dataclass
+class ApiBase:
+    def __init__(self, email: str = None,
+                 password: str = None,
+                 old_password: str = None,
+                 new_password: str = None,
+                 type: str = None,
+                 new_email: str = None,
+                 value: str = None,
+                 group_id: int = None,
+                 subject_id: int = None,
+                 teacher_id: int = None,
+                 group: str = None,
+                 day_number: int = None,
+                 name: str = None,
+                 surname: str = None,
+                 city: str = None,
+                 key: str = None,
+                 school_id: int = None,
+                 user_id: int = None,
+                 lesson_number: int = None,
+                 lesson_id: int = None,
+                 id: int = None,
+                 student_id: int = None,
+                 date: str = None,
+                 mark: int = None,
+                 *args, **kwargs):
+        self.email = email
+        self.old_password = old_password
+        self.new_password = new_password
+        self.password = password
+        self.type = type
+        self.new_email = new_email
+        self.value = value
+        self.group_id = group_id
+        self.subject_id = subject_id
+        self.teacher_id = teacher_id
+        self.group = group
+        self.day_number = day_number
+        self.name = name
+        self.surname = surname
+        self.city = city
+        self.key = key
+        self.school_id = school_id
+        self.user_id = user_id
+        self.lesson_number = lesson_number
+        self.lesson_id = lesson_id
+        self.id = id
+        self.student_id = student_id
+        self.date = date
+        self.mark = mark
+
     email: Optional[str]
     password: Optional[str]
     old_password: Optional[str]
@@ -37,6 +89,9 @@ class ApiBase(BaseModel):
     lesson_number: Optional[int]
     lesson_id: Optional[int]
     id: Optional[int]
+    date: Optional[str]
+    mark: Optional[int]
+    student_id: Optional[int]
 
 
 class KeyBase(ABC):
@@ -533,14 +588,15 @@ class Book:
             if group is not None:
                 dates = teaching_days_dates(Cls.get_teacher_classes_days(class_id))
                 subject = Subject().get(Cls.get_one(class_id).subject_id)
-                res.update({'name': group.name, 'subject': subject, 'students_count': 0, 'dates': dates, 'students': [], 'hw': []})
+                res.update({'name': group.name, 'subject': subject, 'students_count': 0, 'dates': dates, 'students': [],
+                            'hw': []})
                 try:
                     res['students_count'] = len(group.students)
                     students = sorted(group.students, key=lambda x: x.surname)
                     for number, student in enumerate(students):
                         res['students'].append(
                             {'id': student.id, 'number': number + 1, 'name': student.name, 'surname': student.surname,
-                             'marks': {'avg': 0, 'all': []}})
+                             'marks': {'avg': 0, 'all': Mark().get_student_marks(dates, class_id, student.id)}})
                 except KeyError:
                     pass
             else:
@@ -564,10 +620,59 @@ class Book:
                 number = cls.class_number + 1
                 teacher = Teacher().get(db_cls.teacher_id)
                 subject = Subject.get(db_cls.subject_id)
-                mark = 5
+                mark = Mark().get(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
+                mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
                 hw = ''
-                day['classes'].append({'number': number, 'teacher': teacher, 'subject': subject, 'hw': hw, 'mark': mark})
+                day['classes'].append(
+                    {'number': number, 'teacher': teacher, 'subject': subject, 'hw': hw, 'mark': mark,
+                     'mark_time': mark_time})
         return day
+
+
+class Mark(CRUDBase):
+
+    def create(self, body: ApiBase):
+        with Sessions() as session:
+            print(body.date, body.value, body.student_id, body.subject_id)
+            mark = session.query(DBMark).filter_by(date=body.date, student_id=body.student_id,
+                                                   class_id=body.subject_id).first()
+            if mark is not None:
+                mark.value = body.mark
+                session.add(mark)
+                session.commit()
+                return JSONResponse(status_code=status.HTTP_200_OK, content='mark updated')
+            mark = DBMark(date=body.date, value=body.mark, student_id=body.student_id, class_id=body.subject_id,
+                          time=get_current_time())
+            session.add(mark)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark added successfully')
+
+    def get(self, body: ApiBase):
+        with Sessions() as session:
+            mark = session.query(DBMark).filter_by(student_id=body.student_id, date=body.date,
+                                                   class_id=body.subject_id).first()
+            return mark.value if mark is not None else ''
+
+    @staticmethod
+    def delete(id: int):
+        pass
+
+    def get_student_marks(self, dates: list, class_id: int, student_id: int):
+        marks = {}
+        for date in dates:
+            long_date = date['long']
+            mark = self.get(ApiBase(student_id=student_id, date=long_date, subject_id=class_id))
+            print('1', mark)
+            if mark != '':
+                marks.update({long_date: mark})
+        return marks
+
+    @staticmethod
+    def time(body: ApiBase):
+        with Sessions() as session:
+            mark = session.query(DBMark).filter_by(student_id=body.student_id, date=body.date,
+                                                   class_id=body.subject_id).first()
+            return mark.time if mark is not None else ''
 
 
 class CRUDAdapter:
@@ -581,7 +686,8 @@ class CRUDAdapter:
              'group': Group,
              'cls': Cls,
              'scheduleclass': ScheduleClass,
-             'book': Book}
+             'book': Book,
+             'mark': Mark}
 
     @property
     def clss(self):

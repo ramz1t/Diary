@@ -29,7 +29,7 @@ function loadDiary(day) {
                 </div>
                 <div class="flex-row">
                     <div class="splitter"></div>
-                    <h3 id="mark" class="p-5 mark">${diary_data['classes'][i].mark}</h3>
+                    <h3 onclick="alert('Mark was added on ${diary_data.classes[i].mark_time}')" id="mark" class="p-5 mark pointer">${diary_data['classes'][i].mark}</h3>
                 </div>
             </div>`;
             diary.innerHTML += inner;

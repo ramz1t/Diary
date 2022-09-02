@@ -111,3 +111,15 @@ box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
 .date-btn:hover {
     border: 2px solid black;
 }
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.none {
+    display: none;
+}
