@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -77,6 +79,17 @@ class DBSchool(Base):
     classes = relationship('DBClassesRelationship', lazy='dynamic')
 
 
+class DBMark(Base):
+    __tablename__ = 'marks'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    value = Column(Integer)
+    date = Column(String)
+    time = Column(String)
+    class_id = Column(Integer)
+    student_id = Column(Integer, ForeignKey('students.id'))
+
+
 class DBStudent(Base):
     __tablename__ = 'students'
     __table_args__ = {'extend_existing': True}
@@ -88,7 +101,7 @@ class DBStudent(Base):
     school_id = Column(Integer)
     group = Column(String)
     group_id = Column(Integer, ForeignKey("groups.id"))
-    # marks = relationship(Mark)
+    marks = relationship('DBMark', lazy='dynamic')
 
 
 class DBSubject(Base):
@@ -110,4 +123,3 @@ class DBTeacher(Base):
     surname = Column(String)
     school_id = Column(Integer)
     school_db_id = Column(Integer, ForeignKey('schools.id'))
-    # classes: relationship(Group)

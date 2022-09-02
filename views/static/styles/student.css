@@ -15,7 +15,7 @@ h3, h6, p {
 }
 
 .initials {
-    color: lightgrey;
+    color: #b2b2b2;
     font-size: 15px;
 }
 
@@ -24,7 +24,7 @@ h3, h6, p {
 }
 
 .splitter {
-    border-right: 1px solid black;
+    border-right: 2px solid black;
 }
 
 .homework {
@@ -34,6 +34,7 @@ h3, h6, p {
 .mark {
     min-width: 28px;
     background: none !important;
+    color: red;
 }
 
 .lesson-info {
@@ -42,4 +43,8 @@ h3, h6, p {
 
 .lesson-n {
     min-width: 32px;
+}
+
+.date-btn:hover {
+    border: black solid 1px;
 }

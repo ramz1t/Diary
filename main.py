@@ -11,7 +11,6 @@ from Diary.files.export import write_student_keys, write_teacher_keys
 from Diary.func.helpers import check_date, make_dates_for_week, get_title, teaching_days_dates
 from Diary.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user, \
     validate_token
-from Diary.models.day import AddLesson
 from Diary.models.token import Token
 from Diary.crud_models import CRUDAdapter
 from Diary.crud_models import ApiBase

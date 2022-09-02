@@ -1,11 +1,29 @@
 <div class="content-wrapper" id="book-wrapper">
+    <div id="modal-container">
+        <div id="mark-modal" class="round-border p-10" data-mark="">
+            <p id="student_name">Surname Name</p>
+            <p id="mark_date">2022-09-01</p>
+
+            <div class="flex-row allign-center">
+                <div class="grid column-5">
+                    <button id="mark-2" class="diary-btn square">2</button>
+                    <button id="mark-3" class="diary-btn">3</button>
+                    <button id="mark-4" class="diary-btn">4</button>
+                    <button id="mark-5" class="diary-btn">5</button>
+                </div>
+                <i class="bi bi-check-lg pointer" style="color: green"></i>
+                <i class="bi bi-x-lg pointer" style="color: red"></i>
+            </div>
+        </div>
+    </div>
     <div class="flex-row">
         <button class="diary-btn" onclick="loadPage('teacher', 'classes')"><i class="bi bi-arrow-left p-5"></i>Back
             to classes
         </button>
         <div class="flex-row">
             <h1 id="subject"></h1>
-            <h1 id="group"></h1></div>
+            <h1 id="group"></h1>
+        </div>
     </div>
     <br>
 </div>

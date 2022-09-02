@@ -564,7 +564,9 @@ class Book:
                 number = cls.class_number + 1
                 teacher = Teacher().get(db_cls.teacher_id)
                 subject = Subject.get(db_cls.subject_id)
-                day['classes'].append({'number': number, 'teacher': teacher, 'subject': subject, 'hw': '', 'mark': ''})
+                mark = 5
+                hw = ''
+                day['classes'].append({'number': number, 'teacher': teacher, 'subject': subject, 'hw': hw, 'mark': mark})
         return day
 
 

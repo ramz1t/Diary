@@ -3,18 +3,18 @@
     <br>
     <div class="diary">
         <div class="flex-row day-choose round-border p-10">
-            <button onclick="changeDates('back')" class="diary-btn">back</button>
-            <h6 id="mon" data-date="{{dates[0].date}}" onclick="loadDiary('mon')" class="round-border p-10 pointer">
+            <button onclick="changeDates('back')" class="diary-btn"><i class="bi bi-chevron-left"></i></button>
+            <h6 id="mon" data-date="{{dates[0].date}}" onclick="loadDiary('mon')" class="round-border p-10 pointer date-btn">
                 {{dates[0].day}} Mon</h6>
-            <h6 id="tue" data-date="{{dates[1].date}}" onclick="loadDiary('tue')" class="round-border p-10 pointer">
+            <h6 id="tue" data-date="{{dates[1].date}}" onclick="loadDiary('tue')" class="round-border p-10 pointer date-btn">
                 {{dates[1].day}} Tue</h6>
-            <h6 id="wed" data-date="{{dates[2].date}}" onclick="loadDiary('wed')" class="round-border p-10 pointer">
+            <h6 id="wed" data-date="{{dates[2].date}}" onclick="loadDiary('wed')" class="round-border p-10 pointer date-btn">
                 {{dates[2].day}} Wed</h6>
-            <h6 id="thu" data-date="{{dates[3].date}}" onclick="loadDiary('thu')" class="round-border p-10 pointer">
+            <h6 id="thu" data-date="{{dates[3].date}}" onclick="loadDiary('thu')" class="round-border p-10 pointer date-btn">
                 {{dates[3].day}} Thu</h6>
-            <h6 id="fri" data-date="{{dates[4].date}}" onclick="loadDiary('fri')" class="round-border p-10 pointer">
+            <h6 id="fri" data-date="{{dates[4].date}}" onclick="loadDiary('fri')" class="round-border p-10 pointer date-btn">
                 {{dates[4].day}} Fri</h6>
-            <button onclick="changeDates('next')" class="diary-btn">next</button>
+            <button onclick="changeDates('next')" class="diary-btn"><i class="bi bi-chevron-right"></i></button>
         </div>
         <div id="diary-wrapper"></div>
     </div>

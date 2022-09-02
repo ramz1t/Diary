@@ -65,7 +65,7 @@ body {
 }
 
 .round-border {
-    border: 1px solid var(--dairy-color);
+    border: 2px solid var(--dairy-color);
     border-radius: 10px;
 }
 
@@ -85,6 +85,13 @@ body {
     padding: 7px;
 }
 
+.diary-btn:hover {
+    background: #004200;
+    -webkit-box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
+-moz-box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
+box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
+}
+
 .eye {
     position: absolute;
     float: right;
@@ -99,4 +106,8 @@ body {
 .sticky {
     position: fixed;
     background-color: white;
+}
+
+.date-btn:hover {
+    border: 2px solid black;
 }

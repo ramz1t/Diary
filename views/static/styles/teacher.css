@@ -37,7 +37,7 @@ table {
 }
 
 .book-student-ns {
-    min-width: 250px;
+    min-width: 245px;
 }
 
 th {
@@ -51,3 +51,17 @@ th {
 /*    margin-top: -1px;*/
 /*    top: auto;*/
 /*}*/
+
+#modal-container {
+    position: absolute;
+    left: 260px;
+    top: 105px;
+    height: fit-content;
+    width: fit-content;
+}
+
+#mark-modal {
+    background: white;
+    width: 315px;
+    height: 140px;
+}
