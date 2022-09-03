@@ -662,7 +662,6 @@ class Mark(CRUDBase):
         for date in dates:
             long_date = date['long']
             mark = self.get(ApiBase(student_id=student_id, date=long_date, subject_id=class_id))
-            print('1', mark)
             if mark != '':
                 marks.update({long_date: mark})
         return marks

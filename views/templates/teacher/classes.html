@@ -6,8 +6,9 @@
         <div>
             <h3>{{day.day_name}}</h3>
             <div class="day-card">
+                {% if day.lessons_count > 0 %}
                 {% for i in range(day.last_lesson_number) %}
-                <div class="flex-row allign-center">
+                <div class="flex-row allign-center p-5">
                     <h5>{{day.lessons[i].lesson_number}}</h5>
                     {% if day.lessons[i]|length > 1 %}
                     <h5>{{day.lessons[i].subject_name}}</h5>
@@ -18,6 +19,9 @@
                     {% endif %}
                 </div>
                 {% endfor %}
+                {% else %}
+                <h5>No classes on this day</h5>
+                {% endif %}
             </div>
         </div>
         {%endfor%}

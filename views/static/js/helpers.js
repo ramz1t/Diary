@@ -28,8 +28,9 @@ function writeStorage(data) {
 function logout() {
     const type = localStorage.getItem('type');
     document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    localStorage.clear();
+    localStorage.setItem('type', type);
     window.open(`/${type}/login`, '_self');
-
 }
 
 function checkCredentials(status) {
