@@ -1,8 +1,13 @@
 function loadDiary(day) {
     if (day === 'load') {
         let objToday = new Date();
-	    let weekday = ['', 'mon', 'tue', 'wed', 'thu', 'fri', ''];
-	    day = weekday[objToday.getDay()]
+        if (objToday.getDay() === 0 || objToday.getDay() === 6) {
+            changeDates('next');
+            day = 'mon';
+        } else {
+            let weekday = ['', 'mon', 'tue', 'wed', 'thu', 'fri', ''];
+	        day = weekday[objToday.getDay()];
+        }
     }
     const date = document.getElementById(day).dataset.date;
     callServer(`/load_diary?date=${date}`).then(async (response) => {
@@ -38,7 +43,7 @@ function loadDiary(day) {
     })
 }
 
-function changeDates(type) {
+async function changeDates(type) {
     const firstDate = document.getElementById('mon').dataset.date;
     callServer(`/get_dates_for_next_week?date=${firstDate}&type=${type}`).then(async (response) => {
         const data = await response.json()
