@@ -594,9 +594,10 @@ class Book:
                     res['students_count'] = len(group.students)
                     students = sorted(group.students, key=lambda x: x.surname)
                     for number, student in enumerate(students):
+                        marks, summ, count = Mark().get_student_marks(dates, class_id, student.id)
                         res['students'].append(
                             {'id': student.id, 'number': number + 1, 'name': student.name, 'surname': student.surname,
-                             'marks': {'avg': 0, 'all': Mark().get_student_marks(dates, class_id, student.id)}})
+                             'marks': {'all': marks, 'summ': summ, 'count': count}})
                 except KeyError:
                     pass
             else:
@@ -621,6 +622,10 @@ class Book:
                 teacher = Teacher().get(db_cls.teacher_id)
                 subject = Subject.get(db_cls.subject_id)
                 mark = Mark().get(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
+                if mark is not None:
+                    mark = mark.value
+                else:
+                    mark = ''
                 mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
                 hw = ''
                 day['classes'].append(
@@ -651,20 +656,28 @@ class Mark(CRUDBase):
         with Sessions() as session:
             mark = session.query(DBMark).filter_by(student_id=body.student_id, date=body.date,
                                                    class_id=body.subject_id).first()
-            return mark.value if mark is not None else ''
+            return mark
 
     @staticmethod
     def delete(id: int):
-        pass
+        with Sessions() as session:
+            mark = session.query(DBMark).filter_by(id=id).first()
+            session.delete(mark)
+            session.commit()
+            return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark deleted')
 
     def get_student_marks(self, dates: list, class_id: int, student_id: int):
         marks = {}
+        summ = 0
+        count = 0
         for date in dates:
             long_date = date['long']
             mark = self.get(ApiBase(student_id=student_id, date=long_date, subject_id=class_id))
-            if mark != '':
-                marks.update({long_date: mark})
-        return marks
+            if mark is not None:
+                summ += mark.value
+                count += 1
+                marks.update({long_date: {'value': mark.value, 'id': mark.id}})
+        return marks, summ, count
 
     @staticmethod
     def time(body: ApiBase):

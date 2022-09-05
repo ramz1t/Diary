@@ -1,3 +1,30 @@
+function getAvg(studentId, mark, increase) {
+    function showAvg(span) {
+        let count = parseInt(span.dataset.marksCount);
+        span.innerText = ((span.dataset.marksSum / (count > 0 ? count : 1)).toFixed(2)).toString();
+    }
+
+    const avgSpan = document.getElementById(`${studentId}-avg`);
+    if ((typeof increase) === "string") {
+        if (increase.startsWith('change')) {
+            const oldMark = increase.split('-')[1];
+            avgSpan.dataset.marksSum = (parseInt(avgSpan.dataset.marksSum) - parseInt(oldMark)).toString();
+            avgSpan.dataset.marksSum = (parseInt(avgSpan.dataset.marksSum) + parseInt(mark)).toString();
+            showAvg(avgSpan);
+            return;
+        }
+    }
+    if (increase) {
+        avgSpan.dataset.marksSum = (parseInt(avgSpan.dataset.marksSum) + parseInt(mark)).toString();
+        avgSpan.dataset.marksCount = (parseInt(avgSpan.dataset.marksCount) + 1).toString();
+    } else {
+        const newSum = parseInt(avgSpan.dataset.marksSum) - parseInt(mark)
+        avgSpan.dataset.marksSum = (newSum >= 0 ? newSum : mark).toString();
+        avgSpan.dataset.marksCount = (parseInt(avgSpan.dataset.marksCount) - 1).toString();
+    }
+    showAvg(avgSpan);
+}
+
 function openClassBook() {
     const group_id = localStorage.getItem('book_group_id');
     const class_id = localStorage.getItem('book_class_id');
@@ -24,29 +51,38 @@ function openClassBook() {
                               </td>`
             for (let j = 0; j < book.dates.length; j++) {
                 // mark cells
-                const date = book.dates[j].long
+                const date = book.dates[j].long;
                 let mark = book.students[i].marks.all[date];
+                let markSaved = 1;
                 if (mark === undefined) {
-                    mark = '';
+                    mark = {'value': '', 'id': ''};
+                    markSaved = 0;
                 }
                 row.innerHTML += `<td id="${book.students[i].id}-${book.dates[j].long}"
                                     class="pointer mark-click-target-area" 
                                     data-student-id ="${book.students[i].id}" 
                                     data-date = "${book.dates[j].long}"
-                                    data-initials = "${book.students[i].surname} ${book.students[i].name}">
-                                    ${mark}
+                                    data-initials = "${book.students[i].surname} ${book.students[i].name}"
+                                    data-db-mark-id = "${mark.id}"
+                                    data-db-mark="${mark.value}">
+                                    ${mark.value}
                                   </td>`
             }
-            row.innerHTML += `<td>${book.students[i].marks.avg}</td>`
+            row.innerHTML += `<td id="${book.students[i].id}-avg"
+                                  data-marks-sum="${book.students[i].marks.summ}"
+                                  data-marks-count="${book.students[i].marks.count}">
+                                  ${(book.students[i].marks.summ / (book.students[i].marks.count > 0 ?
+                book.students[i].marks.count : 1)).toFixed(2)}
+                              </td>`
             table.appendChild(row)
         }
         book_wrapper.appendChild(table);
     })
 }
 
-document.addEventListener('click', addMark)
+document.addEventListener('click', showMarkModal)
 
-function addMark(e) {
+function showMarkModal(e) {
     const modalWindow = document.getElementById('modal-container');
     if (e.target.classList.contains('mark-click-target-area')) {
         const studentId = parseInt(e.target.dataset.studentId);
@@ -68,21 +104,56 @@ function addMark(e) {
     }
 }
 
+function checkMarkEquality(cell, mark) {
+    if (cell.dataset.dbMark === mark.toString()) {
+        cell.classList.remove('red');
+    } else {
+        cell.classList.add('red');
+    }
+}
+
 function placeMark(mark) {
     const modal = document.getElementById('mark-modal');
     modal.setAttribute('data-mark', mark);
-    console.log(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
     const cell = document.getElementById(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
-    cell.innerText = mark;
-    cell.classList.add('red');
+    if (cell.innerText !== mark) {
+        if (cell.innerText === '') {
+            getAvg(modal.dataset.modalStudentId, mark, true)
+        } else {
+            getAvg(modal.dataset.modalStudentId, mark, `change-${parseInt(cell.innerText)}`)
+        }
+        cell.innerText = mark;
+        checkMarkEquality(cell, mark);
+    }
 }
 
 function dismissMark() {
     const modal = document.getElementById('mark-modal');
     const cell = document.getElementById(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
-    cell.innerText = '';
-    cell.classList.remove('red');
-    document.getElementById('modal-container').classList.add('none');
+    const dbMark = cell.dataset.dbMark;
+    if (cell.classList.contains('red')) {
+        const oldMark = cell.innerText;
+        cell.innerText = dbMark;
+        getAvg(modal.dataset.modalStudentId, dbMark, `change-${parseInt(oldMark)}`);
+        cell.classList.remove('red');
+        document.getElementById('modal-container').classList.add('none');
+    } else {
+        const id = parseInt(cell.dataset.dbMarkId);
+        callServer(`/mark/delete?id=${id}`, {}, 'POST').then((response) => {
+            try {
+                const p = alertError(response);
+                checkCredentials(response);
+                getAvg(modal.dataset.modalStudentId, parseInt(cell.innerText), false);
+                cell.innerText = '';
+                cell.dataset.dbMark = '';
+                cell.dataset.dbMarkId = '';
+                cell.classList.remove('red');
+                document.getElementById('modal-container').classList.add('none');
+            } catch (e) {
+                console.log(e);
+            }
+        })
+    }
 }
 
 function sendMark() {
@@ -90,11 +161,15 @@ function sendMark() {
     const date = modal.dataset.modalDate;
     const mark = modal.dataset.mark;
     const studentId = modal.dataset.modalStudentId;
-    const data = {'date': date, 'mark': mark, 'student_id': studentId, 'subject_id': localStorage.getItem('book_class_id')}
+    const data = {
+        'date': date, 'mark': mark, 'student_id': studentId, 'subject_id': localStorage.getItem('book_class_id')
+    }
     callServer('/execute/mark/create', data, 'POST').then((response) => {
         const p = alertError(response);
         checkCredentials(response);
+        const cell = document.getElementById(`${studentId}-${date}`);
+        cell.dataset.dbMark = (mark).toString();
         document.getElementById('modal-container').classList.add('none');
-        document.getElementById(`${studentId}-${date}`).classList.remove('red');
+        checkMarkEquality(cell, mark);
     });
 }

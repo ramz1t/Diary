@@ -6,6 +6,6 @@ async function alertError(response) {
             title: 'Oops...',
             text: await response.text()
         })
-        throw `error ${response.status}`
+        throw new Error(`error ${response.status}`)
     }
 }

@@ -1,8 +1,15 @@
 <div class="content-wrapper" id="book-wrapper">
     <div class="none" id="modal-container">
         <div id="mark-modal" class="round-border p-10" data-mark="">
-            <p id="student_name">Surname Name</p>
-            <p id="mark_date">2022-09-01</p>
+            <div class="flex-row space-between">
+                <div>
+                    <p id="student_name">Surname Name</p>
+                    <p id="mark_date">2022-09-01</p>
+                </div>
+                <i onclick="document.getElementById('modal-container').classList.toggle('none')"
+                   class="bi bi-arrows-angle-contract pointer"></i>
+            </div>
+
 
             <div class="flex-row allign-center">
                 <div class="grid column-5">
