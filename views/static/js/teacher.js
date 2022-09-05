@@ -132,7 +132,7 @@ function dismissMark() {
     const cell = document.getElementById(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
     const dbMark = cell.dataset.dbMark;
     if (cell.innerText === '') {
-        modal.classList.add('none');
+        document.getElementById('modal-container').classList.add('none');
         return;
     }
     if (cell.classList.contains('red')) {
