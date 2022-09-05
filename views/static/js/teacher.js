@@ -131,6 +131,10 @@ function dismissMark() {
     const modal = document.getElementById('mark-modal');
     const cell = document.getElementById(`${modal.dataset.modalStudentId}-${modal.dataset.modalDate}`);
     const dbMark = cell.dataset.dbMark;
+    if (cell.innerText === '') {
+        modal.classList.add('none');
+        return;
+    }
     if (cell.classList.contains('red')) {
         const oldMark = cell.innerText;
         cell.innerText = dbMark;
