@@ -237,6 +237,72 @@ class StudentInfoPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
+class MarksPage(PageBase):
+    USERTYPE = 'student'
+    FILE_NAME = 'marks.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        marks_data = {
+            'current_season': 2,
+            'subjects': [{
+                'name': 'Algebra',
+                'seasons': {
+                    1: {
+                        'marks': [1, 4, 5, 2, 5],
+                        'avg': 3.4
+                    },
+                    2: {
+                        'marks': [2, 4, 5, 2, 5],
+                        'avg': 4.4
+                    },
+                    3: {
+                        'marks': [3, 3, 5, 2, 5],
+                        'avg': 2.4
+                    }
+                },
+                'final': None
+            },
+                {
+                    'name': 'PE',
+                    'seasons': {
+                        1: {
+                            'marks': [1, 4, 2, 2, 5],
+                            'avg': 4.4
+                        },
+                        2: {
+                            'marks': [2, 4],
+                            'avg': 3.4
+                        },
+                        3: {
+                            'marks': [3, 3, 4, 5, 5, 2, 5],
+                            'avg': 4.4
+                        }
+                    },
+                    'final': 5
+                },
+                {
+                    'name': 'Russian',
+                    'seasons': {
+                        1: {
+                            'marks': [1, 4, 5, 2, 5],
+                            'avg': 3.4
+                        },
+                        2: {
+                            'marks': [2, 3, 5, 2, 5],
+                            'avg': 4.4
+                        },
+                        3: {
+                            'marks': [3, 3, 5, 2, 5],
+                            'avg': 2.4
+                        }
+                    },
+                    'final': None
+                }]
+        }
+        data = {'request': request, 'marks_data': marks_data}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -251,7 +317,8 @@ class PagesAdapter:
               'classes': TeacherClassesPage,
               'admin_profile_info': AdminInfoPage,
               'teacher_profile_info': TeacherInfoPage,
-              'student_profile_info': StudentInfoPage}
+              'student_profile_info': StudentInfoPage,
+              'student_marks': MarksPage}
 
     @property
     def pages(self):

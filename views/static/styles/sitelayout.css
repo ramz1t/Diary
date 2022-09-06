@@ -56,8 +56,32 @@ body {
     gap: 1rem;
 }
 
+.grid-gap-quarter {
+    gap: 0.25rem;
+}
+
+.grid-gap-half {
+    gap: 0.5rem;
+}
+
+.grid-gap-1 {
+    gap: 1rem;
+}
+
+.grid-gap-2 {
+    gap: 2rem;
+}
+
+.grid-gap-3 {
+    gap: 3rem;
+}
+
 .column-5 {
     grid-template-columns: repeat(5, 1fr);
+}
+
+.column-2 {
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .space-between {

@@ -48,3 +48,17 @@ h3, h6, p {
 .date-btn:hover {
     border: black solid 1px;
 }
+
+.mark-list-element {
+    min-width: 38px;
+    min-height: 35px;
+    border: solid black 2px;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h5 {
+    margin-bottom: 0 !important;
+    vertical-align: middle;
+}
