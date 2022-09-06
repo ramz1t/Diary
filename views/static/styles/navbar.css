@@ -4,6 +4,13 @@
     margin-right: 2rem;
     background-color: white;
     min-height: 100vh;
+
+}
+
+.shadow-place {
+    -webkit-box-shadow: -100px 11px 36px -100px rgba(34, 60, 80, 0.2) inset;
+-moz-box-shadow: -100px 11px 36px -100px rgba(34, 60, 80, 0.2) inset;
+box-shadow: -100px 11px 36px -100px rgba(34, 60, 80, 0.2) inset;
 }
 
 .btn:focus {

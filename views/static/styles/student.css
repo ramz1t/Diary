@@ -14,8 +14,11 @@ h3, h6, p {
     margin-bottom: 0 !important;
 }
 
-.initials {
+.grey {
     color: #b2b2b2;
+}
+
+.initials {
     font-size: 15px;
 }
 

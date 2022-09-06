@@ -21,13 +21,13 @@ function loadDiary(day) {
         let inner = '';
         for (let i = 0; i < diary_data.classes.length; i++) {
             inner = `
-            <div class="flex-row space-between justify-center diary-class round-border p-10">
+            <div class="flex-row space-between justify-center diary-class p-10 border-radius white">
                 <div class="flex-row">
                     <h3 class="p-5 lesson-n">${diary_data['classes'][i].number}</h3>
                     <div class="splitter"></div>
                     <div class="lesson-info">
                         <h6>${diary_data['classes'][i].subject}</h6>
-                        <p class="initials">${diary_data['classes'][i].teacher}</p>
+                        <p class="initials grey">${diary_data['classes'][i].teacher}</p>
                     </div>
                     <div class="splitter"></div>
                     <p id="hw" class="p-10">${diary_data['classes'][i].hw}</p>

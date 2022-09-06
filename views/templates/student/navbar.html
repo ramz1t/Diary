@@ -1,58 +1,62 @@
-<div class="flex-shrink-0 p-3 bg-white">
+<div class="shadow-place flex-shrink-0 p-3 bg-white">
     <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
         <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
+        <h3 class="p-10">Diary</h3>
     </a>
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed"
                     onclick="loadPage('student', 'my_diary')">
-                My Dairy
+                <i class="bi bi-journal-bookmark-fill icon-custom"></i>
+                Schedule
             </button>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed"
                     onclick="loadPage('student', 'student_marks')">
-                My marks
+                <i class="bi bi-123 icon-custom"></i>
+                Marks
             </button>
         </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#teachers-collapse" aria-expanded="false">
-                3
-            </button>
-            <div class="collapse" id="teachers-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">3.1</a></li>
-                    <li><a href="#" class="link-dark rounded">3.2</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#subjects-collapse" aria-expanded="false">
-                4
-            </button>
-            <div class="collapse" id="subjects-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">4.1</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#school-collapse" aria-expanded="false">
-                5
-            </button>
-            <div class="collapse" id="school-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">5.1</a></li>
-                </ul>
-            </div>
-        </li>
+        <!--        <li class="mb-1">-->
+        <!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
+        <!--                    data-bs-target="#teachers-collapse" aria-expanded="false">-->
+        <!--                3-->
+        <!--            </button>-->
+        <!--            <div class="collapse" id="teachers-collapse">-->
+        <!--                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+        <!--                    <li><a href="#" class="link-dark rounded">3.1</a></li>-->
+        <!--                    <li><a href="#" class="link-dark rounded">3.2</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
+        <!--        <li class="mb-1">-->
+        <!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
+        <!--                    data-bs-target="#subjects-collapse" aria-expanded="false">-->
+        <!--                4-->
+        <!--            </button>-->
+        <!--            <div class="collapse" id="subjects-collapse">-->
+        <!--                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+        <!--                    <li><a href="#" class="link-dark rounded">4.1</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
+        <!--        <li class="mb-1">-->
+        <!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
+        <!--                    data-bs-target="#school-collapse" aria-expanded="false">-->
+        <!--                5-->
+        <!--            </button>-->
+        <!--            <div class="collapse" id="school-collapse">-->
+        <!--                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+        <!--                    <li><a href="#" class="link-dark rounded">5.1</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
         <li class="border-top my-3"></li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#account-collapse" aria-expanded="false">
+                <i class="bi bi-person-circle icon-custom"></i>
                 Account
             </button>
             <div class="collapse" id="account-collapse">
@@ -87,3 +91,4 @@
         </li>
     </ul>
 </div>
+<div class="shadow-place" style="display: block; min-height: 100vh"></div>

@@ -1,18 +1,24 @@
 <div class="content-wrapper">
     <h1>Marks</h1>
     <br>
-    <div class="grid column-2 grid-gap-1">
+    <div class="grid column-2 grid-gap-3">
         {% for subject in marks_data.subjects %}
-        <div class="round-border p-10">
+        <div class="border-radius grid p-20 grid-gap-1 white" id="{{subject.name}}"
+             data-current-season="{{marks_data.current_season}}">
             <div class="flex-row space-between">
                 <h3>{{subject.name}}</h3>
                 {% if subject.final is not none %}
                 <h4 class="red">{{subject.final}}</h4>
                 {% endif %}
             </div>
-            <br>
             {% for season in range(1, 4) %}
             {% if season == marks_data.current_season %}
+            <div class="flex-row">
+                <h6>{{season}} period</h6>
+                <h6 class="grey">{{marks_data.seasons_dates[season]}}</h6>
+                <i class="bi bi-dot"></i>
+                <h6>{{subject.seasons[season].marks | length}} marks</h6>
+            </div>
             <div class="flex-row space-between justify-center">
                 {% else %}
                 <div class="flex-row space-between justify-center none">
@@ -22,7 +28,8 @@
                         <p class="mark-list-element p-5">{{mark}}</p>
                         {% endfor %}
                     </div>
-                    <p class="mark-list-element p-5 bold"><i class="bi bi-activity"></i>{{subject.seasons[season].avg}}
+                    <!--                    <i class="bi bi-activity"></i>-->
+                    <p style="min-width: 60px" class="mark-list-element p-5 bold">{{subject.seasons[season].avg}}
                     </p>
                 </div>
                 {% endfor %}

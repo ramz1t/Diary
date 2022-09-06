@@ -34,6 +34,7 @@ function openClassBook() {
         document.getElementById('subject').innerText = book.subject;
         let book_wrapper = document.getElementById('book-wrapper');
         let table = document.createElement('table');
+        table.classList.add('white', 'border-radius')
         let first_row = document.createElement('tr');
         first_row.innerHTML = `<th class="square absolute">№</th><th class="book-student-ns absolute">Student</th>`
         for (let i = 0; i < book.dates.length; i++) {
