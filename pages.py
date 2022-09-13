@@ -242,68 +242,7 @@ class MarksPage(PageBase):
     FILE_NAME = 'marks.html'
 
     def export(self, body: ApiPage, request, current_user):
-        marks_data = {
-            'current_season': 2,
-            'seasons_dates': {
-                1: '01.09.2022 - 27.11.2022',
-                2: '28.11.2022 - 26.02.2023',
-                3: '27.02.2023 - 31.05.2023'
-            },
-            'subjects': [{
-                'name': 'Algebra',
-                'seasons': {
-                    1: {
-                        'marks': [1, 4, 5, 2, 5],
-                        'avg': 3.45
-                    },
-                    2: {
-                        'marks': [2, 4, 5, 2, 5],
-                        'avg': 4.42
-                    },
-                    3: {
-                        'marks': [3, 3, 5, 2, 5],
-                        'avg': 2.44
-                    }
-                },
-                'final': None
-            },
-                {
-                    'name': 'PE',
-                    'seasons': {
-                        1: {
-                            'marks': [1, 4, 2, 2, 5],
-                            'avg': 4.4
-                        },
-                        2: {
-                            'marks': [2, 4],
-                            'avg': 3.4
-                        },
-                        3: {
-                            'marks': [3, 3, 4, 5, 5, 2, 5],
-                            'avg': 4.4
-                        }
-                    },
-                    'final': 5
-                },
-                {
-                    'name': 'Russian',
-                    'seasons': {
-                        1: {
-                            'marks': [1, 4, 5, 2, 5],
-                            'avg': 3
-                        },
-                        2: {
-                            'marks': [2, 3, 5, 2, 5],
-                            'avg': 4
-                        },
-                        3: {
-                            'marks': [3, 3, 5, 2, 5],
-                            'avg': 2.4
-                        }
-                    },
-                    'final': None
-                }]
-        }
+        marks_data = clss['mark']().get_marks_list(current_user.id)
         data = {'request': request, 'marks_data': marks_data}
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 

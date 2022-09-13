@@ -154,3 +154,12 @@ def alert_on_telegram(student_id, data, type):
         url = f'https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={message}&parse_mode=html'
         if (type == 'mark' and mark_permition) or (type == 'hw' and hw_permition):
             requests.get(url)
+
+
+def get_seasons_info():
+    return {'current': 2,
+            'dates': {
+                1: '01.09.2022 - 27.11.2022',
+                2: '28.11.2022 - 26.02.2023',
+                3: '27.02.2023 - 31.05.2023'
+            }}

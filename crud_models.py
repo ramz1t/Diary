@@ -13,7 +13,7 @@ from abc import abstractmethod, ABC
 from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass, DBMark
 from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
-    alert_on_telegram
+    alert_on_telegram, get_seasons_info
 from Diary.logic.auth import get_password_hash
 from contextlib import closing
 
@@ -701,7 +701,46 @@ class Mark(CRUDBase):
                                                    class_id=body.subject_id).first()
             return mark.time if mark is not None else ''
 
+    def get_marks_list(self, student_id: int):
+        seasons_info = get_seasons_info()
+        data = {
+            'current_season': seasons_info['current'],
+            'seasons_dates': seasons_info['dates']
+        }
+        with Sessions() as session:
+            marks_query = session.query(DBMark).filter_by(student_id=student_id)
+            cls_ids = set([mark.class_id for mark in marks_query.all()])
+            subjects = []
+            for c_id in cls_ids:
+                name = Subject.get(session.query(DBClassesRelationship).filter_by(id=c_id).first().subject_id)
+                seasons = self.get_marks_by_seasons(student_id=student_id, class_id=c_id)
+                final_mark = self.get_final_mark(student_id=student_id, class_id=c_id)
+                subject = {'name': name, 'seasons': seasons, 'final': final_mark}
+                subjects.append(subject)
+        subjects = sorted(subjects, key=lambda x: x['name'])
+        data.update({'subjects': subjects})
+        return data
 
+    @staticmethod
+    def get_final_mark(student_id: int, class_id: int):
+        return None
+
+    @staticmethod
+    def get_marks_by_seasons(student_id: int, class_id: int):
+        return {
+                    1: {
+                        'marks': [1, 4, 5, 2, 5],
+                        'avg': 3.45
+                    },
+                    2: {
+                        'marks': [student_id, 4, class_id, 2, 5],
+                        'avg': 4.42
+                    },
+                    3: {
+                        'marks': [3, 3, 5, 2, 5],
+                        'avg': 2.44
+                    }
+                }
 class CRUDAdapter:
     _clss = {'student': Student,
              'admin': Admin,
