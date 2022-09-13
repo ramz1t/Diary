@@ -9,7 +9,7 @@ from starlette.templating import Jinja2Templates
 
 from Diary.crud_models import CRUDAdapter
 from Diary.data.data import Sessions
-from Diary.func.helpers import verify_user_type, make_dates_for_week
+from Diary.func.helpers import verify_user_type, make_dates_for_week, check_telegram, check_permitions
 from pyowm import OWM
 from datetime import datetime, timedelta
 
@@ -308,6 +308,19 @@ class MarksPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
+class TelegramPage(PageBase):
+    USERTYPE = 'student'
+    FILE_NAME = 'telegram.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        telegram = check_telegram(current_user.id)
+        mark, hw = False, False
+        if telegram:
+            mark, hw = check_permitions(current_user.id)
+        data = {'request': request, 'telegram': telegram, 'mark': mark, 'hw': hw}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -323,7 +336,8 @@ class PagesAdapter:
               'admin_profile_info': AdminInfoPage,
               'teacher_profile_info': TeacherInfoPage,
               'student_profile_info': StudentInfoPage,
-              'student_marks': MarksPage}
+              'student_marks': MarksPage,
+              'telegram': TelegramPage}
 
     @property
     def pages(self):

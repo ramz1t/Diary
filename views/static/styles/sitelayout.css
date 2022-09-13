@@ -32,6 +32,7 @@ body {
     width: calc(100vw - var(--nav-width) - 20px);
     padding-right: 30px;
     margin-top: 2rem;
+    padding-left: 25px;
 }
 
 .page {

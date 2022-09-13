@@ -1,19 +1,21 @@
 from random import randint
 from typing import Optional, Union
 
+import psycopg2
 from pydantic import BaseModel
 from pydantic.dataclasses import dataclass
 
-from Diary.data.data import Sessions, symbols
+from Diary.data.data import Sessions, symbols, DB_NAME, USERNAME, DB_HOST, DB_PASS
 from fastapi.responses import JSONResponse
 from fastapi import status
 from abc import abstractmethod, ABC
 
 from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass, DBMark
-from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time
+from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
+    alert_on_telegram
 from Diary.logic.auth import get_password_hash
-import re
+from contextlib import closing
 
 
 @dataclass
@@ -243,21 +245,32 @@ class Student(CRUDBase, StudentKey):
     def create(self, body: ApiBase):
         with Sessions() as session:
             key = self.get_key(body)
-            group = session.query(DBGroup).filter_by(name=key.group).first()
             if key is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong key')
+            group = session.query(DBGroup).filter_by(name=key.group).first()
             if not session.query(DBStudent).filter_by(email=body.email).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
-            student = DBStudent(email=body.email, password=get_password_hash(body.password), name=key.name,
+            password = get_password_hash(body.password)
+            student = DBStudent(email=body.email, password=password, name=key.name,
                                 surname=key.surname, school_id=key.school_id, group=key.group)
             group.students.append(student)
             session.add(group)
             session.commit()
             self.delete_key(body)
+
+        with closing(psycopg2.connect(dbname=DB_NAME, user=USERNAME,
+                                      password=DB_PASS, host=DB_HOST)) as conn:
+            with conn.cursor() as cursor:
+                login = body.email
+                diary_id = self.get(ApiBase(email=body.email)).id
+                print(login, password, diary_id)
+                cursor.execute(f'insert into users (login, password, diary_id) values (%s, %s, %s);', (login, password, diary_id))
+                conn.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Student created')
 
     def get(self, body: ApiBase):
-        pass
+        with Sessions() as session:
+            return session.query(DBStudent).filter_by(email=body.email).first()
 
     @staticmethod
     def delete(id: int):
@@ -650,6 +663,8 @@ class Mark(CRUDBase):
                           time=get_current_time())
             session.add(mark)
             session.commit()
+            data = {'time': mark.time, 'body': f'New mark, <b>{mark.value}</b>', 'date': mark.date}
+        alert_on_telegram(body.student_id, data, 'mark')
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark added successfully')
 
     def get(self, body: ApiBase):

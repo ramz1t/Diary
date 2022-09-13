@@ -90,7 +90,7 @@ function showMarkModal(e) {
         const date = e.target.dataset.date;
         const name = e.target.dataset.initials;
         const y = e.clientY + window.scrollY - (e.clientY + window.scrollY - 105) % 35;
-        let x = e.clientX + window.scrollX - (e.clientX + window.scrollX - 260) % 35 + 35;
+        let x = e.clientX + window.scrollX - (e.clientX + window.scrollX - 269) % 35 + 35;
         if (window.screen.width + window.scrollX - x < 315) {
             x -= 350
         }

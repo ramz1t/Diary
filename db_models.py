@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from data.data import Base
@@ -123,3 +123,12 @@ class DBTeacher(Base):
     surname = Column(String)
     school_id = Column(Integer)
     school_db_id = Column(Integer, ForeignKey('schools.id'))
+
+
+class TelegramAuthorization(Base):
+    __tablename__ = 'telegram_autorizations'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    diary_id = Column(Integer)
+    mark = Column(Boolean)
+    hw = Column(Boolean)

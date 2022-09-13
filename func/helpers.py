@@ -1,15 +1,22 @@
 import datetime
+import os
+from contextlib import closing
 
+import psycopg2
+import requests
+from dotenv import load_dotenv
 from fastapi import HTTPException
 from fastapi.security.utils import get_authorization_scheme_param
 from jose import jwt, JWTError
 from starlette import status
 from starlette.responses import JSONResponse
 from datetime import date
+
+from Diary.db_models import TelegramAuthorization
 from Diary.func.db_user_find import get_user_by_email
 from Diary.logic.auth import SECRET_KEY, ALGORITHM
 # from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
-from Diary.data.data import Sessions, YEAR_END, YEAR_START, TODAY
+from Diary.data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, DB_HOST, DB_PASS
 
 # def change_user_password(email, body: ApiChangePassword):
 #     with Sessions() as session:
@@ -113,3 +120,37 @@ def get_day_index_from_date(date: str):
 
 def get_current_time():
     return datetime.datetime.now().strftime("%d/%m/%y %H:%M")
+
+
+def check_telegram(student_id):
+    with closing(psycopg2.connect(dbname=DB_NAME, user=USERNAME,
+                                  password=DB_PASS, host=DB_HOST)) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(f'SELECT * FROM users WHERE diary_id = %s', (student_id,))
+            user = cursor.fetchone()
+            if user is None:
+                return False
+    return user[4]
+
+
+def check_permitions(student_id):
+    with Sessions() as session:
+        telegram_permitions = session.query(TelegramAuthorization).filter_by(diary_id=student_id).first()
+        if telegram_permitions is None:
+            session.add(TelegramAuthorization(diary_id=student_id, hw=False, mark=False))
+            return False, False
+        else:
+            return telegram_permitions.mark, telegram_permitions.hw
+
+
+def alert_on_telegram(student_id, data, type):
+    # mark_permition, hw_permition = check_permitions(student_id)
+    mark_permition, hw_permition = True, True
+    if mark_permition or hw_permition:
+        load_dotenv()
+        bot_token = os.getenv('TELEGRAM_BOT_KEY')
+        chat_id = check_telegram(student_id)
+        message = f'⚠ Diary alert ⚠\n{data["body"]}\n<b>Time:</b> {data["time"]}\n<b>Class date:</b> {data["date"]}'
+        url = f'https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={message}&parse_mode=html'
+        if (type == 'mark' and mark_permition) or (type == 'hw' and hw_permition):
+            requests.get(url)

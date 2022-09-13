@@ -197,10 +197,10 @@ def class_book(group_id: int, class_id: int):
     return crudadapter.clss['book'].make_class(group_id, class_id)
 
 
-@app.get('/test')
-def test(class_id: int):
-    dates = crudadapter.clss['cls'].get_teacher_classes_days(class_id=class_id)
-    return teaching_days_dates(dates)
+# @app.get('/test')
+# def test1(class_id: int):
+#     dates = crudadapter.clss['cls'].get_teacher_classes_days(class_id=class_id)
+#     return teaching_days_dates(dates)
 
 
 if __name__ == '__main__':
