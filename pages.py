@@ -9,7 +9,7 @@ from starlette.templating import Jinja2Templates
 
 from Diary.crud_models import CRUDAdapter
 from Diary.data.data import Sessions
-from Diary.func.helpers import verify_user_type, make_dates_for_week, check_telegram, check_permitions
+from Diary.func.helpers import verify_user_type, make_dates_for_week, check_telegram, check_permissions
 from pyowm import OWM
 from datetime import datetime, timedelta
 
@@ -255,7 +255,7 @@ class TelegramPage(PageBase):
         telegram = check_telegram(current_user.id)
         mark, hw = False, False
         if telegram:
-            mark, hw = check_permitions(current_user.id)
+            mark, hw = check_permissions(current_user.id)
         data = {'request': request, 'telegram': telegram, 'mark': mark, 'hw': hw}
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 

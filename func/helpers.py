@@ -16,7 +16,8 @@ from Diary.db_models import TelegramAuthorization
 from Diary.func.db_user_find import get_user_by_email
 from Diary.logic.auth import SECRET_KEY, ALGORITHM
 # from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
-from Diary.data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, DB_HOST, DB_PASS
+from Diary.data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, DB_HOST, DB_PASS, SEASON_1, \
+    SEASON_2, SEASON_3
 
 # def change_user_password(email, body: ApiChangePassword):
 #     with Sessions() as session:
@@ -122,6 +123,16 @@ def get_current_time():
     return datetime.datetime.now().strftime("%d/%m/%y %H:%M")
 
 
+def get_current_season():
+    today = datetime.date.today()
+    if SEASON_1[0] <= today <= SEASON_1[1]:
+        return 1
+    elif SEASON_2[0] <= today <= SEASON_2[1]:
+        return 2
+    elif SEASON_3[0] <= today <= SEASON_3[1]:
+        return 3
+
+
 def check_telegram(student_id):
     with closing(psycopg2.connect(dbname=DB_NAME, user=USERNAME,
                                   password=DB_PASS, host=DB_HOST)) as conn:
@@ -133,33 +144,42 @@ def check_telegram(student_id):
     return user[4]
 
 
-def check_permitions(student_id):
+def check_permissions(student_id):
     with Sessions() as session:
-        telegram_permitions = session.query(TelegramAuthorization).filter_by(diary_id=student_id).first()
-        if telegram_permitions is None:
+        telegram_permissions = session.query(TelegramAuthorization).filter_by(diary_id=student_id).first()
+        if telegram_permissions is None:
             session.add(TelegramAuthorization(diary_id=student_id, hw=False, mark=False))
+            session.commit()
             return False, False
         else:
-            return telegram_permitions.mark, telegram_permitions.hw
+            return telegram_permissions.mark, telegram_permissions.hw
 
 
-def alert_on_telegram(student_id, data, type):
-    # mark_permition, hw_permition = check_permitions(student_id)
-    mark_permition, hw_permition = True, True
-    if mark_permition or hw_permition:
+def alert_on_telegram(student_id: int, data: dict, alert_type: str):
+    mark_permission, hw_permission = check_permissions(student_id)
+    if mark_permission or hw_permission:
         load_dotenv()
         bot_token = os.getenv('TELEGRAM_BOT_KEY')
         chat_id = check_telegram(student_id)
         message = f'⚠ Diary alert ⚠\n{data["body"]}\n<b>Time:</b> {data["time"]}\n<b>Class date:</b> {data["date"]}'
         url = f'https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={message}&parse_mode=html'
-        if (type == 'mark' and mark_permition) or (type == 'hw' and hw_permition):
+        if (alert_type == 'mark' and mark_permission) or (alert_type == 'hw' and hw_permission):
             requests.get(url)
 
 
+def set_permissions(hw: bool, mark: bool, student_id: int):
+    with Sessions() as session:
+        permissions = session.query(TelegramAuthorization).filter_by(diary_id=student_id).first()
+        permissions.hw, permissions.mark = hw, mark
+        session.add(permissions)
+        session.commit()
+    return JSONResponse(status_code=status.HTTP_200_OK, content='permissions set')
+
+
 def get_seasons_info():
-    return {'current': 2,
+    return {'current': get_current_season(),
             'dates': {
-                1: '01.09.2022 - 27.11.2022',
-                2: '28.11.2022 - 26.02.2023',
-                3: '27.02.2023 - 31.05.2023'
+                1: f'{SEASON_1[0].strftime("%d.%m.%y")} - {SEASON_1[1].strftime("%d.%m.%y")}',
+                2: f'{SEASON_2[0].strftime("%d.%m.%y")} - {SEASON_2[1].strftime("%d.%m.%y")}',
+                3: f'{SEASON_3[0].strftime("%d.%m.%y")} - {SEASON_3[1].strftime("%d.%m.%y")}'
             }}

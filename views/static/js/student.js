@@ -56,3 +56,19 @@ async function changeDates(type) {
         loadDiary('mon');
     });
 }
+
+
+async function setPermissions() {
+    const hw = document.getElementById('hw-check').checked;
+    const mark = document.getElementById('mark-check').checked;
+    callServer(`/edit_tg_permissions?hw=${hw}&mark=${mark}`, {}, 'POST').then(async (response) => {
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                text: 'Saved!'
+            });
+        }
+        await alertError(response);
+        checkCredentials(response.status);
+    })
+}

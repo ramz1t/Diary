@@ -58,6 +58,7 @@ th {
 
 #modal-container {
     position: absolute;
+    z-index: 10;
     left: 260px;
     top: 105px;
     height: fit-content;
