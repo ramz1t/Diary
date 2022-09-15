@@ -5,7 +5,7 @@
         {% for day in classes_data %}
         <div>
             <h3>{{day.day_name}}</h3>
-            <div class="white border-radius p-10">
+            <div class="white border-radius p-20 grid grid-gap-quarter">
                 {% if day.lessons_count > 0 %}
                 {% for i in range(day.last_lesson_number) %}
                 <div style="min-height: 40px" class="flex-row allign-center p-5 space-between">

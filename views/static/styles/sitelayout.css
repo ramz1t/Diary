@@ -91,6 +91,10 @@ body {
     grid-template-columns: repeat(2, 1fr);
 }
 
+.column-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
 .space-between {
     justify-content: space-between;
 }

@@ -8,10 +8,9 @@ from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 
 from Diary.crud_models import CRUDAdapter
-from Diary.data.data import Sessions
 from Diary.func.helpers import verify_user_type, make_dates_for_week, check_telegram, check_permissions
 from pyowm import OWM
-from datetime import datetime, timedelta
+from datetime import datetime
 
 clss = CRUDAdapter().clss
 templates = Jinja2Templates(directory="views/templates")
@@ -260,6 +259,16 @@ class TelegramPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
+class FinalMarksPage(PageBase):
+    USERTYPE = 'teacher'
+    FILE_NAME = 'final_marks.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        classes = clss['cls'].get_classes_for_final_marks(current_user.id)
+        data = {'request': request, 'classes': classes}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -276,7 +285,8 @@ class PagesAdapter:
               'teacher_profile_info': TeacherInfoPage,
               'student_profile_info': StudentInfoPage,
               'student_marks': MarksPage,
-              'telegram': TelegramPage}
+              'telegram': TelegramPage,
+              'final_marks': FinalMarksPage}
 
     @property
     def pages(self):

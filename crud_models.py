@@ -1,8 +1,8 @@
 from random import randint
-from typing import Optional, Union
+from typing import Optional
 
 import psycopg2
-from pydantic import BaseModel
+
 from pydantic.dataclasses import dataclass
 
 from Diary.data.data import Sessions, symbols, DB_NAME, USERNAME, DB_HOST, DB_PASS
@@ -269,7 +269,6 @@ class Student(CRUDBase, StudentKey):
             with conn.cursor() as cursor:
                 login = body.email
                 diary_id = self.get(ApiBase(email=body.email)).id
-                print(login, password, diary_id)
                 cursor.execute(f'insert into users (login, password, diary_id) values (%s, %s, %s);',
                                (login, password, diary_id))
                 conn.commit()
@@ -528,6 +527,16 @@ class Cls(CRUDBase):
             return res
 
     @staticmethod
+    def get_classes_for_final_marks(teacher_id: int):
+        with Sessions() as session:
+            res = []
+            classes_ids = session.query(DBClassesRelationship).filter_by(teacher_id=teacher_id).all()
+            for cls in classes_ids:
+                res.append({'id': cls.id, 'name': Group().get(cls.group_id).name,
+                            'subject': Subject.get(cls.subject_id)})
+            return res
+
+    @staticmethod
     def get_teacher_classes_days(class_id: int):
         with Sessions() as session:
             res = []
@@ -615,7 +624,7 @@ class Book:
                     res['students_count'] = len(group.students)
                     students = sorted(group.students, key=lambda x: x.surname)
                     for number, student in enumerate(students):
-                        marks, summ, count = Mark().get_student_marks(get_current_season(), class_id, student.id)
+                        marks, summ, count = Mark.get_student_marks(get_current_season(), class_id, student.id)
                         res['students'].append(
                             {'id': student.id, 'number': number + 1, 'name': student.name, 'surname': student.surname,
                              'marks': {'all': marks, 'summ': summ, 'count': count}})
@@ -654,12 +663,45 @@ class Book:
                      'mark_time': mark_time})
         return day
 
+    @staticmethod
+    def get_final(class_id: int):
+        with Sessions() as session:
+            cls = Cls.get_one(class_id)
+            group = session.query(DBGroup).filter_by(id=cls.group_id).first()
+            res = {'class_id': class_id, 'name': group.name, 'subject': Subject.get(cls.subject_id), 'students': []}
+            students = group.students
+            for number, student in enumerate(sorted(students, key=lambda x: x.surname)):
+                season_1_final = Mark.get_final_mark(student.id, class_id, 1)
+                season_2_final = Mark.get_final_mark(student.id, class_id, 2)
+                season_3_final = Mark.get_final_mark(student.id, class_id, 3)
+                season_4_final = Mark.get_final_mark(student.id, class_id, 4)
+                season_1_avg, season_1_warning = Mark.get_student_avg_and_warning(student.id, class_id, 1)
+                season_2_avg, season_2_warning = Mark.get_student_avg_and_warning(student.id, class_id, 2)
+                season_3_avg, season_3_warning = Mark.get_student_avg_and_warning(student.id, class_id, 3)
+                all_seasons = [season_1_avg, season_2_avg, season_3_avg]
+                season_4_avg = sum(all_seasons) / (3 - all_seasons.count(0) if (3 - all_seasons.count(0)) > 0 else 1)
+                student_data = {'id': student.id,
+                                'number': number + 1,
+                                'initials': f'{student.surname} {student.name}',
+                                'season_1_final': season_1_final,
+                                'season_1_avg': season_1_avg,
+                                'season_2_final': season_2_final,
+                                'season_2_avg': season_2_avg,
+                                'season_3_final': season_3_final,
+                                'season_3_avg': season_3_avg,
+                                'season_4_final': season_4_final,
+                                'season_4_avg': season_4_avg,
+                                'season_1_warning': season_1_warning,
+                                'season_2_warning': season_2_warning,
+                                'season_3_warning': season_3_warning, }
+                res['students'].append(student_data)
+        return res
+
 
 class Mark(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            print(body.date, body.value, body.student_id, body.subject_id)
             mark = session.query(DBMark).filter_by(date=body.date, student_id=body.student_id,
                                                    class_id=body.subject_id).first()
             if mark is not None:
@@ -676,6 +718,27 @@ class Mark(CRUDBase):
         alert_on_telegram(body.student_id, data, 'mark')
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark added successfully')
 
+    @staticmethod
+    def create_final_mark(body: ApiBase):
+        with Sessions() as session:
+            mark = session.query(DBMark).filter_by(student_id=body.student_id,
+                                                   class_id=body.subject_id, final=True, season=body.season).first()
+            if mark is not None:
+                mark.value = body.mark
+                session.add(mark)
+                session.commit()
+                return JSONResponse(status_code=status.HTTP_200_OK, content='mark updated')
+            mark = DBMark(value=body.mark, student_id=body.student_id, class_id=body.subject_id,
+                          time=get_current_time(), comment='', season=body.season, final=True)
+            session.add(mark)
+            session.commit()
+            data = {'time': mark.time,
+                    'body': f'New final mark, <b>{mark.value}</b>\nSeason: {mark.season if mark.season != 4 else "year"}',
+                    'date': mark.date,
+                    'comment': mark.comment}
+        alert_on_telegram(body.student_id, data, 'mark')
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark added successfully')
+
     def get(self, body: ApiBase):
         with Sessions() as session:
             mark = session.query(DBMark).filter_by(student_id=body.student_id, date=body.date,
@@ -688,26 +751,19 @@ class Mark(CRUDBase):
             mark = session.query(DBMark).filter_by(id=id).first()
             session.delete(mark)
             session.commit()
-            return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark deleted')
+            return JSONResponse(status_code=status.HTTP_200_OK, content='mark deleted')
 
-    def get_student_marks(self, season: int, subject_id: int, student_id: int):
+    @staticmethod
+    def get_student_marks(season: int, subject_id: int, student_id: int):
         marks = {}
         summ = 0
-        count = 0
         with Sessions() as session:
-            marks_query = session.query(DBMark).filter_by(student_id=student_id, season=season, class_id=subject_id).all()
+            marks_query = session.query(DBMark).filter_by(student_id=student_id, season=season,
+                                                          class_id=subject_id).all()
             count = len(marks_query)
             for mark in marks_query:
                 summ += mark.value
                 marks.update({mark.date: {'value': mark.value, 'id': mark.id}})
-
-        # for date in dates:
-        #     long_date = date['long']
-        #     mark = self.get(ApiBase(student_id=student_id, date=long_date, subject_id=subject_id))
-        #     if mark is not None:
-        #         summ += mark.value
-        #         count += 1
-        #         marks.update({long_date: {'value': mark.value, 'id': mark.id}})
         return marks, summ, count
 
     @staticmethod
@@ -730,7 +786,7 @@ class Mark(CRUDBase):
             for c_id in cls_ids:
                 name = Subject.get(session.query(DBClassesRelationship).filter_by(id=c_id).first().subject_id)
                 seasons = self.get_marks_by_seasons(student_id=student_id, class_id=c_id)
-                final_mark = self.get_final_mark(student_id=student_id, class_id=c_id)
+                final_mark = self.get_final_mark(student_id=student_id, class_id=c_id, season=4)
                 subject = {'name': name, 'seasons': seasons, 'final': final_mark}
                 subjects.append(subject)
         subjects = sorted(subjects, key=lambda x: x['name'])
@@ -738,11 +794,13 @@ class Mark(CRUDBase):
         return data
 
     @staticmethod
-    def get_final_mark(student_id: int, class_id: int):
-        return None
+    def get_final_mark(student_id: int, class_id: int, season: int):
+        with Sessions() as session:
+            mark = session.query(DBMark).filter_by(student_id=student_id, class_id=class_id, final=True,
+                                                   season=season).first()
+            return mark.value if mark is not None else ''
 
-    @staticmethod
-    def get_marks_by_seasons(student_id: int, class_id: int):
+    def get_marks_by_seasons(self, student_id: int, class_id: int):
         with Sessions() as session:
             data = {}
             for season in range(1, get_current_season() + 1):
@@ -755,8 +813,28 @@ class Mark(CRUDBase):
                     k += 1
                     marks[i] = {'value': marks[i].value, 'comment': marks[i].comment, 'time': marks[i].time,
                                 'date': marks[i].date}
-                data.update({season: {'marks': marks, 'avg': "{:.2f}".format(sum / (1 if k == 0 else k))}})
+                data.update({season: {'marks': marks, 'avg': "{:.2f}".format(sum / (1 if k == 0 else k)),
+                                      'season_final': self.get_final_mark(student_id, class_id, season)}})
         return data
+
+    @staticmethod
+    def get_student_avg_and_warning(student_id: int, class_id: int, season: int):
+        with Sessions() as session:
+            marks = session.query(DBMark).filter_by(final=False, season=season, student_id=student_id,
+                                                    class_id=class_id).all()
+            sum = 0
+            k = 0
+            for mark in marks:
+                sum += mark.value
+                k += 1
+        avg = float("{:.2f}".format(sum / (1 if k == 0 else k)))
+        warning = ''
+        if season <= get_current_season():
+            if k < 3:
+                warning = f'This student has only {k} marks\nMinimum required for attestation is 3'
+            elif avg < 2.6:
+                warning = f'Avg score {avg} is too low\nMinimum required for attestation is 2.6'
+        return avg, warning
 
 
 class CRUDAdapter:

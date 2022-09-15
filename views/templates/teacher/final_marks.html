@@ -1,0 +1,61 @@
+<div class="content-wrapper">
+    <div id="primary-content">
+        <h1>Final marks</h1>
+        <br>
+        <div class="classes-list grid grid-gap-2" style="width: 30%">
+            {% for class in classes %}
+            <div class="flex-row space-between white p-20 border-radius">
+                <div class="flex-row allign-center">
+                    <h5>{{ class.name }}</h5>
+                    <h5>{{ class.subject }}</h5>
+                </div>
+                <button onclick="getFinalMarksTable('{{class.id}}')" class="diary-btn"><i
+                        class="bi bi-arrow-right pointer"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="secondary-content" class="none">
+        <button class="diary-btn" onclick="closeTable()"><i class="bi bi-arrow-left p-5"></i>Back
+            to class list
+        </button>
+        <br>
+        <br>
+        <table id="marks-table" class="white">
+            <tr>
+                <th class="square">№</th>
+                <th class="book-student-ns">Surname Name</th>
+                <th>Season I avg</th>
+                <th data-season="1">Season I final</th>
+                <th>Season II avg</th>
+                <th data-season="2">Season II final</th>
+                <th>Season III avg</th>
+                <th data-season="3">Season III final</th>
+                <th>Year avg</th>
+                <th data-season="4">Year final</th>
+            </tr>
+        </table>
+    </div>
+
+</div>
+<div class="none" id="modal-container">
+    <div id="mark-modal" class="grid grid-gap-quarter round-border p-10" data-mark=""
+         style="height: auto !important;">
+        <div class="flex-row space-between">
+            <div>
+                <b id="student_name">Surname Name</b>
+                <p id="season">2022-09-01</p>
+            </div>
+            <i onclick="document.getElementById('modal-container').classList.toggle('none')"
+               class="bi bi-arrows-angle-contract pointer"></i>
+        </div>
+        <div class="grid column-4">
+            <button onclick="finalMark(2)" id="mark-2" class="diary-btn square">2</button>
+            <button onclick="finalMark(3)" id="mark-3" class="diary-btn">3</button>
+            <button onclick="finalMark(4)" id="mark-4" class="diary-btn">4</button>
+            <button onclick="finalMark(5)" id="mark-5" class="diary-btn">5</button>
+        </div>
+    </div>
+</div>

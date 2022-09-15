@@ -12,7 +12,6 @@
                 {% endif %}
             </div>
             {% for season in range(1, marks_data.current_season + 1) %}
-            {% if season == marks_data.current_season %}
             <div class="flex-row">
                 <h6>{{season}} period</h6>
                 <h6 class="grey">{{marks_data.seasons_dates[season]}}</h6>
@@ -20,20 +19,19 @@
                 <h6>{{subject.seasons[season].marks | length}} marks</h6>
             </div>
             <div class="flex-row space-between justify-center">
-                {% else %}
-                <div class="flex-row space-between justify-center none">
-                    {% endif %}
-                    <div class="flex-row grid-gap-half">
-                        {% for mark in subject.seasons[season].marks %}
-                        <p onclick="alert(`Time: {{mark.time}}\nClass date: {{mark.date}}\nComment: {{mark.comment}}`)" class="mark-list-element p-5">{{mark.value}}</p>
-                        {% endfor %}
-                    </div>
-                    <!--                    <i class="bi bi-activity"></i>-->
-                    <p style="min-width: 60px" class="mark-list-element p-5 bold">{{subject.seasons[season].avg}}
-                    </p>
+                <div class="flex-row grid-gap-half">
+                    {% for mark in subject.seasons[season].marks %}
+                    <p onclick="alert(`Time: {{mark.time}}\nClass date: {{mark.date}}\nComment: {{mark.comment}}`)"
+                       class="mark-list-element p-5">{{mark.value}}</p>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                <div class="flex-row">
+                    <p class="red p-5 bold">{{subject.seasons[season].season_final}}</p>
+                    <p style="min-width: 60px" class="mark-list-element p-5 bold">{{subject.seasons[season].avg}}</p>
+                </div>
             </div>
             {% endfor %}
         </div>
+        {% endfor %}
     </div>
+</div>

@@ -182,3 +182,108 @@ function sendMark() {
         checkMarkEquality(cell, mark);
     });
 }
+
+async function getFinalMarksTable(class_id) {
+    callServer(`/final_marks?class_id=${class_id}`).then(async (response) => {
+        document.getElementById('primary-content').classList.add('none');
+        document.getElementById('secondary-content').classList.remove('none');
+        const data = await response.json();
+        const table = document.getElementById('marks-table');
+        const firstRow = table.children[0];
+        table.innerHTML = '';
+        table.dataset.classId = class_id;
+        table.appendChild(firstRow);
+        data.students.forEach((student) => {
+            const row = `
+            <tr>
+                <th>${student.number}</th>
+                <td data-student-id="${student.id}">${student.initials}</td>
+                <td id="${student.id}_season_1_avg" 
+                    data-warning="${student.season_1_warning}">
+                    <span>${student.season_1_avg}</span>
+                </td>
+                <td id="${student.id}_season_1_final" class="final-mark-area">${student.season_1_final}</td>
+                <td id="${student.id}_season_2_avg" 
+                    data-warning="${student.season_2_warning}">
+                    <span>${student.season_2_avg}</span>
+                </td>
+                <td id="${student.id}_season_2_final" class="final-mark-area">${student.season_2_final}</td>
+                <td id="${student.id}_season_3_avg" 
+                    data-warning="${student.season_3_warning}">
+                    <span>${student.season_3_avg}</span>
+                </td>
+                <td id="${student.id}_season_3_final" class="final-mark-area">${student.season_3_final}</td>
+                <td id="${student.id}_season_4_avg">${student.season_4_avg}</td>
+                <td id="${student.id}_season_4_final" class="final-mark-area">${student.season_4_final}</td>
+            </tr>`;
+            table.innerHTML += row;
+        });
+        data['students'].forEach((student) => {
+            const cells = [
+                document.getElementById(`${student.id}_season_1_avg`),
+                document.getElementById(`${student.id}_season_2_avg`),
+                document.getElementById(`${student.id}_season_3_avg`)
+            ]
+            const warnings = [
+                student.season_1_warning,
+                student.season_2_warning,
+                student.season_3_warning
+            ]
+            for (let i = 0; i < 3; i++) {
+                if (warnings[i] !== '') {
+                    cells[i].innerHTML += `<i data-warning="${warnings[i]}" class="bi bi-exclamation-triangle warning-icon"></i>`
+                }
+            }
+        })
+    });
+}
+
+function closeTable() {
+    document.getElementById('secondary-content').classList.add('none');
+    document.getElementById('primary-content').classList.remove('none');
+    document.getElementById('modal-container').classList.add('none');
+}
+
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('warning-icon')) {
+        const warning = e.target.dataset.warning
+        alert(warning !== '' ? warning : 'No problems!');
+    } else if (e.target.classList.contains('final-mark-area')) {
+        const initials = e.target.parentNode.children[1].innerText;
+        const studentId = e.target.parentNode.children[1].dataset.studentId;
+        const tableHead = document.getElementById('marks-table').children[0].children[0].children[Array.from(e.target.parentNode.children).indexOf(e.target)]
+        const season_i = tableHead.dataset.season;
+        const modalWindow = document.getElementById('modal-container');
+        document.getElementById('student_name').innerText = initials;
+        document.getElementById('season').innerText = tableHead.innerText;
+        modalWindow.style.left = `${e.clientX + 50}px`;
+        modalWindow.style.top = `${e.clientY + window.scrollY}px`;
+        modalWindow.classList.remove('none');
+        modalWindow.dataset.season = season_i;
+        modalWindow.dataset.studentId = studentId;
+    }
+})
+
+async function finalMark(value) {
+    const modalWindow = document.getElementById('modal-container');
+    console.log(modalWindow);
+    const season = modalWindow.dataset.season;
+    const studentId = modalWindow.dataset.studentId;
+    const classId = document.getElementById('marks-table').dataset.classId;
+    const data = {
+        'student_id': studentId,
+        'season': season,
+        'mark': value,
+        'subject_id': classId
+    };
+    console.log(data);
+    callServer(`/execute/mark/create_final_mark`, data, 'POST').then(async (response) => {
+        try {
+            checkCredentials(response.status)
+            await alertError(response);
+            document.getElementById(`${studentId}_season_${season}_final`).innerText = value;
+        } catch (e) {
+
+        }
+    })
+}

@@ -1,73 +1,20 @@
-<div class="flex-shrink-0 p-3 bg-white">
+<div class="shadow-place flex-shrink-0 p-3 bg-white">
     <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
         <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
         <span style="padding-left: 15px" class="fs-5 fw-semibold">Teacher Panel</span>
     </a>
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" onclick="loadPage('teacher', 'classes')"><i
+            <button class="btn btn-toggle align-items-center rounded collapsed"
+                    onclick="loadPage('teacher', 'classes')"><i
                     class="bi bi-journal-bookmark icon-custom"></i>My schedule
             </button>
         </li>
-<!--        <li class="mb-1">-->
-<!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
-<!--                    data-bs-target="#dashboard-collapse" aria-expanded="false">develop-->
-<!--            </button>-->
-<!--            <div class="collapse" id="dashboard-collapse">-->
-<!--                <ul class="btn-toggle-nav list-unstyled fw-normal small">-->
-<!--                    <li>-->
-<!--                        <button class="navbar-button" onclick="loadPage()">develop</button>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                        <button class="navbar-button" onclick="loadPage()"></i>develop</button>-->
-<!--                    </li>-->
-<!--                    <li class="border-top my-3"></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </li>-->
-<!--        <li class="mb-1">-->
-<!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
-<!--                    data-bs-target="#teachers-collapse" aria-expanded="false">-->
-<!--                develop-->
-<!--            </button>-->
-<!--            <div class="collapse" id="teachers-collapse">-->
-<!--                <ul class="btn-toggle-nav list-unstyled fw-normal small">-->
-<!--                    <li>-->
-<!--                        <button class="navbar-button" onclick="loadPage()">develop</button>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                        <button class="navbar-button" onclick="loadPage()">develop</button>-->
-<!--                    </li>-->
-<!--                    <li class="border-top my-3"></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </li>-->
-<!--        <li class="mb-1">-->
-<!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
-<!--                    data-bs-target="#subjects-collapse" aria-expanded="false">develop-->
-<!--            </button>-->
-<!--            <div class="collapse" id="subjects-collapse">-->
-<!--                <ul class="btn-toggle-nav list-unstyled fw-normal small">-->
-<!--                    <li>-->
-<!--                        <button class="navbar-button" onclick="loadPage()">develop</button>-->
-<!--                    </li>-->
-<!--                    <li class="border-top my-3"></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </li>-->
-<!--        <li class="mb-1">-->
-<!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
-<!--                    data-bs-target="#school-collapse" aria-expanded="false">-->
-<!--                <i class="bi bi-house-door icon-custom"></i>develop-->
-<!--            </button>-->
-<!--            <div class="collapse" id="school-collapse">-->
-<!--                <ul class="btn-toggle-nav list-unstyled fw-normal small">-->
-<!--                    <li>-->
-<!--                        <button class="navbar-button" onclick="loadPage()"></i>develop</button>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </li>-->
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed"
+                    onclick="loadPage('teacher', 'final_marks')"><i class="bi bi-123 icon-custom"></i>Final marks
+            </button>
+        </li>
         <li class="border-top my-3"></li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
@@ -101,3 +48,4 @@
         </li>
     </ul>
 </div>
+<div class="shadow-place" style="display: block; min-height: 100vh"></div>

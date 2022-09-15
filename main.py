@@ -202,5 +202,10 @@ def edit_tg_permissions(hw: bool, mark: bool, current_user=Depends(get_current_u
     return set_permissions(hw, mark, current_user.id)
 
 
+@app.get('/final_marks')
+def get_final_marks_for_table(class_id: int):
+    return crudadapter.clss['book'].get_final(class_id)
+
+
 if __name__ == '__main__':
     uvicorn.run("__main__:app", host='127.0.0.1', port=8000, reload=True)

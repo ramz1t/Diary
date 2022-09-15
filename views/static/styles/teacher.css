@@ -77,3 +77,11 @@ input:focus {
     border: none;
     min-height: 30px;
 }
+
+h5 {
+    line-height: 1.5;
+}
+
+.warning-icon {
+    color: orangered;
+}
