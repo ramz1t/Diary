@@ -1,16 +1,18 @@
 <div class="content-wrapper" id="book-wrapper">
     <div class="none" id="modal-container">
-        <div id="mark-modal" class="round-border p-10" data-mark="">
+        <div id="mark-modal" class="grid grid-gap-quarter round-border p-10" data-mark="">
             <div class="flex-row space-between">
                 <div>
-                    <p id="student_name">Surname Name</p>
+                    <b><p id="student_name">Surname Name</p></b>
                     <p id="mark_date">2022-09-01</p>
                 </div>
                 <i onclick="document.getElementById('modal-container').classList.toggle('none')"
                    class="bi bi-arrows-angle-contract pointer"></i>
             </div>
-
-
+            <div>
+                <label for="mark-comment">Comment:</label>
+                <input id="mark-comment" type="text">
+            </div>
             <div class="flex-row allign-center">
                 <div class="grid column-5">
                     <button onclick="placeMark(2)" id="mark-2" class="diary-btn square">2</button>

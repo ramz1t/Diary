@@ -253,10 +253,10 @@ class TelegramPage(PageBase):
 
     def export(self, body: ApiPage, request, current_user):
         telegram = check_telegram(current_user.id)
-        mark, hw = False, False
+        data = {'request': request, 'telegram': telegram}
         if telegram:
             mark, hw = check_permissions(current_user.id)
-        data = {'request': request, 'telegram': telegram, 'mark': mark, 'hw': hw}
+            data.update({'mark': mark, 'hw': hw})
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 

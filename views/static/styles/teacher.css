@@ -59,8 +59,6 @@ th {
 #modal-container {
     position: absolute;
     z-index: 10;
-    left: 260px;
-    top: 105px;
     height: fit-content;
     width: fit-content;
 }
@@ -68,5 +66,14 @@ th {
 #mark-modal {
     background: white;
     width: 315px;
-    height: 140px;
+    height: 175px;
+}
+
+p {
+    margin-bottom: 0 !important;
+}
+
+input:focus {
+    border: none;
+    min-height: 30px;
 }

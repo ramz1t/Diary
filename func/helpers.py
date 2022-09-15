@@ -104,9 +104,12 @@ def get_title(date):
 
 def teaching_days_dates(days_indexes):
     dates = []
-    current_day = YEAR_START - datetime.timedelta(days=YEAR_START.weekday())
-    while current_day < TODAY + datetime.timedelta(days=110):
-        if current_day >= YEAR_START:
+    current_season = [SEASON_1, SEASON_2, SEASON_3][get_current_season() - 1]
+    current_day = current_season[0] - datetime.timedelta(days=YEAR_START.weekday())
+    while current_day < current_season[1]:
+        if current_day > current_season[1]:
+            break
+        if current_day >= current_season[0]:
             for index in days_indexes:
                 if index == current_day.weekday():
                     dates.append({'long': current_day.strftime("%Y-%m-%d"), 'short': current_day.strftime('%d')})
@@ -161,7 +164,7 @@ def alert_on_telegram(student_id: int, data: dict, alert_type: str):
         load_dotenv()
         bot_token = os.getenv('TELEGRAM_BOT_KEY')
         chat_id = check_telegram(student_id)
-        message = f'⚠ Diary alert ⚠\n{data["body"]}\n<b>Time:</b> {data["time"]}\n<b>Class date:</b> {data["date"]}'
+        message = f'⚠ Diary alert ⚠\n{data["body"]}\n<b>Time:</b> {data["time"]}\n<b>Class date:</b> {data["date"]}\n<b>Comment: </b>{data["comment"]}'
         url = f'https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={message}&parse_mode=html'
         if (alert_type == 'mark' and mark_permission) or (alert_type == 'hw' and hw_permission):
             requests.get(url)

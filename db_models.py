@@ -87,6 +87,9 @@ class DBMark(Base):
     date = Column(String)
     time = Column(String)
     class_id = Column(Integer)
+    final = Column(Boolean)
+    season = Column(Integer)
+    comment = Column(String)
     student_id = Column(Integer, ForeignKey('students.id'))
 
 

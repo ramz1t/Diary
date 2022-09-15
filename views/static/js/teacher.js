@@ -33,6 +33,7 @@ function openClassBook() {
         document.getElementById('group').innerText = book.name;
         document.getElementById('subject').innerText = book.subject;
         let book_wrapper = document.getElementById('book-wrapper');
+        book_wrapper.dataset.current_season = book['current_season'];
         let table = document.createElement('table');
         table.classList.add('white', 'border-radius')
         let first_row = document.createElement('tr');
@@ -89,8 +90,8 @@ function showMarkModal(e) {
         const studentId = parseInt(e.target.dataset.studentId);
         const date = e.target.dataset.date;
         const name = e.target.dataset.initials;
-        const y = e.clientY + window.scrollY - (e.clientY + window.scrollY - 105) % 35;
-        let x = e.clientX + window.scrollX - (e.clientX + window.scrollX - 269) % 35 + 35;
+        const y = e.clientY + window.scrollY - (e.clientY + window.scrollY - 104) % 35;
+        let x = e.clientX + window.scrollX - (e.clientX + window.scrollX - 272) % 35 + 35;
         if (window.screen.width + window.scrollX - x < 315) {
             x -= 350
         }
@@ -166,8 +167,11 @@ function sendMark() {
     const date = modal.dataset.modalDate;
     const mark = modal.dataset.mark;
     const studentId = modal.dataset.modalStudentId;
+    const comment = document.getElementById('mark-comment').value;
+    const season = document.getElementById('book-wrapper').dataset.current_season;
     const data = {
-        'date': date, 'mark': mark, 'student_id': studentId, 'subject_id': localStorage.getItem('book_class_id')
+        'date': date, 'mark': mark, 'student_id': studentId, 'subject_id': localStorage.getItem('book_class_id'),
+        'comment': comment, 'season': season
     }
     callServer('/execute/mark/create', data, 'POST').then((response) => {
         const p = alertError(response);

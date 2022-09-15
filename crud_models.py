@@ -13,7 +13,7 @@ from abc import abstractmethod, ABC
 from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass, DBMark
 from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
-    alert_on_telegram, get_seasons_info
+    alert_on_telegram, get_seasons_info, get_current_season
 from Diary.logic.auth import get_password_hash
 from contextlib import closing
 
@@ -44,6 +44,8 @@ class ApiBase:
                  student_id: int = None,
                  date: str = None,
                  mark: int = None,
+                 comment: str = None,
+                 season: str = None,
                  *args, **kwargs):
         self.email = email
         self.old_password = old_password
@@ -69,6 +71,8 @@ class ApiBase:
         self.student_id = student_id
         self.date = date
         self.mark = mark
+        self.comment = comment
+        self.season = season
 
     email: Optional[str]
     password: Optional[str]
@@ -94,6 +98,8 @@ class ApiBase:
     date: Optional[str]
     mark: Optional[int]
     student_id: Optional[int]
+    comment: Optional[str]
+    season: Optional[int]
 
 
 class KeyBase(ABC):
@@ -264,7 +270,8 @@ class Student(CRUDBase, StudentKey):
                 login = body.email
                 diary_id = self.get(ApiBase(email=body.email)).id
                 print(login, password, diary_id)
-                cursor.execute(f'insert into users (login, password, diary_id) values (%s, %s, %s);', (login, password, diary_id))
+                cursor.execute(f'insert into users (login, password, diary_id) values (%s, %s, %s);',
+                               (login, password, diary_id))
                 conn.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Student created')
 
@@ -601,7 +608,8 @@ class Book:
             if group is not None:
                 dates = teaching_days_dates(Cls.get_teacher_classes_days(class_id))
                 subject = Subject().get(Cls.get_one(class_id).subject_id)
-                res.update({'name': group.name, 'subject': subject, 'students_count': 0, 'dates': dates, 'students': [],
+                res.update({'name': group.name, 'subject': subject, 'current_season': get_current_season(),
+                            'students_count': 0, 'dates': dates, 'students': [],
                             'hw': []})
                 try:
                     res['students_count'] = len(group.students)
@@ -660,10 +668,11 @@ class Mark(CRUDBase):
                 session.commit()
                 return JSONResponse(status_code=status.HTTP_200_OK, content='mark updated')
             mark = DBMark(date=body.date, value=body.mark, student_id=body.student_id, class_id=body.subject_id,
-                          time=get_current_time())
+                          time=get_current_time(), comment=body.comment, season=body.season, final=False)
             session.add(mark)
             session.commit()
-            data = {'time': mark.time, 'body': f'New mark, <b>{mark.value}</b>', 'date': mark.date}
+            data = {'time': mark.time, 'body': f'New mark, <b>{mark.value}</b>', 'date': mark.date,
+                    'comment': mark.comment}
         alert_on_telegram(body.student_id, data, 'mark')
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark added successfully')
 
@@ -727,20 +736,22 @@ class Mark(CRUDBase):
 
     @staticmethod
     def get_marks_by_seasons(student_id: int, class_id: int):
-        return {
-                    1: {
-                        'marks': [1, 4, 5, 2, 5],
-                        'avg': 3.45
-                    },
-                    2: {
-                        'marks': [student_id, 4, class_id, 2, 5],
-                        'avg': 4.42
-                    },
-                    3: {
-                        'marks': [3, 3, 5, 2, 5],
-                        'avg': 2.44
-                    }
-                }
+        with Sessions() as session:
+            data = {}
+            for season in range(1, get_current_season() + 1):
+                marks = session.query(DBMark).filter_by(final=False, season=season, student_id=student_id,
+                                                        class_id=class_id).all()
+                sum = 0
+                k = 0
+                for i in range(len(marks)):
+                    sum += marks[i].value
+                    k += 1
+                    marks[i] = {'value': marks[i].value, 'comment': marks[i].comment, 'time': marks[i].time,
+                                'date': marks[i].date}
+                data.update({season: {'marks': marks, 'avg': "{:.2f}".format(sum / (1 if k == 0 else k))}})
+        return data
+
+
 class CRUDAdapter:
     _clss = {'student': Student,
              'admin': Admin,
