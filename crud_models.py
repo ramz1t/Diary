@@ -615,7 +615,7 @@ class Book:
                     res['students_count'] = len(group.students)
                     students = sorted(group.students, key=lambda x: x.surname)
                     for number, student in enumerate(students):
-                        marks, summ, count = Mark().get_student_marks(dates, class_id, student.id)
+                        marks, summ, count = Mark().get_student_marks(get_current_season(), class_id, student.id)
                         res['students'].append(
                             {'id': student.id, 'number': number + 1, 'name': student.name, 'surname': student.surname,
                              'marks': {'all': marks, 'summ': summ, 'count': count}})
@@ -690,17 +690,24 @@ class Mark(CRUDBase):
             session.commit()
             return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark deleted')
 
-    def get_student_marks(self, dates: list, class_id: int, student_id: int):
+    def get_student_marks(self, season: int, subject_id: int, student_id: int):
         marks = {}
         summ = 0
         count = 0
-        for date in dates:
-            long_date = date['long']
-            mark = self.get(ApiBase(student_id=student_id, date=long_date, subject_id=class_id))
-            if mark is not None:
+        with Sessions() as session:
+            marks_query = session.query(DBMark).filter_by(student_id=student_id, season=season, class_id=subject_id).all()
+            count = len(marks_query)
+            for mark in marks_query:
                 summ += mark.value
-                count += 1
-                marks.update({long_date: {'value': mark.value, 'id': mark.id}})
+                marks.update({mark.date: {'value': mark.value, 'id': mark.id}})
+
+        # for date in dates:
+        #     long_date = date['long']
+        #     mark = self.get(ApiBase(student_id=student_id, date=long_date, subject_id=subject_id))
+        #     if mark is not None:
+        #         summ += mark.value
+        #         count += 1
+        #         marks.update({long_date: {'value': mark.value, 'id': mark.id}})
         return marks, summ, count
 
     @staticmethod
