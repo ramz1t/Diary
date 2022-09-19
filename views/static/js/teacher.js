@@ -188,6 +188,8 @@ async function getFinalMarksTable(class_id) {
         document.getElementById('primary-content').classList.add('none');
         document.getElementById('secondary-content').classList.remove('none');
         const data = await response.json();
+        document.getElementById('name').innerText = data.name;
+        document.getElementById('subject').innerHTML = data.subject
         const table = document.getElementById('marks-table');
         const firstRow = table.children[0];
         table.innerHTML = '';
