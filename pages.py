@@ -7,8 +7,8 @@ from starlette import status
 from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 
-from Diary.crud_models import CRUDAdapter
-from Diary.func.helpers import verify_user_type, make_dates_for_week, check_telegram, check_permissions
+from crud_models import CRUDAdapter
+from func.helpers import verify_user_type, make_dates_for_week, check_telegram, check_permissions
 from pyowm import OWM
 from datetime import datetime
 

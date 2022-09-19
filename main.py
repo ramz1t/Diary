@@ -7,14 +7,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.responses import JSONResponse, RedirectResponse
 
-from Diary.files.export import write_student_keys, write_teacher_keys
-from Diary.func.helpers import check_date, make_dates_for_week, get_title, teaching_days_dates, set_permissions
-from Diary.logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user, \
+from files.export import write_student_keys, write_teacher_keys
+from func.helpers import check_date, make_dates_for_week, get_title, teaching_days_dates, set_permissions
+from logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user, \
     validate_token
-from Diary.models.token import Token
-from Diary.crud_models import CRUDAdapter
-from Diary.crud_models import ApiBase
-from Diary.pages import PagesAdapter, ApiPage
+from models.token import Token
+from crud_models import CRUDAdapter
+from crud_models import ApiBase
+from pages import PagesAdapter, ApiPage
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="views/static"), name="static")

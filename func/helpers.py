@@ -1,7 +1,7 @@
 import datetime
 import os
 from contextlib import closing
-
+from models.token import TokenData
 import psycopg2
 import requests
 from dotenv import load_dotenv
@@ -12,11 +12,11 @@ from starlette import status
 from starlette.responses import JSONResponse
 from datetime import date
 
-from Diary.db_models import TelegramAuthorization
-from Diary.func.db_user_find import get_user_by_email
-from Diary.logic.auth import SECRET_KEY, ALGORITHM
+from db_models import TelegramAuthorization
+from func.db_user_find import get_user_by_email
+from logic.auth import SECRET_KEY, ALGORITHM
 # from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
-from Diary.data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, DB_HOST, DB_PASS, SEASON_1, \
+from data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, DB_HOST, DB_PASS, SEASON_1, \
     SEASON_2, SEASON_3
 
 # def change_user_password(email, body: ApiChangePassword):
@@ -40,7 +40,6 @@ from Diary.data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USER
 #             return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')
 #         else:
 #             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old email is not correct')
-from Diary.models.token import TokenData
 
 
 def verify_user_type(usertype, request) -> bool:

@@ -5,16 +5,16 @@ import psycopg2
 
 from pydantic.dataclasses import dataclass
 
-from Diary.data.data import Sessions, symbols, DB_NAME, USERNAME, DB_HOST, DB_PASS
+from data.data import Sessions, symbols, DB_NAME, USERNAME, DB_HOST, DB_PASS
 from fastapi.responses import JSONResponse
 from fastapi import status
 from abc import abstractmethod, ABC
 
-from Diary.db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
+from db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass, DBMark
-from Diary.func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
+from func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
     alert_on_telegram, get_seasons_info, get_current_season
-from Diary.logic.auth import get_password_hash
+from logic.auth import get_password_hash
 from contextlib import closing
 
 
