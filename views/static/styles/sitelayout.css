@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap');
 
+/** {*/
+/*    outline: solid 1px deeppink;*/
+/*}*/
+
 :root {
     --dairy-color: #004d00;
     --nav-width: 290px;
@@ -7,6 +11,7 @@
 
 body {
     font-family: 'Montserrat', sans-serif !important;
+    background-color: white;
 }
 
 .all-site {
@@ -24,8 +29,10 @@ body {
 }
 
 .content-wrapper {
-    width: calc(100vw - var(--nav-width));
+    width: calc(100vw - var(--nav-width) - 20px);
+    padding-right: 30px;
     margin-top: 2rem;
+    padding-left: 25px;
 }
 
 .page {
@@ -35,4 +42,159 @@ body {
 
 .icon-custom {
     padding-right: 15px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+}
+
+.allign-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.grid-gap-quarter {
+    gap: 0.25rem;
+}
+
+.grid-gap-half {
+    gap: 0.5rem;
+}
+
+.grid-gap-1 {
+    gap: 1rem;
+}
+
+.grid-gap-2 {
+    gap: 2rem;
+}
+
+.grid-gap-3 {
+    gap: 3rem;
+}
+
+.column-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.column-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.column-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.round-border {
+    border: 2px solid var(--dairy-color);
+    border-radius: 10px;
+}
+
+.p-20 {
+    padding: 20px;
+}
+
+.p-10 {
+    padding: 10px;
+}
+
+.p-5 {
+    padding: 5px !important;
+}
+
+.diary-btn {
+    background: var(--dairy-color);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 7px;
+}
+
+.diary-btn:hover {
+    background: #004200;
+    -webkit-box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
+-moz-box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
+box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
+}
+
+.eye {
+    position: absolute;
+    float: right;
+    margin-left: 90%;
+    margin-top: 18px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.sticky {
+    position: fixed;
+    background-color: white;
+}
+
+.date-btn:hover {
+    border: 2px solid black;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.none {
+    display: none;
+}
+
+.white {
+    background-color: white;
+-webkit-box-shadow: 4px 4px 16px 3px rgba(34, 60, 80, 0.2);
+-moz-box-shadow: 4px 4px 16px 3px rgba(34, 60, 80, 0.2);
+box-shadow: 4px 4px 16px 3px rgba(34, 60, 80, 0.2);
+}
+
+.border-radius {
+    border-radius: 15px;
+}
+
+.wave-container {
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.wave-container > svg {
+    display: block;
+}
+
+@keyframes animateWave {
+    0% {
+        transform: scale(1, 0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.wave-container > svg {
+    display: block;
+    transform-origin: bottom;
+    animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }

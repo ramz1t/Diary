@@ -10,7 +10,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {% for group in groups %}
-                    <li><a class="dropdown-item" onclick="setValue('group', '{{ group[1] }}', '{{group[0]}}')" >{{ group[1] }}</a></li>
+                    <li><a class="dropdown-item" onclick="setValue('group', '{{ group.name }}', '{{group.id}}')" >{{ group.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

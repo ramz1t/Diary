@@ -12,6 +12,10 @@ async function callServer(url, data, method) {
 function executeScripts(page) {
     if (page === 'manage_groups') {
         loadSchedule('load', '0');
+    } else if (page === 'my_diary') {
+        loadDiary('load');
+    } else if (page === 'group_book') {
+        openClassBook('load')
     }
 }
 
@@ -22,18 +26,24 @@ function writeStorage(data) {
 }
 
 function logout() {
-    var type = localStorage.getItem('type')
+    const type = localStorage.getItem('type');
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    localStorage.clear();
+    localStorage.setItem('type', type);
     window.open(`/${type}/login`, '_self');
-    document.cookie = 'access_token=; expires=-1;';
 }
 
 function checkCredentials(status) {
+    const timeout = 2000;
     if (status === 401) {
         Swal.fire({
-            text: 'Your session has expired, please log in again'
+            text: 'Your session has expired, please log in again',
+            timer: timeout
         });
-        logout();
+        setTimeout(logout, timeout)
+        throw 'credentials error 401'
     }
+
 }
 
 
@@ -94,11 +104,9 @@ async function loadPage(type, page) {
     }
     if (page !== null) {
         let data = {
-            'user_id': user_id,
-            'type': type,
-            'page': page
+            'user_id': user_id
         };
-        let response = await callServer('/load_page/', data, 'PATCH');
+        let response = await callServer(`/load_page/?page=${page}&type=${type}`, data, 'PATCH');
         if (response.ok) {
             let wrapper = document.getElementById('wrapper');
             response = await response.text();
@@ -108,5 +116,58 @@ async function loadPage(type, page) {
             checkCredentials(response.status)
         }
         executeScripts(page);
+    }
+}
+
+function deleteFromDB(id, model) {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed){
+            callServer(`/${model}/delete?id=${id}`, {}, 'POST').then(async (response) => {
+                checkCredentials(response.status);
+                await alertError(response);
+                window.location.reload(true)
+    })
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Data is safe :)',
+                'error'
+            )
+        }
+    })
+
+}
+
+function hideShow() {
+    var input_fields = $('.pass_input');
+    var eyes = $('.eye-btn');
+    if(input_fields[0].type === 'password') {
+        for (let i = 0; i < input_fields.length; i++) {
+            input_fields[i].type = 'text';
+            eyes[i].classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    }
+    else{
+        for (let i = 0; i < input_fields.length; i++) {
+            input_fields[i].type = 'password';
+            eyes[i].classList.replace('bi-eye', 'bi-eye-slash');
+        }
     }
 }

@@ -8,9 +8,6 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 from data.data import Base
-from models.mark import Mark
-from models.task import Task
-from models.day import Day, ScheduleClass
 from db_models import *
 config = context.config
 

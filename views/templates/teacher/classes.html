@@ -1,0 +1,37 @@
+<div class="content-wrapper">
+    <h1>Classes</h1>
+    <br>
+    <div class="grid column-5">
+        {% for day in classes_data %}
+        <div>
+            <h3>{{day.day_name}}</h3>
+            <div class="white border-radius p-20 grid grid-gap-quarter">
+                {% if day.lessons_count > 0 %}
+                {% for i in range(day.last_lesson_number) %}
+                <div style="min-height: 40px" class="flex-row allign-center p-5 space-between">
+                    {% if day.lessons[i]|length > 1 %}
+                    <div class="flex-row">
+                        <h5>{{day.lessons[i].lesson_number}}</h5>
+                        <h5>{{day.lessons[i].subject_name}}</h5>
+                        <h5 class="group-icon">{{day.lessons[i].group_name}}</h5>
+                    </div>
+                    <div class="flex-row">
+
+                        <i onclick="loadPage('teacher', 'group_book'); localStorage.setItem('book_group_id', '{{day.lessons[i].group_id}}');
+                                                                   localStorage.setItem('book_class_id', '{{day.lessons[i].class_id}}')"
+                           class="bi bi-arrow-right pointer"></i>
+                    </div>
+                    {% else %}
+                    <h5>{{day.lessons[i].lesson_number}}</h5>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <h5>No classes on this day</h5>
+                {% endif %}
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+

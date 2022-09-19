@@ -5,11 +5,12 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, RedirectResponse
 
 from files.export import write_student_keys, write_teacher_keys
-from logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
-from models.day import AddLesson
+from func.helpers import check_date, make_dates_for_week, get_title, teaching_days_dates, set_permissions
+from logic.auth import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user, \
+    validate_token
 from models.token import Token
 from crud_models import CRUDAdapter
 from crud_models import ApiBase
@@ -34,6 +35,9 @@ def execute(body: ApiBase, model: str, method: str):
 
 @app.get('/')
 def main_page(request: Request):
+    token_valid, type = validate_token(request.cookies.get('access_token'))
+    if token_valid:
+        return RedirectResponse(f'/{type}')
     return templates.TemplateResponse('mainpage.html', {"request": request})
 
 
@@ -57,11 +61,12 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    REMEMBER_ME = form_data.client_secret
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES if REMEMBER_ME == 'false' else 365 * 24 * 60)
     access_token = create_access_token(
         data={"sub": user.email, "type": form_data.client_id}, expires_delta=access_token_expires
     )
-    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
+    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=False)
     return {"access_token": access_token, "token_type": "bearer"}
 
 
@@ -89,21 +94,22 @@ def student_profile(request: Request, current_user=Depends(get_current_user)):
 def teacher_profile(request: Request, current_user=Depends(get_current_user)):
     if current_user.__tablename__ != 'teachers':
         return JSONResponse(status_code=status.HTTP_403_FORBIDDEN, content='no access with this usertype')
-    return templates.TemplateResponse('teacher/profile.html', {"request": request,
-                                                               "user_id": current_user.id})
+    return templates.TemplateResponse('teacher.html', {"request": request,
+                                                       "user_id": current_user.id})
 
 
 @app.patch('/load_page/')
-def load_page(body: ApiPage, request: Request, current_user=Depends(get_current_user)):
+def load_page(body: ApiPage, page: str, type: str, request: Request, current_user=Depends(get_current_user)):
     try:
-        return pagesadapter.pages[body.page]().export(body=body, request=request, current_user=current_user)
+        return pagesadapter.pages[page]().export(body=body, request=request, current_user=current_user)
     except KeyError:
-        return templates.TemplateResponse(f'{body.type}/{body.page}.html', {'request': request})
+        return templates.TemplateResponse(f'{type}/{page}.html', {'request': request})
 
 
 @app.post('/add_lesson')
 def add_lesson(body: ApiPage, request: Request):
-    classes = crudadapter.clss['cls']().get(body)
+    classes = crudadapter.clss['cls']().for_schedule(body)
+    print(classes)
     return templates.TemplateResponse('admin/class.html', {"request": request,
                                                            "day_i": body.day_i,
                                                            "lesson_i": body.lesson_i + 1,
@@ -117,12 +123,27 @@ def search_school(body: ApiBase, request: Request):
 
 
 @app.patch('/load_schedule')
-def load_schedule(body: ApiPage, group_id: int, request: Request):
+def load_schedule(body: ApiBase, group_id: int, request: Request):
     days_titles = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-    classes = crudadapter.clss['cls']().get(body)
+    classes = crudadapter.clss['cls']().for_schedule(body)
     data = crudadapter.clss['scheduleclass']().get_schedule(group_id)
     return templates.TemplateResponse('admin/schedule.html', {"request": request, "data": data, "classes": classes,
                                                               "days": days_titles})
+
+
+@app.get('/load_teacher_classes')
+def load_teacher_classes(teacher_id: int):
+    return crudadapter.clss['cls'].for_teacher(teacher_id)
+
+
+@app.post('/upgrade_groups')
+def upgrade_groups(body: ApiBase):
+    return crudadapter.clss['group']().upgrade(body)
+
+
+@app.post('/{model}/delete')
+def delete_from_db(id: int, model: str):
+    return crudadapter.clss[model].delete(id)
 
 
 ''' DB urls'''
@@ -161,5 +182,30 @@ def get_weather_photo(weather: str):
     return FileResponse(f'./views/static/photos/weather/{weather}.jpg')
 
 
+@app.get('/load_diary')
+def load_diary(date: str, current_user=Depends(get_current_user)):
+    return crudadapter.clss['book'].make_day(date, current_user)
+
+
+@app.get('/get_dates_for_next_week')
+def get_dates(date: str, type: str):
+    return make_dates_for_week(date, type=type)
+
+
+@app.get('/class_book')
+def class_book(group_id: int, class_id: int):
+    return crudadapter.clss['book'].make_class(group_id, class_id)
+
+
+@app.post('/edit_tg_permissions')
+def edit_tg_permissions(hw: bool, mark: bool, current_user=Depends(get_current_user)):
+    return set_permissions(hw, mark, current_user.id)
+
+
+@app.get('/final_marks')
+def get_final_marks_for_table(class_id: int):
+    return crudadapter.clss['book'].get_final(class_id)
+
+
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    uvicorn.run("__main__:app", host='127.0.0.1', port=8000, reload=True)

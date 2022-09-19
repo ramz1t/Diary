@@ -186,7 +186,8 @@ async function addLesson(day_number) {
     let data = {
         'day_i': day_number,
         'lesson_i': lesson_number,
-        'user_id': id
+        'user_id': id,
+        'group_id': localStorage.getItem('schedule_group_id')
     };
     let response = await callServer('/add_lesson', data, 'POST');
     if (response.ok) {
@@ -209,7 +210,7 @@ async function loadSchedule(group_name, group_id) {
     }
     if (group_id !== null && group_name !== null) {
         document.getElementById('group').innerHTML = localStorage.getItem('schedule_group_name');
-        let data = {"user_id": localStorage.getItem('user_id')};
+        let data = {"user_id": localStorage.getItem('user_id'), 'group_id': group_id};
         let response = await callServer(`/load_schedule?group_id=${group_id}`, data, 'PATCH');
         if (response.ok) {
             let wrapper = document.getElementById('schedule-wrapper');
@@ -308,4 +309,48 @@ async function linkSchool(school_id, school_number) {
         checkCredentials(response.status);
         await alertError(response);
     }
+}
+
+function upgradeGroups() {
+    let data = {'user_id': localStorage.getItem('user_id')}
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, level up classes',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed){
+            callServer('/upgrade_groups', data, 'POST').then((response) => {
+            if (response.ok) {
+                window.location.reload(true);
+            }
+            else {
+                Swal.DismissReason.cancel
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error!'
+                })
+            }
+        })
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Data is safe :)',
+                'error'
+            )
+        }
+    })
 }

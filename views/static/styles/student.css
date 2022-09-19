@@ -1,0 +1,67 @@
+#diary-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.diary {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+h3, h6, p {
+    margin-bottom: 0 !important;
+}
+
+.grey {
+    color: #b2b2b2;
+}
+
+.initials {
+    font-size: 15px;
+}
+
+.day-choose {
+    width: fit-content;
+}
+
+.splitter {
+    border-right: 2px solid black;
+}
+
+.homework {
+    height: fit-content;
+}
+
+.mark {
+    min-width: 28px;
+    background: none !important;
+    color: red;
+}
+
+.lesson-info {
+    min-width: 180px;
+}
+
+.lesson-n {
+    min-width: 32px;
+}
+
+.date-btn:hover {
+    border: black solid 1px;
+}
+
+.mark-list-element {
+    min-width: 38px;
+    min-height: 35px;
+    border: solid black 2px;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h5 {
+    margin-bottom: 0 !important;
+    vertical-align: middle;
+}

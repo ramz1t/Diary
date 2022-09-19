@@ -1,74 +1,94 @@
-<div class="flex-shrink-0 p-3 bg-white">
+<div class="shadow-place flex-shrink-0 p-3 bg-white">
     <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
         <img width="30px" height="30px" src="{{ url_for('static', path='photos/dairy.png') }}">
+        <h3 class="p-10">Diary</h3>
     </a>
     <ul class="list-unstyled ps-0">
         <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" onclick="loadPage('student', 'my_dairy')">
-                My Dairy
+            <button class="btn btn-toggle align-items-center rounded collapsed"
+                    onclick="loadPage('student', 'my_diary')">
+                <i class="bi bi-journal-bookmark-fill icon-custom"></i>
+                Schedule
             </button>
         </li>
         <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#dashboard-collapse" aria-expanded="false">
-                2
+            <button class="btn btn-toggle align-items-center rounded collapsed"
+                    onclick="loadPage('student', 'student_marks')">
+                <i class="bi bi-123 icon-custom"></i>
+                Marks
             </button>
-            <div class="collapse" id="dashboard-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">2.1</a></li>
-                    <li><a href="#" class="link-dark rounded">2.2</a></li>
-                </ul>
-            </div>
         </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#teachers-collapse" aria-expanded="false">
-                3
-            </button>
-            <div class="collapse" id="teachers-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">3.1</a></li>
-                    <li><a href="#" class="link-dark rounded">3.2</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#subjects-collapse" aria-expanded="false">
-                4
-            </button>
-            <div class="collapse" id="subjects-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">4.1</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#school-collapse" aria-expanded="false">
-                5
-            </button>
-            <div class="collapse" id="school-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">5.1</a></li>
-                </ul>
-            </div>
-        </li>
+        <!--        <li class="mb-1">-->
+        <!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
+        <!--                    data-bs-target="#teachers-collapse" aria-expanded="false">-->
+        <!--                3-->
+        <!--            </button>-->
+        <!--            <div class="collapse" id="teachers-collapse">-->
+        <!--                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+        <!--                    <li><a href="#" class="link-dark rounded">3.1</a></li>-->
+        <!--                    <li><a href="#" class="link-dark rounded">3.2</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
+        <!--        <li class="mb-1">-->
+        <!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
+        <!--                    data-bs-target="#subjects-collapse" aria-expanded="false">-->
+        <!--                4-->
+        <!--            </button>-->
+        <!--            <div class="collapse" id="subjects-collapse">-->
+        <!--                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+        <!--                    <li><a href="#" class="link-dark rounded">4.1</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
+        <!--        <li class="mb-1">-->
+        <!--            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"-->
+        <!--                    data-bs-target="#school-collapse" aria-expanded="false">-->
+        <!--                5-->
+        <!--            </button>-->
+        <!--            <div class="collapse" id="school-collapse">-->
+        <!--                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+        <!--                    <li><a href="#" class="link-dark rounded">5.1</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
         <li class="border-top my-3"></li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#account-collapse" aria-expanded="false">
+                <i class="bi bi-person-circle icon-custom"></i>
                 Account
             </button>
             <div class="collapse" id="account-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/admin/change_password" class="link-dark rounded"><i
-                                class="bi bi-lock navbar-icon"></i>Change password</a></li>
-                    <li><button class="navbar-button" onclick="loadPage('student', 'telegram')"><i class="bi bi-telegram navbar-icon"></i>TelegramBot</button></li>
-                    <li><button class="navbar-button" onclick="logout()"><i
-                    class="bi bi-box-arrow-right icon-custom"></i>Log out</button></li>
+                <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('student', 'student_profile_info')"><i
+                                class="bi bi-info-lg navbar-icon"></i>Profile info
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_password')"><i
+                                class="bi bi-lock navbar-icon"></i>Change password
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('admin', 'change_email')"><i
+                                class="bi bi-envelope navbar-icon"></i>Change email
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="loadPage('student', 'telegram')"><i
+                                class="bi bi-telegram navbar-icon"></i>TelegramBot
+                        </button>
+                    </li>
+                    <li>
+                        <button class="navbar-button" onclick="logout()"><i
+                                class="bi bi-box-arrow-right navbar-icon"></i>Log out
+                        </button>
+                    </li>
                 </ul>
             </div>
         </li>
     </ul>
 </div>
+<div class="shadow-place" style="display: block; min-height: 100vh"></div>

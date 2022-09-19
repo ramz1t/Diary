@@ -7,6 +7,11 @@
             <label for="groupname"><i class="bi bi-person"></i>Group name</label>
         </div>
         <button class="btn btn-login-custom text-light" onclick="addGroup()">Add group</button>
+        <br>
+        <br>
+        <br>
+        <h1>Level up all classes</h1>
+        <button class="btn btn-login-custom text-light" onclick="upgradeGroups()">UPGRADE</button>
     </div>
     <div class="content-element">
         <h1>Added groups</h1>
@@ -16,14 +21,16 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Number of students</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             {% for group in groups %}
             <tr>
-                <th scope="row">{{ group[0] }}</th>
-                <td>{{ group[1] }}</td>
-                <td>{{ group[2] }}</td>
+                <th scope="row">{{ group.id }}</th>
+                <td>{{ group.name }}</td>
+                <td>{{ group.student_count }}</td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ group.id }}', 'group')" class="bi bi-trash3"></i></td>
             </tr>
             {% endfor %}
             </tbody>

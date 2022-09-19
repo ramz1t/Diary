@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+import datetime
+
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from data.data import Base
@@ -74,7 +76,21 @@ class DBSchool(Base):
     groups = relationship('DBGroup')
     subjects = relationship('DBSubject')
     teachers = relationship('DBTeacher')
-    classes = relationship('DBClassesRelationship')
+    classes = relationship('DBClassesRelationship', lazy='dynamic')
+
+
+class DBMark(Base):
+    __tablename__ = 'marks'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    value = Column(Integer)
+    date = Column(String)
+    time = Column(String)
+    class_id = Column(Integer)
+    final = Column(Boolean)
+    season = Column(Integer)
+    comment = Column(String)
+    student_id = Column(Integer, ForeignKey('students.id'))
 
 
 class DBStudent(Base):
@@ -88,7 +104,7 @@ class DBStudent(Base):
     school_id = Column(Integer)
     group = Column(String)
     group_id = Column(Integer, ForeignKey("groups.id"))
-    # marks = relationship(Mark)
+    marks = relationship('DBMark', lazy='dynamic')
 
 
 class DBSubject(Base):
@@ -110,4 +126,12 @@ class DBTeacher(Base):
     surname = Column(String)
     school_id = Column(Integer)
     school_db_id = Column(Integer, ForeignKey('schools.id'))
-    # classes: relationship(Group)
+
+
+class TelegramAuthorization(Base):
+    __tablename__ = 'telegram_autorizations'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    diary_id = Column(Integer)
+    mark = Column(Boolean)
+    hw = Column(Boolean)

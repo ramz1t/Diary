@@ -1,0 +1,38 @@
+<div class="content-wrapper" id="book-wrapper">
+    <div class="none" id="modal-container">
+        <div id="mark-modal" class="grid grid-gap-quarter round-border p-10" data-mark="">
+            <div class="flex-row space-between">
+                <div>
+                    <b><p id="student_name">Surname Name</p></b>
+                    <p id="mark_date">2022-09-01</p>
+                </div>
+                <i onclick="document.getElementById('modal-container').classList.toggle('none')"
+                   class="bi bi-arrows-angle-contract pointer"></i>
+            </div>
+            <div>
+                <label for="mark-comment">Comment:</label>
+                <input id="mark-comment" type="text">
+            </div>
+            <div class="flex-row allign-center">
+                <div class="grid column-5">
+                    <button onclick="placeMark(2)" id="mark-2" class="diary-btn square">2</button>
+                    <button onclick="placeMark(3)" id="mark-3" class="diary-btn">3</button>
+                    <button onclick="placeMark(4)" id="mark-4" class="diary-btn">4</button>
+                    <button onclick="placeMark(5)" id="mark-5" class="diary-btn">5</button>
+                </div>
+                <i onclick="sendMark()" class="bi bi-check-lg pointer green" style="color: green"></i>
+                <i onclick="dismissMark()" class="bi bi-x-lg pointer red"></i>
+            </div>
+        </div>
+    </div>
+    <div class="flex-row">
+        <button class="diary-btn" onclick="loadPage('teacher', 'classes')"><i class="bi bi-arrow-left p-5"></i>Back
+            to classes
+        </button>
+        <div class="flex-row">
+            <h1 id="subject"></h1>
+            <h1 id="group"></h1>
+        </div>
+    </div>
+    <br>
+</div>

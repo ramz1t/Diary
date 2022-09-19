@@ -9,6 +9,7 @@
     {% include 'components/bootstrap.html' %}
 </head>
 <body>
+<img id="s1mple" style="display: none" src="{{ url_for('static', path='photos/s1mple.jpg') }}">
 <div class="page-flex">
     <div class="page-flex-element">
         <img id="logo" src="{{ url_for('static', path='photos/dairy.png') }}">
@@ -23,18 +24,29 @@
                     <input type="email" class="form-control" id="email" placeholder="name@example.com">
                     <label for="email"><i class="bi bi-envelope icon-custom"></i>Email address</label>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="password" placeholder="password">
+                <div class="form-floating mb-3 flex-row">
+                    <input type="password" class="form-control pass_input" id="password" placeholder="password">
+                    <div class="eye" onclick="hideShow()">
+                        <i class="eye-btn bi bi-eye-slash"></i>
+                    </div>
                     <label for="password"><i class="bi bi-key icon-custom"></i>Password</label>
+                </div>
+                <div class="form-check" style="margin-bottom: 0.75rem">
+                    <input class="form-check-input remember-me" type="checkbox" value="" id="remember_me">
+                    <label class="form-check-label" for="remember_me">
+                        Remember me
+                    </label>
                 </div>
                 <div class="btn-custom">
                     <button onclick="login()" type="button" class="btn btn-login-custom text-light">Login</button>
                 </div>
             </div>
+            {% if usertype != 'admin' %}
             <div class="hadnt" id="footer">
-                <a class="link text-decoration-none" onclick="openRegisterPage($.cookie('type'))">I don't have an
+                <a class="link text-decoration-none" href="/{{usertype}}/register">I don't have an
                     account</a>
             </div>
+            {% endif %}
             <div class="change-type">
                 <a href="/">Choose user type</a>
             </div>
@@ -44,9 +56,3 @@
 </div>
 </body>
 </html>
-<script>
-    var type = $.cookie('type');
-    if (type === 'admin') {
-        document.getElementById('footer').innerHTML = '';
-    }
-</script>

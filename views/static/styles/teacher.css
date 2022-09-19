@@ -1,0 +1,87 @@
+.day-card {
+    padding: 0.5rem;
+    border: solid 1px black;
+    border-radius: 5px;
+    display: grid;
+}
+
+body {
+    counter-reset: sticky;
+}
+
+.group-icon {
+    border: 2px solid dimgrey;
+    border-radius: 5px;
+    color: dimgrey
+}
+
+h1, h5 {
+    margin-bottom: 0 !important;
+}
+
+th, td {
+    border: solid 1px black;
+    padding: 5px;
+}
+
+td, th {
+    text-align: center;
+}
+
+.tr {
+    height: 35px;
+}
+
+table {
+    overflow-x: scroll;
+}
+
+.square {
+    min-width: 35px;
+}
+
+.book-student-ns {
+    min-width: 245px;
+}
+
+th {
+    background-color: #e5e5e5;
+}
+
+/*.absolute {*/
+/*    position: absolute;*/
+/*    left: 274px;*/
+/*    border-top-width: 1px;*/
+/*    margin-top: -1px;*/
+/*    top: auto;*/
+/*}*/
+
+#modal-container {
+    position: absolute;
+    z-index: 10;
+    height: fit-content;
+    width: fit-content;
+}
+
+#mark-modal {
+    background: white;
+    width: 315px;
+    height: 175px;
+}
+
+p {
+    margin-bottom: 0 !important;
+}
+
+input:focus {
+    border: none;
+    min-height: 30px;
+}
+
+h5 {
+    line-height: 1.5;
+}
+
+.warning-icon {
+    color: orangered;
+}

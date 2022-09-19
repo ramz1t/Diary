@@ -1,5 +1,31 @@
-<div style="width: calc(100vw - var(--nav-width))">
-    <h1>Telegram</h1>
-    <h3>page with bot connection and notifications settings</h3>
+<div class="content-wrapper">
+    <h1>Telegram settings</h1>
+    <br>
+    {% if telegram %}
+    <div style="display: flex; flex-direction: column; width: 50%" class="grid-gap-1 white p-20 border-radius">
+        <div class="flex-row">
+            {% if mark %}
+            <input class="form-check-input" id="mark-check" type="checkbox" checked>
+            {% else %}
+            <input class="form-check-input" id="mark-check" type="checkbox">
+            {% endif%}
+        <label class="form-check-label" for="mark-check">Send notifications about new marks</label>
+        </div>
+        <div class="flex-row">
+            {% if hw %}
+            <input class="form-check-input" id="hw-check" type="checkbox" checked>
+            {% else %}
+            <input class="form-check-input" id="hw-check" type="checkbox">
+            {% endif%}
+        <label class="form-check-label" for="hw-check">Send notifications about new homework</label>
+        </div>
 
+        <button onclick="setPermissions()" style="width: 30%" class="diary-btn">Save</button>
+    </div>
+
+    {% else %}
+    <h3>You don't have telegram chat connected to this account</h3>
+    <br>
+    <p>Ask <a href="https://t.me/diary_service_bot" target="_blank">this bot</a> for help</p>
+    {% endif %}
 </div>
