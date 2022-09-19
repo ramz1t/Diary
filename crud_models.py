@@ -3,28 +3,19 @@ from typing import Optional
 
 import psycopg2
 
-<<<<<<< HEAD
-from data.data import Sessions, symbols
-=======
 from pydantic.dataclasses import dataclass
 
 from data.data import Sessions, symbols, DB_NAME, USERNAME, DB_HOST, DB_PASS
->>>>>>> leo
 from fastapi.responses import JSONResponse
 from fastapi import status
 from abc import abstractmethod, ABC
 
 from db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
-<<<<<<< HEAD
-    DBClassesRelationship, DBScheduleClass
-from logic.auth import get_password_hash
-=======
     DBClassesRelationship, DBScheduleClass, DBMark
 from func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
     alert_on_telegram, get_seasons_info, get_current_season
 from logic.auth import get_password_hash
 from contextlib import closing
->>>>>>> leo
 
 
 @dataclass
