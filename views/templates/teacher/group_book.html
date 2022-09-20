@@ -36,3 +36,23 @@
     </div>
     <br>
 </div>
+<div id="hw-container" class="flex-row align-center justify-center">
+    <div class="white border-radius grid grid-gap-1 p-20" style="min-width: 25%">
+        <div class="flex-row space-between">
+            <div class="flex-row">
+                <h3 id="hw-type">Add</h3>
+                <h3>homework</h3>
+            </div>
+            <i class="bi bi-x-lg" onclick="document.getElementById('hw-container').classList.add('none')"></i>
+        </div>
+        <div class="flex-row">
+            <p><i class="bi bi-calendar4-week icon-custom"></i>Date:</p>
+            <p id="date">2022/09/20</p>
+        </div>
+        <label for="homework"><i class="bi bi-pen icon-custom"></i>Homework</label>
+        <textarea type="text" id="homework"></textarea>
+        <label for="homework"><i class="bi bi-clock icon-custom"></i>Execution time</label>
+        <input type="text" id="exec_time">
+        <button class="diary-btn">Send</button>
+    </div>
+</div>

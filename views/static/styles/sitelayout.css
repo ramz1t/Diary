@@ -25,14 +25,13 @@ body {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    margin-right: 1rem;
 }
 
 .content-wrapper {
-    width: calc(100vw - var(--nav-width) - 20px);
-    padding-right: 30px;
+    width: calc(100vw - var(--nav-width) + 23px);
+    padding-right: 2rem;
     margin-top: 2rem;
-    padding-left: 25px;
+    padding-left: 2rem;
 }
 
 .page {

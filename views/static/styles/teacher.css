@@ -85,3 +85,12 @@ h5 {
 .warning-icon {
     color: orangered;
 }
+
+#hw-container {
+    position: absolute;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: rgba(76, 74, 74, 0.8);
+    padding-top: 7rem;
+    padding-bottom: 17rem;
+}

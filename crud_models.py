@@ -848,15 +848,23 @@ class Homework(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            if session.query(DBHomework).filter_by(db_group_id=body.group_id, class_date=body.date).first() is not None:
-                pass
-            group = Group().get(body.group_id)
+            group: DBGroup = Group().get(body.group_id)
+            session.add(group)
+            hw: DBHomework = group.homework.filter_by(db_group_id=body.group_id, class_date=body.date).first()
+            if hw is not None:
+                hw.time = get_current_time()
+                hw.body = body.value
+                hw.exec_time = body.exec_time
+                session.add(hw)
+                session.commit()    
+                return JSONResponse(status_code=status.HTTP_200_OK, content='hw edited')
             hw = DBHomework(class_date=body.date, time=get_current_time(), body=body.value, exec_time=body.exec_time, 
                             class_id=body.class_id)
             group.homework.append(hw)
             session.add(group)
             session.commit()
-            data = {'time': hw.time, 'body': f'New homework, <b>{hw.body}</b>', 'date': hw.time}
+            data = {'time': hw.time, 'body': f'New homework, <b>{hw.body}</b>', 'date': hw.time,
+                    'comment': ''}
             [alert_on_telegram(student.id, data, 'hw') for student in group.students]
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='homework created')
 
