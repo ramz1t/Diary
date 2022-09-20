@@ -64,7 +64,7 @@ class DBGroup(Base):
     students = relationship("DBStudent")
     school_db_id = Column(Integer, ForeignKey('schools.id'))
     classes = relationship("DBScheduleClass", lazy='dynamic')
-    # tasks: relationship(Task)
+    homework = relationship('DBHomework', lazy='dynamic')
 
 
 class DBSchool(Base):
@@ -135,3 +135,15 @@ class TelegramAuthorization(Base):
     diary_id = Column(Integer)
     mark = Column(Boolean)
     hw = Column(Boolean)
+
+
+class DBHomework(Base):
+    __tablename__ = 'homework'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    class_date = Column(String)
+    time = Column(String)
+    exec_time = Column(Integer)
+    db_group_id = Column(Integer, ForeignKey('groups.id'))
+    class_id = Column(Integer)
+    body = Column(String)

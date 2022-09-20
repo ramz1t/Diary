@@ -16,7 +16,9 @@ from crud_models import CRUDAdapter
 from crud_models import ApiBase
 from pages import PagesAdapter, ApiPage
 
-app = FastAPI()
+
+#don't forget to set debug=False on production server!!!
+app = FastAPI(debug=True)
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
 crudadapter = CRUDAdapter()

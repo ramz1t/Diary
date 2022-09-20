@@ -31,6 +31,6 @@ SEASON_3 = (SEASON_2[1] + timedelta(days=1), YEAR_END)
 
 
 DB_NAME = os.getenv('DB')
-USERNAME = os.getenv('USERNAME')
+USERNAME = os.getenv('DB_USERNAME')
 DB_PASS = os.getenv('DB_PASS')
 DB_HOST = os.getenv('DB_HOST')

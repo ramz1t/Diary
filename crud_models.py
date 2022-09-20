@@ -4,6 +4,7 @@ from typing import Optional
 import psycopg2
 
 from pydantic.dataclasses import dataclass
+from db_models import DBHomework
 
 from data.data import Sessions, symbols, DB_NAME, USERNAME, DB_HOST, DB_PASS
 from fastapi.responses import JSONResponse
@@ -46,6 +47,8 @@ class ApiBase:
                  mark: int = None,
                  comment: str = None,
                  season: str = None,
+                 class_id: int = None,
+                 exec_time: int = None,
                  *args, **kwargs):
         self.email = email
         self.old_password = old_password
@@ -73,6 +76,8 @@ class ApiBase:
         self.mark = mark
         self.comment = comment
         self.season = season
+        self.class_id = class_id
+        self.exec_time = exec_time
 
     email: Optional[str]
     password: Optional[str]
@@ -100,6 +105,8 @@ class ApiBase:
     student_id: Optional[int]
     comment: Optional[str]
     season: Optional[int]
+    class_id: Optional[int]
+    exec_time: Optional[int]
 
 
 class KeyBase(ABC):
@@ -837,6 +844,29 @@ class Mark(CRUDBase):
         return avg, warning
 
 
+class Homework(CRUDBase):
+
+    def create(self, body: ApiBase):
+        with Sessions() as session:
+            if session.query(DBHomework).filter_by(db_group_id=body.group_id, class_date=body.date).first() is not None:
+                pass
+            group = Group().get(body.group_id)
+            hw = DBHomework(class_date=body.date, time=get_current_time(), body=body.value, exec_time=body.exec_time, 
+                            class_id=body.class_id)
+            group.homework.append(hw)
+            session.add(group)
+            session.commit()
+            data = {'time': hw.time, 'body': f'New homework, <b>{hw.body}</b>', 'date': hw.time}
+            [alert_on_telegram(student.id, data, 'hw') for student in group.students]
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='homework created')
+
+    def get(self, body: ApiBase):
+        pass
+
+    def delete(self, id: int):
+        pass
+
+
 class CRUDAdapter:
     _clss = {'student': Student,
              'admin': Admin,
@@ -849,7 +879,8 @@ class CRUDAdapter:
              'cls': Cls,
              'scheduleclass': ScheduleClass,
              'book': Book,
-             'mark': Mark}
+             'mark': Mark,
+             'homework': Homework}
 
     @property
     def clss(self):
