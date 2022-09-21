@@ -96,11 +96,17 @@ async function changeEmail() {
 }
 
 async function loadPage(type, page) {
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
     let user_id = localStorage.getItem('user_id');
     if (page === 'load') {
-        page = localStorage.getItem(`${type}_page`);
+        page = params.page;
     } else {
-        localStorage.setItem(`${type}_page`, page);
+        var searchParams = new URLSearchParams(window.location.search)
+        searchParams.set("page", page);
+        var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+        history.pushState(null, '', newRelativePathQuery);
     }
     if (page !== null) {
         let data = {
