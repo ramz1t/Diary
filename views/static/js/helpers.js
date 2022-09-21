@@ -16,6 +16,8 @@ function executeScripts(page) {
         loadDiary('load');
     } else if (page === 'group_book') {
         openClassBook('load')
+    } else if (page === 'teacher_homework') {
+        load_hw('load')
     }
 }
 
@@ -109,12 +111,19 @@ async function loadPage(type, page) {
         history.pushState(null, '', newRelativePathQuery);
     }
     if (page !== null) {
+        const wrapper = document.getElementById('wrapper');
+        wrapper.innerHTML = `<div class="content-wrapper"><div class="flex-row"><h1>Loading...</h1>
+                            <div class="spinner-border text-primary" style="color: var(--diary-color)" role="status">
+                                <span class="visually-hidden">Loading...</span></div>
+                            </div>
+                            </div>
+                            `;
         let data = {
             'user_id': user_id
         };
         let response = await callServer(`/load_page/?page=${page}&type=${type}`, data, 'PATCH');
         if (response.ok) {
-            let wrapper = document.getElementById('wrapper');
+            wrapper.innerHTML = '';
             response = await response.text();
             wrapper.innerHTML = '';
             wrapper.innerHTML = response;

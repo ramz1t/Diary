@@ -116,6 +116,17 @@ def teaching_days_dates(days_indexes):
     return dates
 
 
+def eight_days(days_indexes):
+    days_indexes = set(days_indexes)
+    current_day = datetime.date.today()
+    k = 0
+    dates = []
+    while k < 8:
+        dates.append(k)
+        k += 1
+    return dates
+
+
 def get_day_index_from_date(date: str):
     date = make_datetime_from_str(date)
     return date.weekday()

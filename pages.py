@@ -269,6 +269,16 @@ class FinalMarksPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
+class TeacherHWPage(PageBase):
+    USERTYPE = 'teacher'
+    FILE_NAME = 'homework.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        groups = clss['cls'].get_classes_for_final_marks(current_user.id)
+        data = {'request': request, 'groups': groups, 'dates': []}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -286,7 +296,8 @@ class PagesAdapter:
               'student_profile_info': StudentInfoPage,
               'student_marks': MarksPage,
               'telegram': TelegramPage,
-              'final_marks': FinalMarksPage}
+              'final_marks': FinalMarksPage,
+              'teacher_homework': TeacherHWPage}
 
     @property
     def pages(self):

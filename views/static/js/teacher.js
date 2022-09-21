@@ -289,3 +289,122 @@ async function finalMark(value) {
         }
     })
 }
+
+function load_hw(class_id, group_id) {
+    if (class_id === 'load') {
+        class_id = localStorage.getItem('hw_class_id');
+        group_id = localStorage.getItem('hw_group_id');
+    } else {
+        localStorage.setItem('hw_class_id', class_id);
+        localStorage.setItem('hw_group_id', group_id);
+    }
+    if (class_id === null || group_id === null) {
+        return;
+    }
+    const btns = document.querySelectorAll('.round-border');
+    btns.forEach((btn) => {
+        btn.classList.remove('round-border');
+    });
+    const wrapper = document.getElementById('secondary-content');
+    wrapper.innerHTML = 'Loading...'
+    document.getElementById(`hw-btn-${class_id}`).classList.add('round-border');
+    callServer(`/class_homework?group_id=${class_id}`).then(async (response) => {
+        try {
+            checkCredentials(response.status);
+            await alertError(response);
+            const data = await response.json();
+            wrapper.innerHTML = '';
+            wrapper.dataset.classId = class_id;
+            wrapper.dataset.groupId = group_id;
+            data['hw'].forEach((hw) => {
+                wrapper.innerHTML += `
+                <div id="hw-${hw.id}" data-body="${hw.body}" data-time="${hw.exec_time}" data-date="${hw.class_date}" class="white border-radius p-20">
+                    <div style="padding-bottom: 10px" class="flex-row allign-center">
+                        <i class="bi bi-calendar-week"></i>
+                        <h6 class="gray">Date:</h6>
+                        <h6 class="gray">${hw.class_date}</h6>
+                    </div>
+                    <div class="flex-row space-between allign-center">
+                        <h3>${hw.body}</h3>
+                        <div class="flex-row allign-center">
+                            <div class="flex-row round-border p-5" style="gap: 0.2rem; margin-right: 15px;">
+                                <i class="bi bi-clock"></i>
+                                <p>${hw.exec_time}</p>
+                                <p>min.</p>
+                            </div>
+                            <div class="flex-row">
+                                <i onclick="openHwModal('edit', '${hw.id}')" class="bi bi-pencil"></i>
+                                <i onclick="deleteFromDB('${hw.id}', 'homework')" class="bi bi-trash3 red"></i>
+                            </div>  
+                        </div>
+                    </div>
+                </div>`;
+            });
+            const datesBox = document.getElementById('dates-flex');
+            const datesTitle = datesBox.children[0];
+            datesBox.innerHTML = ''
+            datesBox.appendChild(datesTitle);
+            data['dates'].forEach((date) => {
+                datesBox.innerHTML += `
+                <div id="date-${date}" onclick="document.getElementById('date-${date}').classList.toggle('selected-date')"
+                class="pointer white border-radius p-5 flex-row align-center">
+                    <p>${date}</p>
+                </div>
+                `;
+            })
+            if (data['hw'].length === 0) {
+                wrapper.innerHTML = '<h5>No homework yet</h5>';
+            }
+        } catch (error) {
+            
+        }
+    })
+}
+
+function openHwModal(type, hwId) {
+    const btn = document.querySelector('.round-border');
+    const cls = btn.children[0].innerText;
+    const subject = btn.children[2].innerText;
+    document.getElementById('group-name').innerHTML = `${cls} ${subject}`;
+    document.getElementById('hw-type').innerText = type.charAt(0).toUpperCase() + type.slice(1);;
+    if (type === 'edit') {
+        const hw = document.getElementById(`hw-${hwId}`);
+        console.log(hw.dataset.date)
+        document.getElementById(`date-${hw.dataset.date}`).classList.add('selected-date');
+        document.getElementById('homework').value = hw.dataset.body;
+        document.getElementById('exec_time').value = hw.dataset.time;
+    }
+    document.getElementById('hw-container').classList.remove('none');
+}
+
+function sendHomework() {
+    document.querySelectorAll('.selected-date').forEach((el) => {
+        const data = {
+            'value': document.getElementById('homework').value,
+            'exec_time': document.getElementById('exec_time').value,
+            'date': el.innerText,
+            'class_id': document.getElementById('secondary-content').dataset.classId,
+            'group_id': document.getElementById('secondary-content').dataset.groupId
+        }
+        callServer('/execute/homework/create', data, 'POST').then(async (response) => {
+            try {
+                checkCredentials(response.status);
+                await alertError(response);
+            } catch (error) {
+                
+            }
+        })
+    });
+    closeHwModal();
+    Swal.fire({
+        icon: 'success',
+        text: 'Saved!'
+    });
+    load_hw('load');            
+}
+
+function closeHwModal() {
+    document.getElementById('homework').value = '';
+    document.getElementById('exec_time').value = '';
+    document.getElementById('hw-container').classList.add('none');
+}

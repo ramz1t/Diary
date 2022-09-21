@@ -14,7 +14,7 @@ from abc import abstractmethod, ABC
 from db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass, DBMark
 from func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
-    alert_on_telegram, get_seasons_info, get_current_season
+    alert_on_telegram, get_seasons_info, get_current_season, eight_days
 from logic.auth import get_password_hash
 from contextlib import closing
 
@@ -540,7 +540,7 @@ class Cls(CRUDBase):
             classes_ids = session.query(DBClassesRelationship).filter_by(teacher_id=teacher_id).all()
             for cls in classes_ids:
                 res.append({'id': cls.id, 'name': Group().get(cls.group_id).name,
-                            'subject': Subject.get(cls.subject_id)})
+                            'subject': Subject.get(cls.subject_id), 'group_id': cls.group_id})
             return res
 
     @staticmethod
@@ -612,6 +612,20 @@ class ScheduleClass(CRUDBase):
                     day.append({'name': name.capitalize(), 'teacher': teacher.capitalize(), 'class_id': db_cls.id})
                 data.append(day)
         return data
+
+
+    @staticmethod
+    def get_eight_teacher_working_days(class_id):
+        with Sessions() as session:
+            res = []
+            for day_i in range(5):
+                classes = session.query(DBScheduleClass).filter_by(day_number=day_i, class_id=class_id).all()
+                for cls in classes:
+                    if cls is not None:
+                        res.append(day_i)
+            return eight_days(res)
+            
+
 
 
 class Book:
@@ -848,9 +862,10 @@ class Homework(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
+            print(body.class_id)
             group: DBGroup = Group().get(body.group_id)
             session.add(group)
-            hw: DBHomework = group.homework.filter_by(db_group_id=body.group_id, class_date=body.date).first()
+            hw: DBHomework = group.homework.filter_by(db_group_id=body.group_id, class_date=body.date, class_id=body.class_id).first()
             if hw is not None:
                 hw.time = get_current_time()
                 hw.body = body.value
@@ -871,8 +886,20 @@ class Homework(CRUDBase):
     def get(self, body: ApiBase):
         pass
 
-    def delete(self, id: int):
-        pass
+    def delete(id: int):
+        with Sessions() as session:
+            hw = session.query(DBHomework).filter_by(id=id).first()
+            session.delete(hw)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content='hw deleted')
+
+ 
+    @staticmethod
+    def group_hw(class_id: int):
+        with Sessions() as session:
+            homework: list[DBHomework] = session.query(DBHomework).filter_by(class_id=class_id).all()
+            homework = sorted(homework, key=lambda x: x.class_date, reverse=True)
+        return homework
 
 
 class CRUDAdapter:

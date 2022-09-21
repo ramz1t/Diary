@@ -1,4 +1,5 @@
 from datetime import timedelta
+from tokenize import group
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
@@ -207,6 +208,12 @@ def edit_tg_permissions(hw: bool, mark: bool, current_user=Depends(get_current_u
 @app.get('/final_marks')
 def get_final_marks_for_table(class_id: int):
     return crudadapter.clss['book'].get_final(class_id)
+
+
+@app.get('/class_homework')
+def get_class_homework(group_id: int):
+    return {'hw': crudadapter.clss['homework'].group_hw(group_id), 
+    'dates': crudadapter.clss['scheduleclass'].get_eight_teacher_working_days(group_id)[:-1] + [group_id]}
 
 
 if __name__ == '__main__':
