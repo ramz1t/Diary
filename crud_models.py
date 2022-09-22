@@ -738,8 +738,6 @@ class Book:
                     hw_on_date.append(hw_dict)
                 result[index] = hw_on_date
             result = collections.OrderedDict(sorted(result.items()))
-            print(result)
-            print(*result, sep='\n')
         return result
 
 

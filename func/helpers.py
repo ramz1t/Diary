@@ -120,14 +120,17 @@ def eight_days(days_indexes):
     days_indexes = list(set(days_indexes))
     current_day = datetime.date.today()
     cd_index = current_day.weekday()
-    start_index = cd_index
     dates = []
+    start_index = -1
     for index in days_indexes:
         if index > cd_index:
             current_day = current_day - datetime.timedelta(cd_index) + datetime.timedelta(index)
             start_index = days_indexes.index(index)
             break
     k = 0
+    if start_index == -1:
+        start_index = 0
+        current_day = current_day + datetime.timedelta(days=7 - current_day.weekday() + days_indexes[0])
     while k < 8:
         dates.append({'long': current_day.strftime('%Y-%m-%d'), 
                       'title': f"{current_day.strftime('%d.%m')}, {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][current_day.weekday()]}"})
@@ -136,8 +139,9 @@ def eight_days(days_indexes):
             start_index -= len(days_indexes)
             current_day += datetime.timedelta(days=7) - datetime.timedelta(current_day.weekday())
         current_day += datetime.timedelta(days=days_indexes[start_index]) - datetime.timedelta(current_day.weekday())
+        if current_day > YEAR_END:
+            break
         k += 1
-        
     return dates
 
 
