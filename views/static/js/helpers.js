@@ -49,6 +49,30 @@ function checkCredentials(status) {
 }
 
 
+function markComment(mark){
+    mark = mark.replaceAll("'", '"')
+    mark = JSON.parse(mark)
+    Swal.fire({
+        text: `Time: ${mark['time']}\n Class date: ${mark['date']}\n Comment: ${mark['comment']}`,
+        position: 'top',
+        confirmButtonColor: '#004d00',
+        title: 'Information'
+    })
+}
+
+
+function hmComment(hw_single){
+    hw_single = hw_single.replaceAll("'", '"')
+    hw_single = JSON.parse(hw_single)
+    Swal.fire({
+        text: hw_single['time'],
+        position: 'top',
+        confirmButtonColor: '#004d00',
+        title: 'Information'
+    })
+}
+
+
 
 async function changePassword() {
     var type = $.cookie("type");

@@ -9,7 +9,7 @@
                 {% for hw_single in hw[hw_date] %}
                     <div>
                         <h6 class="initials grey" style="margin-bottom: 10px">{{ hw_single.subject }}</h6>
-                        <div onclick="alert('{{hw_single.made}}')" class="flex-row space-between">
+                        <div onclick="hmComment(`{{hw_single.made}}`)" class="flex-row space-between">
                             <p>{{ hw_single.body }}</p>
                             <div class="flex-row" style="gap: 5px">
                                 <i class="bi bi-clock"></i>
