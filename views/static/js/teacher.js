@@ -137,6 +137,7 @@ function dismissMark() {
         document.getElementById('modal-container').classList.add('none');
         return;
     }
+    console.log(cell);
     if (cell.classList.contains('red')) {
         const oldMark = cell.innerText;
         cell.innerText = dbMark;

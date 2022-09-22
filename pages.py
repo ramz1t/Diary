@@ -279,6 +279,16 @@ class TeacherHWPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
+class StudentHWPage(PageBase):
+    USERTYPE = 'student'
+    FILE_NAME = 'homework.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        hw = clss['book'].student_hw(current_user.id)
+        data = {'request': request, 'hw': hw}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -297,7 +307,8 @@ class PagesAdapter:
               'student_marks': MarksPage,
               'telegram': TelegramPage,
               'final_marks': FinalMarksPage,
-              'teacher_homework': TeacherHWPage}
+              'teacher_homework': TeacherHWPage,
+              'student_hw': StudentHWPage}
 
     @property
     def pages(self):

@@ -1,0 +1,26 @@
+<div class="content-wrapper">
+    <h1>Homework</h1>
+    <br>
+    <div class="grid grid-gap-2 column-2">
+        {% for hw_date in hw %}
+        <div>
+            <h5 class="p-5">{{ hw_date }}</h5>
+            <div class="white border-radius p-20 grid grid-gap-half">
+                {% for hw_single in hw[hw_date] %}
+                    <div>
+                        <h6 class="initials grey" style="margin-bottom: 10px">{{ hw_single.subject }}</h6>
+                        <div onclick="alert('{{hw_single.made}}')" class="flex-row space-between">
+                            <p>{{ hw_single.body }}</p>
+                            <div class="flex-row" style="gap: 5px">
+                                <i class="bi bi-clock"></i>
+                                <p>{{ hw_single.exec_time }}</p>
+                                <p>min.</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div> 
+        </div>
+        {% endfor %}
+    </div>
+</div>

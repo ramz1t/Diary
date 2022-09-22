@@ -1,4 +1,6 @@
+import collections
 from random import randint
+from re import S
 from typing import Optional
 
 import psycopg2
@@ -672,13 +674,13 @@ class Book:
                 number = cls.class_number + 1
                 teacher = Teacher().get(db_cls.teacher_id)
                 subject = Subject.get(db_cls.subject_id)
+                hw = Homework().get(ApiBase(date=date, class_id=db_cls.id))
                 mark = Mark().get(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
                 if mark is not None:
                     mark = mark.value
                 else:
                     mark = ''
                 mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
-                hw = ''
                 day['classes'].append(
                     {'number': number, 'teacher': teacher, 'subject': subject, 'hw': hw, 'mark': mark,
                      'mark_time': mark_time})
@@ -717,6 +719,28 @@ class Book:
                                 'season_3_warning': season_3_warning, }
                 res['students'].append(student_data)
         return res
+
+    @staticmethod
+    def student_hw(student_id):
+        with Sessions() as session:
+            student: DBStudent = session.query(DBStudent).filter_by(id=student_id).first()
+            group: DBGroup = Group().get(student.group_id)
+            session.add(group)
+            hw_query = group.homework.all()
+            result: dict[DBHomework] = {}
+            for dct in hw_query:
+                result.setdefault(dct.class_date, []).append(dct)
+            for index in result:
+                hw_on_date = []
+                for hw in result[index]:
+                    subject = Subject.get(Cls.get_one(hw.class_id).subject_id)
+                    hw_dict = {'body': hw.body, 'exec_time': hw.exec_time, 'made': hw.time, 'subject': subject}
+                    hw_on_date.append(hw_dict)
+                result[index] = hw_on_date
+            result = collections.OrderedDict(sorted(result.items()))
+            print(result)
+            print(*result, sep='\n')
+        return result
 
 
 class Mark(CRUDBase):
@@ -884,7 +908,12 @@ class Homework(CRUDBase):
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='homework created')
 
     def get(self, body: ApiBase):
-        pass
+        with Sessions() as session:
+            hw: DBHomework = session.query(DBHomework).filter_by(class_id=body.class_id, class_date=body.date).first()
+            if hw is not None:
+                return {'body': hw.body, 'exec_time': hw.exec_time, 'made': hw.time}
+            else:
+                return {'body': None, 'exec_time': None, 'made': None}
 
     def delete(id: int):
         with Sessions() as session:
