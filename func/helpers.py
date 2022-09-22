@@ -117,13 +117,27 @@ def teaching_days_dates(days_indexes):
 
 
 def eight_days(days_indexes):
-    days_indexes = set(days_indexes)
+    days_indexes = list(set(days_indexes))
     current_day = datetime.date.today()
-    k = 0
+    cd_index = current_day.weekday()
+    start_index = cd_index
     dates = []
+    for index in days_indexes:
+        if index > cd_index:
+            current_day = current_day - datetime.timedelta(cd_index) + datetime.timedelta(index)
+            start_index = days_indexes.index(index)
+            break
+    k = 0
     while k < 8:
-        dates.append(k)
+        dates.append({'long': current_day.strftime('%Y-%m-%d'), 
+                      'title': f"{current_day.strftime('%d.%m')}, {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][current_day.weekday()]}"})
+        start_index += 1
+        if start_index == len(days_indexes):
+            start_index -= len(days_indexes)
+            current_day += datetime.timedelta(days=7) - datetime.timedelta(current_day.weekday())
+        current_day += datetime.timedelta(days=days_indexes[start_index]) - datetime.timedelta(current_day.weekday())
         k += 1
+        
     return dates
 
 

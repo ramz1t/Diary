@@ -213,7 +213,7 @@ def get_final_marks_for_table(class_id: int):
 @app.get('/class_homework')
 def get_class_homework(group_id: int):
     return {'hw': crudadapter.clss['homework'].group_hw(group_id), 
-    'dates': crudadapter.clss['scheduleclass'].get_eight_teacher_working_days(group_id)[:-1] + [group_id]}
+    'dates': crudadapter.clss['scheduleclass'].get_eight_teacher_working_days(group_id)}
 
 
 if __name__ == '__main__':

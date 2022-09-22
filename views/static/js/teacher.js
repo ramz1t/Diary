@@ -345,13 +345,14 @@ function load_hw(class_id, group_id) {
             datesBox.innerHTML = ''
             datesBox.appendChild(datesTitle);
             data['dates'].forEach((date) => {
+                console.log(date);
                 datesBox.innerHTML += `
-                <div id="date-${date}" onclick="document.getElementById('date-${date}').classList.toggle('selected-date')"
+                <div data-long-date="${date['long']}" id="date-${date['long']}" onclick="document.getElementById('date-${date['long']}').classList.toggle('selected-date')"
                 class="pointer white border-radius p-5 flex-row align-center">
-                    <p>${date}</p>
+                    <p>${date['title']}</p>
                 </div>
                 `;
-            })
+            });
             if (data['hw'].length === 0) {
                 wrapper.innerHTML = '<h5>No homework yet</h5>';
             }
@@ -382,7 +383,7 @@ function sendHomework() {
         const data = {
             'value': document.getElementById('homework').value,
             'exec_time': document.getElementById('exec_time').value,
-            'date': el.innerText,
+            'date': el.dataset.longDate,
             'class_id': document.getElementById('secondary-content').dataset.classId,
             'group_id': document.getElementById('secondary-content').dataset.groupId
         }
