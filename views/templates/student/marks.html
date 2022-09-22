@@ -21,8 +21,7 @@
             <div class="flex-row space-between justify-center">
                 <div class="flex-row grid-gap-half">
                     {% for mark in subject.seasons[season].marks %}
-<!--                    <p onclick="comment(`Time: {{mark.time}}\nClass date: {{mark.date}}\nComment: {{mark.comment}}`)"-->
-                    <p onclick="markComment(`{{mark}}`)"
+                    <p onclick="markComment(`{{mark}}`, 'top')"
                        class="mark-list-element p-5">{{mark.value}}</p>
                     {% endfor %}
                 </div>
