@@ -7,9 +7,9 @@
             <h5 class="p-5">{{ hw_date }}</h5>
             <div class="white border-radius p-20 grid grid-gap-half">
                 {% for hw_single in hw[hw_date] %}
-                    <div>
+                    <div onclick="hmComment(`{{hw_single}}`, 'top')">
                         <h6 class="initials grey" style="margin-bottom: 10px">{{ hw_single.subject }}</h6>
-                        <div onclick="hmComment(`{{hw_single}}`, 'top')" class="flex-row space-between">
+                        <div class="flex-row space-between">
                             <p>{{ hw_single.body }}</p>
                             <div class="flex-row" style="gap: 5px">
                                 <i class="bi bi-clock"></i>

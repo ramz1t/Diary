@@ -197,9 +197,9 @@ box-shadow: 4px 4px 16px 3px rgba(34, 60, 80, 0.2);
 }
 
 .wave-container > svg {
+    padding-top: 15px;
     position: relative;
     top: 2px;
-    right: 0.5px;
     transform-origin: bottom;
     animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }

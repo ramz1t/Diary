@@ -48,10 +48,15 @@ function checkCredentials(status) {
 
 }
 
+function convertToJSON(str) {
+    str = str.replaceAll("'", '"');
+    str = str.replaceAll('None', '""');
+    str = JSON.parse(str);
+    return str;
+}
 
 function markComment(mark, position){
-    mark = mark.replaceAll("'", '"')
-    mark = JSON.parse(mark)
+    mark = convertToJSON(mark)
     Swal.fire({
         text: `Time: ${mark['time']}\n Class date: ${mark['date']}\n Comment: ${mark['comment']}`,
         position: position,
@@ -61,11 +66,10 @@ function markComment(mark, position){
 }
 
 
-function hmComment(hw_single, position){
-    hw_single = hw_single.replaceAll("'", '"')
-    hw_single = JSON.parse(hw_single)
+function hmComment(hw, position){
+    hw = convertToJSON(hw)
     Swal.fire({
-        text: `Homework was added on ${hw_single['made']}`,
+        text: `Homework was added on ${hw['made']}`,
         position: position,
         confirmButtonColor: '#004d00',
         title: 'Information'

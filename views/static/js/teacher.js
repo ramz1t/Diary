@@ -178,7 +178,6 @@ function sendMark() {
         checkCredentials(response);
         const cell = document.getElementById(`${studentId}-${date}`);
         const data = JSON.parse(await response.json());
-        console.log(data['id']);
         const markId = data['id'];
         cell.dataset.dbMarkId = (markId).toString();
         cell.dataset.dbMark = (mark).toString();
@@ -272,7 +271,6 @@ window.addEventListener('click', (e) => {
 
 async function finalMark(value) {
     const modalWindow = document.getElementById('modal-container');
-    console.log(modalWindow);
     const season = modalWindow.dataset.season;
     const studentId = modalWindow.dataset.studentId;
     const classId = document.getElementById('marks-table').dataset.classId;
@@ -282,7 +280,6 @@ async function finalMark(value) {
         'mark': value,
         'subject_id': classId
     };
-    console.log(data);
     callServer(`/execute/mark/create_final_mark`, data, 'POST').then(async (response) => {
         try {
             checkCredentials(response.status)
@@ -349,7 +346,6 @@ function load_hw(class_id, group_id) {
             datesBox.innerHTML = ''
             datesBox.appendChild(datesTitle);
             data['dates'].forEach((date) => {
-                console.log(date);
                 datesBox.innerHTML += `
                 <div data-long-date="${date['long']}" id="date-${date['long']}" onclick="document.getElementById('date-${date['long']}').classList.toggle('selected-date')"
                 class="pointer white border-radius p-5 flex-row align-center">
@@ -374,7 +370,6 @@ function openHwModal(type, hwId) {
     document.getElementById('hw-type').innerText = type.charAt(0).toUpperCase() + type.slice(1);;
     if (type === 'edit') {
         const hw = document.getElementById(`hw-${hwId}`);
-        console.log(hw.dataset.date)
         document.getElementById(`date-${hw.dataset.date}`).classList.add('selected-date');
         document.getElementById('homework').value = hw.dataset.body;
         document.getElementById('exec_time').value = hw.dataset.time;
