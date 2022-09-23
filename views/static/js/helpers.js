@@ -58,7 +58,7 @@ function convertToJSON(str) {
 function markComment(mark, position){
     mark = convertToJSON(mark)
     Swal.fire({
-        text: `Time: ${mark['time']}\n Class date: ${mark['date']}\n Comment: ${mark['comment']}`,
+        html: `Time: ${mark['time']}<br> Class date: ${mark['date']}<br> Comment: ${mark['comment']}`,
         position: position,
         confirmButtonColor: '#004d00',
         title: 'Information'
