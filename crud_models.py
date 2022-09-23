@@ -652,7 +652,7 @@ class Book:
             res = {}
             group = session.query(DBGroup).filter_by(id=group_id).first()
             if group is not None:
-                dates = teaching_days_dates(Cls.get_teacher_classes_days(class_id))
+                dates = teaching_days_dates(set(Cls.get_teacher_classes_days(class_id)))
                 subject = Subject().get(Cls.get_one(class_id).subject_id)
                 res.update({'name': group.name, 'subject': subject, 'current_season': get_current_season(),
                             'students_count': 0, 'dates': dates, 'students': [],
@@ -683,6 +683,7 @@ class Book:
             day_i = get_day_index_from_date(date)
             schedule_classes = session.query(DBScheduleClass).filter_by(group_id=group.id, day_number=day_i).all()
             schedule_classes = sorted(schedule_classes, key=lambda x: x.class_number)
+            marks_clss = []
             for cls in schedule_classes:
                 db_cls = Cls.get_one(cls.class_id)
                 number = cls.class_number + 1
@@ -691,10 +692,15 @@ class Book:
                 hw = Homework().get(ApiBase(date=date, class_id=db_cls.id))
                 mark = Mark().get(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
                 if mark is not None:
-                    mark = mark.value
+                    if mark.class_id in marks_clss:
+                        mark = ''
+                    else:
+                        marks_clss.append(mark.class_id)
+                        mark = mark.value
+                        mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))   
                 else:
                     mark = ''
-                mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
+                    mark_time = ''
                 day['classes'].append(
                     {'number': number, 'teacher': teacher, 'subject': subject, 'hw': hw, 'mark': mark,
                      'mark_time': mark_time})

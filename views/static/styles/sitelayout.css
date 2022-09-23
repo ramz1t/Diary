@@ -232,3 +232,15 @@ box-shadow: 4px 4px 16px 3px rgba(34, 60, 80, 0.2);
 .instagram:hover{
     color: orange;
 }
+
+p {
+    margin-bottom: 0 !important;
+}
+
+.footer-column {
+    width: fit-content;
+}
+
+a {
+    text-decoration: none;
+}
