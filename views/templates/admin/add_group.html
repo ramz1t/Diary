@@ -26,9 +26,9 @@
             </thead>
             <tbody>
             {% for group in groups %}
-            <tr>
+            <tr id="{{group.id}}-row">
                 <th scope="row">{{ group.id }}</th>
-                <td>{{ group.name }}</td>
+                <td id="{{group.id}}-name">{{ group.name }}</td>
                 <td>{{ group.student_count }}</td>
                 <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ group.id }}', 'group')" class="bi bi-trash3"></i></td>
             </tr>

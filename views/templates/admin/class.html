@@ -15,6 +15,7 @@
             {% endfor %}
         </ul>
         <p style="display: none" id="lesson-{{ day_i }}-{{ lesson_i }}_id"></p>
+        <p style="display: none" id="lesson-{{ day_i }}-{{ lesson_i }}_db_id"></p>
     </div>
     <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')"
             class="submit-lesson unsaved">

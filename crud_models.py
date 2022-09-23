@@ -137,9 +137,13 @@ class StudentKey(KeyBase):
             surname = ' '.join([surname.capitalize() for surname in body.surname.split()])
             key = DBKey(value=value, name=name, surname=surname, group=body.group,
                         school_id=School.school_name(Admin().get(body).school_id))
+            key_dict = key.__dict__.copy()
             session.add(key)
             session.commit()
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
+            del key_dict['_sa_instance_state']
+            key_id = self.get_key(ApiBase(key=value)).id
+            key_dict['id'] = key_id
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=key_dict)
 
     def get_key(self, body: ApiBase):
         with Sessions() as session:
@@ -176,11 +180,14 @@ class TeacherKey(KeyBase):
     def add_key(self, body: ApiBase):
         with Sessions() as session:
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
-            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(),
-                               school_id=School.school_name(Admin().get(body).school_id))
+            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(), school_id=School.school_name(Admin().get(body).school_id))
+            key_dict = key.__dict__.copy()         
             session.add(key)
             session.commit()
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
+            del key_dict['_sa_instance_state']
+            key_id = self.get_key(ApiBase(value=value)).id
+            key_dict['id'] = key_id
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=key_dict)
 
     def get_key(self, body: ApiBase):
         with Sessions() as session:
@@ -452,19 +459,24 @@ class Group(CRUDBase):
 
     def upgrade(self, body: ApiBase):
         with Sessions() as session:
+            update_data = []
             school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             for group in school.groups:
-                for index, letter in enumerate(group.name, 0):
-                    if letter.isalpha():
-                        res = [group.name[:index], group.name[index:]]
+                for i, s in enumerate(group.name):
+                    print(s.isalpha())
+                    if s.isalpha():
+                        res = [group.name[:i], group.name[i:]]
+                        break
                 num = int(res[0]) + 1
                 if num > 11:
                     self.delete(group.id)
+                    update_data.append([{'id': group.id, 'name': group.name, 'type': 'delete'}])
                 else:
                     group.name = ''.join((str(num), res[1]))
                     session.add(group)
-                    session.commit()
-        return JSONResponse(status_code=status.HTTP_200_OK, content='upgraded')
+                    update_data.append([{'id': group.id, 'name': group.name, 'type': 'update'}])
+            session.commit()    
+        return JSONResponse(status_code=status.HTTP_200_OK, content=update_data)
 
 
 class Cls(CRUDBase):

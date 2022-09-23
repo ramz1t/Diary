@@ -103,6 +103,10 @@ body {
     grid-template-columns: repeat(4, 1fr);
 }
 
+.column-10 {
+    grid-template-columns: repeat(10, 1fr);
+}
+
 .space-between {
     justify-content: space-between;
 }
