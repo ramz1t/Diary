@@ -1,4 +1,6 @@
 import collections
+from distutils.archive_util import make_archive
+import json
 from random import randint
 from re import S
 from typing import Optional
@@ -751,7 +753,7 @@ class Mark(CRUDBase):
                 mark.value = body.mark
                 session.add(mark)
                 session.commit()
-                return JSONResponse(status_code=status.HTTP_200_OK, content='mark updated')
+                return JSONResponse(status_code=status.HTTP_200_OK, content=json.dumps({'id': mark.id}))
             mark = DBMark(date=body.date, value=body.mark, student_id=body.student_id, class_id=body.subject_id,
                           time=get_current_time(), comment=body.comment, season=body.season, final=False)
             session.add(mark)
@@ -759,7 +761,9 @@ class Mark(CRUDBase):
             data = {'time': mark.time, 'body': f'New mark, <b>{mark.value}</b>', 'date': mark.date,
                     'comment': mark.comment}
         alert_on_telegram(body.student_id, data, 'mark')
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark added successfully')
+        mark_dict = mark.__dict__
+        del mark_dict['_sa_instance_state']
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=json.dumps(mark_dict))
 
     @staticmethod
     def create_final_mark(body: ApiBase):

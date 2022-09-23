@@ -137,7 +137,6 @@ function dismissMark() {
         document.getElementById('modal-container').classList.add('none');
         return;
     }
-    console.log(cell);
     if (cell.classList.contains('red')) {
         const oldMark = cell.innerText;
         cell.innerText = dbMark;
@@ -174,10 +173,14 @@ function sendMark() {
         'date': date, 'mark': mark, 'student_id': studentId, 'subject_id': localStorage.getItem('book_class_id'),
         'comment': comment, 'season': season
     }
-    callServer('/execute/mark/create', data, 'POST').then((response) => {
+    callServer('/execute/mark/create', data, 'POST').then(async (response) => {
         const p = alertError(response);
         checkCredentials(response);
         const cell = document.getElementById(`${studentId}-${date}`);
+        const data = JSON.parse(await response.json());
+        console.log(data['id']);
+        const markId = data['id'];
+        cell.dataset.dbMarkId = (markId).toString();
         cell.dataset.dbMark = (mark).toString();
         document.getElementById('modal-container').classList.add('none');
         checkMarkEquality(cell, mark);
