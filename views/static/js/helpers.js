@@ -214,3 +214,8 @@ function hideShow() {
         }
     }
 }
+
+
+function downloadPrivacy() {
+    window.open(`/download_privacy`, '_blank')
+}
