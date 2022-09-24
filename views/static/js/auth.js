@@ -6,13 +6,17 @@ async function submit() {
     var key = document.getElementById("secretkey").value;
     if (email.search("@") === -1 || email === "") {
         Swal.fire({
-            text: 'Not Email'
+            text: 'Not Email',
+            position: 'top',
+            timer: 2000
         })
         return;
     }
     if (pass === "") {
         Swal.fire({
-            text: 'Not password'
+            text: 'Not password',
+            position: 'top',
+            timer: 2000
         })
         return;
     }
@@ -20,7 +24,9 @@ async function submit() {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Miss match'
+            text: 'Miss match',
+            position: 'top',
+            timer: 2000
         })
         return;
     }
@@ -41,7 +47,9 @@ async function submit() {
     if (response.ok) {
         Swal.fire({
             icon: 'success',
-            text: 'Created!'
+            text: 'Created!',
+            position: 'top',
+            timer: 2000
         })
     } else {
         await alertError(response);

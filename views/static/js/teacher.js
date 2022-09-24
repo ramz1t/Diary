@@ -398,7 +398,9 @@ function sendHomework() {
     closeHwModal();
     Swal.fire({
         icon: 'success',
-        text: 'Saved!'
+        text: 'Saved!',
+        position: 'top',
+        timer: 3000
     });
     load_hw('load');            
 }

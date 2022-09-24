@@ -75,7 +75,9 @@ async function setPermissions() {
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                text: 'Saved!'
+                text: 'Saved!',
+                position: 'top',
+                timer: 3000
             });
         }
         await alertError(response);
