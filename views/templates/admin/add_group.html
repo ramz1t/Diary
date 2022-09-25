@@ -30,7 +30,8 @@
                 <th scope="row">{{ group.id }}</th>
                 <td id="{{group.id}}-name">{{ group.name }}</td>
                 <td>{{ group.student_count }}</td>
-                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ group.id }}', 'group')" class="bi bi-trash3"></i></td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ group.id }}', 'group')"
+                       class="bi bi-trash3"></i></td>
             </tr>
             {% endfor %}
             </tbody>

@@ -9,7 +9,7 @@
             {% else %}
             <input class="form-check-input" id="mark-check" type="checkbox">
             {% endif%}
-        <label class="form-check-label" for="mark-check">Send notifications about new marks</label>
+            <label class="form-check-label" for="mark-check">Send notifications about new marks</label>
         </div>
         <div class="flex-row">
             {% if hw %}
@@ -17,7 +17,7 @@
             {% else %}
             <input class="form-check-input" id="hw-check" type="checkbox">
             {% endif%}
-        <label class="form-check-label" for="hw-check">Send notifications about new homework</label>
+            <label class="form-check-label" for="hw-check">Send notifications about new homework</label>
         </div>
 
         <button onclick="setPermissions()" style="width: 30%" class="diary-btn">Save</button>
@@ -30,12 +30,12 @@
         </div>
         <div class="card-custom p-10">
             <center>
-            <h4>You don't have telegram chat connected to this account.</h4><br>
-            <button onclick="location.href='https://t.me/diary_service_bot'"
-                    type="button" class="btn" style="background-color: #004200;
+                <h4>You don't have telegram chat connected to this account.</h4><br>
+                <button onclick="location.href='https://t.me/diary_service_bot'"
+                        type="button" class="btn" style="background-color: #004200;
                     color: white; width: 100%"><i class="bi bi-telegram"></i> Follow the button for help
-            </button>
-                </center>
+                </button>
+            </center>
         </div>
     </div>
     {% endif %}

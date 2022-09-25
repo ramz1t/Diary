@@ -36,7 +36,8 @@
                 <th scope="row">{{ sub.id }}</th>
                 <td>{{ sub.name }}</td>
                 <td>{{ sub.type }}</td>
-                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ sub.id }}', 'subject')" class="bi bi-trash3"></i></td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ sub.id }}', 'subject')"
+                       class="bi bi-trash3"></i></td>
             </tr>
             {% endfor %}
             </tbody>
