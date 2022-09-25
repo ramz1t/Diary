@@ -169,7 +169,7 @@ def download_file(groupname, current_user=Depends(get_current_user)):
     write_student_keys(groupname, current_user.email)
     return FileResponse(f'./files/{groupname}.txt',
                         media_type='application/octet-stream',
-                        filename=groupname)
+                        filename=f'{groupname}.txt')
 
 
 @app.get('/download_teachers')
@@ -177,7 +177,7 @@ def download_teachers(current_user=Depends(get_current_user)):
     write_teacher_keys(current_user.email)
     return FileResponse(f'./files/teachers.txt',
                         media_type='application/octet-stream',
-                        filename='teachers')
+                        filename='teachers.txt')
 
 
 @app.get('/weather_photo')
@@ -220,7 +220,7 @@ def get_class_homework(group_id: int):
 def download_privacy():
     return FileResponse(f'./files/Privacy.pdf',
                         media_type='application/octet-stream',
-                        filename='Privacy')
+                        filename='Privacy.pdf')
 
 
 if __name__ == '__main__':
