@@ -420,6 +420,13 @@ class Group(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
+            res = []
+            for i, s in enumerate(body.name):
+                    if s.isalpha():
+                        res = [body.name[:i], body.name[i:]]
+                        break
+            if len(res) < 2 or len(res[0]) == 0 or len(res[1]) == 0:
+                return JSONResponse(status_code=status.HTTP_406_NOT_ACCEPTABLE, content='Please write group name in format NumberLetter')
             if not session.query(DBGroup).filter_by(name=body.name,
                                                     school_db_id=Admin().get(body).school_id).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
@@ -463,7 +470,6 @@ class Group(CRUDBase):
             school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             for group in school.groups:
                 for i, s in enumerate(group.name):
-                    print(s.isalpha())
                     if s.isalpha():
                         res = [group.name[:i], group.name[i:]]
                         break
