@@ -24,9 +24,11 @@
                     {% endfor %}
                 </ul>
                 <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_id"></p>
-                <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_db_id">{{ data[day_i][lesson_i].class_id }}</p>
+                <p style="display: none" id="lesson-{{day_i}}-{{lesson_i}}_db_id">{{ data[day_i][lesson_i].class_id
+                    }}</p>
             </div>
-            <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')" class="submit-lesson">
+            <button id="btn-{{day_i}}-{{lesson_i}}" onclick="addLessonToDB('{{day_i}}', '{{lesson_i}}')"
+                    class="submit-lesson">
                 <i id="icon-{{day_i}}-{{lesson_i}}" class="bi bi-cloud-check"></i>
             </button>
         </div>

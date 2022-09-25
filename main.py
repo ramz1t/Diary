@@ -17,8 +17,7 @@ from crud_models import CRUDAdapter
 from crud_models import ApiBase
 from pages import PagesAdapter, ApiPage
 
-
-#don't forget to set debug=False on production server!!!
+# don't forget to set debug=False on production server!!!
 app = FastAPI(debug=True)
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
@@ -212,8 +211,8 @@ def get_final_marks_for_table(class_id: int):
 
 @app.get('/class_homework')
 def get_class_homework(group_id: int):
-    return {'hw': crudadapter.clss['homework'].group_hw(group_id), 
-    'dates': crudadapter.clss['scheduleclass'].get_eight_teacher_working_days(group_id)}
+    return {'hw': crudadapter.clss['homework'].group_hw(group_id),
+            'dates': crudadapter.clss['scheduleclass'].get_eight_teacher_working_days(group_id)}
 
 
 @app.get('/download_privacy')
