@@ -179,31 +179,32 @@ class TeacherKey(KeyBase):
 
     def add_key(self, body: ApiBase):
         with Sessions() as session:
+            school_id = session.query(DBAdmin).filter_by(id=body.user_id).first().school_id
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
-            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(), school_id=School.school_name(Admin().get(body).school_id))
+            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(), school_id=school_id)
             key_dict = key.__dict__.copy()         
             session.add(key)
             session.commit()
             del key_dict['_sa_instance_state']
-            key_id = self.get_key(ApiBase(value=value)).id
+            key_id = self.get_key(ApiBase(key=value)).id
             key_dict['id'] = key_id
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=key_dict)
 
     def get_key(self, body: ApiBase):
         with Sessions() as session:
-            key = session.query(DBTeacherKey).filter_by(value=body.value).first()
+            key = session.query(DBTeacherKey).filter_by(value=body.key).first()
             return key
 
-    def delete_key(self, body: ApiBase):
+    def delete_key(self, key: DBTeacherKey):
         with Sessions() as session:
-            key = session.query(DBTeacherKey).filter_by(value=body.value).first()
+            key = session.query(DBTeacherKey).filter_by(value=key.key).first()
             session.delete(key)
             session.commit()
 
     def get_teacher_keys(self, body: ApiBase):
         with Sessions() as session:
             keys = session.query(DBTeacherKey).filter_by(
-                school_id=School.school_name(Admin().get(body).school_id)).all()
+                school_id=Admin().get(body).school_id).all()
             return keys
 
     @staticmethod
@@ -308,11 +309,11 @@ class Teacher(CRUDBase, TeacherKey):
             key = self.get_key(body)
             if key is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong key')
-            if not session.query(Teacher).filter_by(email=body.email).first() is None:
+            if not session.query(DBTeacher).filter_by(email=body.email).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
             teacher = DBTeacher(email=body.email, password=get_password_hash(body.password), name=key.name,
                                 surname=key.surname, school_id=key.school_id)
-            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
+            school = session.query(DBSchool).filter_by(id=key.school_id).first()
             school.teachers.append(teacher)
             session.add(school)
             session.commit()
