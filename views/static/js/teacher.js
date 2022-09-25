@@ -398,7 +398,11 @@ function sendHomework() {
     closeHwModal();
     Swal.fire({
         icon: 'success',
-        text: 'Saved!'
+        text: 'Saved!',
+        position: 'top',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
     });
     load_hw('load');            
 }

@@ -147,7 +147,11 @@ async function addClass() {
         Swal.fire({
             icon: 'question',
             title: 'Sorry',
-            text: 'not enough info'
+            text: 'not enough info',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
         })
         return;
     }
@@ -191,7 +195,11 @@ async function addLesson(day_number) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'last lesson not saved'
+                text: 'last lesson not saved',
+                position: 'top',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
             return;
         }
@@ -241,7 +249,11 @@ async function addLessonToDB(day_i, lesson_i) {
         Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'choose lesson'
+                text: 'choose lesson',
+                position: 'top',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
         return;
     }
@@ -322,7 +334,11 @@ async function linkSchool(school_id, school_number) {
         Swal.fire({
             icon: 'success',
             title: 'Done',
-            text: 'Linked'
+            text: 'Linked',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
         })
         window.location.reload(true);
     } else {

@@ -216,5 +216,12 @@ def get_class_homework(group_id: int):
     'dates': crudadapter.clss['scheduleclass'].get_eight_teacher_working_days(group_id)}
 
 
+@app.get('/download_privacy')
+def download_privacy():
+    return FileResponse(f'./files/Privacy.pdf',
+                        media_type='application/octet-stream',
+                        filename='Privacy')
+
+
 if __name__ == '__main__':
     uvicorn.run("__main__:app", host='127.0.0.1', port=8000, reload=True)

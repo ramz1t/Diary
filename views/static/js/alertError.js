@@ -1,10 +1,14 @@
 async function alertError(response) {
     if (!response.ok) {
-        // alert(await response.text());
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: await response.text()
+            text: await response.text(),
+            position: 'top',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            background:'none'
         })
         throw new Error(`error ${response.status}`)
     }
