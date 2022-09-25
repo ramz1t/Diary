@@ -19,42 +19,41 @@
                 <p class="text-center fs-3 fw-bolder">Register ({{ usertype }})</p>
                 <div class="card-custom">
                     <div class="form-floating mb-3">
-                        <form>
-                            <label for="email" class="emailBox"><i class="bi bi-envelope icon-custom"></i> Email address
+                        <form class="emailBox">
+                            <label for="email"><i class="bi bi-envelope icon-custom"></i> Email address</label>
                                 <input type="email" id="email" class="form-control" placeholder="name@example.com">
                                 <span class="emailText"></span>
-                            </label>
                         </form>
                     </div>
                     <div class="form-floating mb-3">
-                        <form>
-                            <label for="password" class="passBox"><i class="bi bi-key icon-custom"></i> Password
+                        <form class="passBox">
+                            <label for="password"><i class="bi bi-key icon-custom"></i> Password</label>
                                 <input type="password" class="pass_input form-control" id="password"
                                        placeholder="password">
+                                    <div class="eye" onclick="hideShow()">
+                                        <i class="eye-btn bi bi-eye-slash"></i>
+                                    </div>
                                 <span class="passText"></span>
-                            </label>
                         </form>
                     </div>
                     <div class="form-floating mb-3">
-                        <form>
-                            <label for="repeatpassword" class="subPassBox"><i class="bi bi-key icon-custom"></i> Repeat
-                                password
+                        <form class="subPassBox">
+                            <label for="repeatpassword"><i class="bi bi-key icon-custom"></i> Repeat
+                                password</label>
                                 <input type="password" class="pass_input form-control" id="repeatpassword"
                                        placeholder="password">
-                                <span class="subPassText"></span>
-                            </label>
+                                    <div class="eye" onclick="hideShow()">
+                                        <i class="eye-btn bi bi-eye-slash"></i>
+                                    </div>
+                                <span class="subPassText"></span> 
                         </form>
                     </div>
                     <div class="form-floating mb-3">
-                        <form>
-                            <label for="secretkey" class="secretKeyBox"><i class="bi bi-link icon-custom"></i> Enter
-                                secretkey
+                        <form class="secretKeyBox">
+                            <label for="secretkey"><i class="bi bi-link icon-custom"></i> Enter
+                                secretkey</label>
                                 <input type="password" class="form-control" id="secretkey" placeholder="example">
-                                <div class="eye" onclick="hideShow()">
-                                    <i class="eye-btn bi bi-eye-slash"></i>
-                                </div>
                                 <span class="secretKeyText"></span>
-                            </label>
                         </form>
                     </div>
                     <!--            <div class="card-custom">-->

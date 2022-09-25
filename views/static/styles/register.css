@@ -58,35 +58,40 @@ body{
 
 
 .emailText,
-.passText{
+.passText,
+.subPassText{
 	display: block;
 	font-weight: 300;
 	font-style: italic;
 	padding: 5px;
 }
-label.valid .emailText,
-label.valid .passText,
-label.valid .subPassText{
+form.valid .emailText,
+form.valid .passText,
+form.valid .subPassText{
 	color: #00ff00;
 }
-label.invalid .emailText,
-label.invalid .passText,
-label.invalid .subPassText{
+form.invalid .emailText,
+form.invalid .passText,
+form.invalid .subPassText{
 	color: #f00;
 }
-label.valid::before,
-label.invalid::before{
+form.valid::before,
+form.invalid::before{
 	content: "";
 	position: absolute;
 	width: 24px;
 	height: 24px;
-	top: 18px;
+	top: 36px;
 	right: 5px;
 	z-index: 100;
 }
-label.valid::before{
+form.valid::before{
 	background: url(../photos/check.svg)no-repeat center /cover;
 }
-label.invalid::before{
+form.invalid::before{
 	background: url(../photos/error.png)no-repeat center /cover;
+}
+
+label {
+    padding-bottom: 5px;
 }
