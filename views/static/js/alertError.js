@@ -8,7 +8,6 @@ async function alertError(response) {
             timer: 3000,
             timerProgressBar: true,
             showConfirmButton: false,
-            background:'none'
         })
         throw new Error(`error ${response.status}`)
     }
