@@ -77,7 +77,9 @@ async function setPermissions() {
                 icon: 'success',
                 text: 'Saved!',
                 position: 'top',
-                timer: 3000
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             });
         }
         await alertError(response);

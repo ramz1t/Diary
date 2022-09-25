@@ -400,7 +400,9 @@ function sendHomework() {
         icon: 'success',
         text: 'Saved!',
         position: 'top',
-        timer: 3000
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
     });
     load_hw('load');            
 }

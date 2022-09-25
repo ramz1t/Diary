@@ -149,7 +149,9 @@ async function addClass() {
             title: 'Sorry',
             text: 'not enough info',
             position: 'top',
-            timer: 2000
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
         })
         return;
     }
@@ -195,7 +197,9 @@ async function addLesson(day_number) {
                 title: 'Oops...',
                 text: 'last lesson not saved',
                 position: 'top',
-                timer: 2000
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
             return;
         }
@@ -247,7 +251,9 @@ async function addLessonToDB(day_i, lesson_i) {
                 title: 'Oops...',
                 text: 'choose lesson',
                 position: 'top',
-                timer: 2000
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
         return;
     }
@@ -330,7 +336,9 @@ async function linkSchool(school_id, school_number) {
             title: 'Done',
             text: 'Linked',
             position: 'top',
-            timer: 2000
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
         })
         window.location.reload(true);
     } else {

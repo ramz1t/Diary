@@ -49,7 +49,8 @@ async function submit() {
             icon: 'success',
             text: 'Created!',
             position: 'top',
-            timer: 2000
+            timer: 2000,
+            showConfirmButton: false,
         })
     } else {
         await alertError(response);
