@@ -7,6 +7,8 @@ from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.responses import JSONResponse, RedirectResponse
+from func.helpers import change_user_password, change_user_email
+from models.change import ApiChangeEmail, ApiChangePassword
 
 from files.export import write_student_keys, write_teacher_keys
 from func.helpers import check_date, make_dates_for_week, get_title, teaching_days_dates, set_permissions
@@ -150,14 +152,14 @@ def delete_from_db(id: int, model: str):
 
 ''' DB urls'''
 
-# @app.post("/change_user_password")
-# def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
-#     return change_user_password(email=current_user.email, body=body)
-#
-#
-# @app.post('/change_user_email')
-# def change_email(body: ApiChangeEmail):
-#     return change_user_email(body=body)
+@app.post("/change_user_password")
+def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
+    return change_user_password(current_user, body=body)
+
+
+@app.post('/change_user_email')
+def change_email(body: ApiChangeEmail, current_user=Depends(get_current_user)):
+    return change_user_email(current_user, body=body)
 
 
 ''' download urls'''

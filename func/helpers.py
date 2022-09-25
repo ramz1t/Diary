@@ -1,6 +1,7 @@
 import datetime
 import os
 from contextlib import closing
+from logic.auth import get_password_hash, verify_password
 from models.token import TokenData
 import psycopg2
 import requests
@@ -15,31 +16,26 @@ from datetime import date
 from db_models import TelegramAuthorization
 from func.db_user_find import get_user_by_email
 from logic.auth import SECRET_KEY, ALGORITHM
-# from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
+from models.change import ApiChangePassword, ApiChangeEmail
 from data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, DB_HOST, DB_PASS, SEASON_1, \
     SEASON_2, SEASON_3
 
-# def change_user_password(email, body: ApiChangePassword):
-#     with Sessions() as session:
-#         user = get_user_by_email(email=email, type=body.type)
-#         if not verify_password(plain_password=body.old_password, hashed_password=user.password):
-#             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old password is not correct')
-#         user.password = get_password_hash(body.new_password)
-#         session.add(user)
-#         session.commit()
-#         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
-#
-#
-# def change_user_email(body: ApiChangeEmail):
-#     with Sessions() as session:
-#         user = get_user_by_email(email=body.email, type=body.type)
-#         if user.email == body.email:
-#             user.email = body.new_email
-#             session.add(user)
-#             session.commit()
-#             return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')
-#         else:
-#             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old email is not correct')
+def change_user_password(current_user, body: ApiChangePassword):
+    with Sessions() as session:
+        if current_user.password != get_password_hash(body.new_pass):
+            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong password')
+        current_user.password = get_password_hash(body)
+        session.add(current_user)
+        session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
+
+
+def change_user_email(current_user, body: ApiChangeEmail):
+    with Sessions() as session:
+        current_user.email = body.new_email
+        session.add(current_user)
+        session.commit()
+    return JSONResponse(status_code=status.HTTP_200_OK, content='updated')
 
 
 def verify_user_type(usertype, request) -> bool:

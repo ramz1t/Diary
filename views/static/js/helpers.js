@@ -105,9 +105,8 @@ async function changePassword() {
 }
 
 async function changeEmail() {
-    var type = $.cookie("type");
+    var type = localStorage.getItem('type');
     var new_email = document.getElementById('New_email').value;
-    var old_email = document.getElementById('Old_email').value;
     var response = await fetch('/change_user_email', {
         method: 'POST',
         headers: {
@@ -117,12 +116,21 @@ async function changeEmail() {
         body: JSON.stringify({
             'type': type,
             'new_email': new_email,
-            'old_email': old_email
         })
 
     });
-    var text = await response.json();
-    alert(text);
+    if (response.ok) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Upgraded',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        })
+    } else {
+        await alertError(response)
+    }
 }
 
 async function loadPage(type, page) {
