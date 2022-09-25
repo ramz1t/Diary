@@ -166,7 +166,7 @@ def delete_from_db(id: int, model: str):
 
 @app.get('/download_group/{groupname}')
 def download_file(groupname, current_user=Depends(get_current_user)):
-    write_student_keys(groupname, current_user.email)
+    write_student_keys(groupname, current_user.id)
     return FileResponse(f'./files/{groupname}.txt',
                         media_type='application/octet-stream',
                         filename=f'{groupname}.txt')
@@ -174,7 +174,7 @@ def download_file(groupname, current_user=Depends(get_current_user)):
 
 @app.get('/download_teachers')
 def download_teachers(current_user=Depends(get_current_user)):
-    write_teacher_keys(current_user.email)
+    write_teacher_keys(current_user.id)
     return FileResponse(f'./files/teachers.txt',
                         media_type='application/octet-stream',
                         filename='teachers.txt')

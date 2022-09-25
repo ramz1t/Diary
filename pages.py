@@ -46,7 +46,7 @@ class AddStudentKeyPage(PageBase):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
         groups = clss['group'].get_groups(self, body)
-        keys = clss['studentkey'].get_student_keys(self, body)
+        keys = clss['studentkey'].get_student_keys(self, current_user.id)
         data = {"request": request, "groups": groups, "keys": keys}
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
@@ -59,7 +59,7 @@ class ExportStudentKeysPage(PageBase):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
-        keys_for_export = clss['student'].get_student_keys_for_export(self, body)
+        keys_for_export = clss['student'].get_student_keys_for_export(self, current_user.id)
         data = {"request": request, "keys_for_export": keys_for_export}
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 

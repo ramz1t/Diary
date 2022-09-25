@@ -132,11 +132,12 @@ class StudentKey(KeyBase):
 
     def add_key(self, body: ApiBase):
         with Sessions() as session:
+            school_id = session.query(DBAdmin).filter_by(id=body.user_id).first().school_id
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
             name = ' '.join([name.capitalize() for name in body.name.split()])
             surname = ' '.join([surname.capitalize() for surname in body.surname.split()])
             key = DBKey(value=value, name=name, surname=surname, group=body.group,
-                        school_id=School.school_name(Admin().get(body).school_id))
+                        school_id=school_id)
             key_dict = key.__dict__.copy()
             session.add(key)
             session.commit()
@@ -156,15 +157,17 @@ class StudentKey(KeyBase):
             session.delete(key)
             session.commit()
 
-    def get_student_keys(self, body: ApiBase):
+    def get_student_keys(self, admin_id: int):
         with Sessions() as session:
-            keys = session.query(DBKey).filter_by(school_id=School.school_name(Admin().get(body).school_id)).all()
+            school_id = Admin().get(ApiBase(user_id=admin_id)).school_id
+            keys = session.query(DBKey).filter_by(school_id=school_id).all()
             return keys
 
-    def get_student_keys_for_export(self, body: ApiBase):
+    def get_student_keys_for_export(self, admin_id: int):
         with Sessions() as session:
+            school_id = Admin().get(ApiBase(user_id=admin_id)).school_id
             keys_for_export = session.query(DBKey).filter_by(
-                school_id=School.school_name(Admin().get(body).school_id)).all()
+                school_id=school_id).all()
             return set([key.group for key in keys_for_export])
 
     @staticmethod

@@ -10,7 +10,7 @@
                 {% for i in range(day.last_lesson_number) %}
                 <div style="min-height: 40px" class="flex-row allign-center p-5 space-between">
                     {% if day.lessons[i]|length > 1 %}
-                    <div class="flex-row">
+                    <div class="flex-row allign-center">
                         <h5>{{day.lessons[i].lesson_number}}</h5>
                         <h5>{{day.lessons[i].subject_name}}</h5>
                         <h5 class="group-icon">{{day.lessons[i].group_name}}</h5>
