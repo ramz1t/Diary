@@ -43,7 +43,7 @@ Login | Password
 ### Teachers:
 Login | Password
 ---- | ----
-surname_from_teachers_list@teacher1534.com | 12345678
+surname_from_teachers_list@teacher1534.com | Teacher12345678
 
 > Babenko, Gusev, Antonova, Shumilov, Kuntina, Leonteva, Malygin, Chernov, Chirikov, Pchelintsev, Sharapova, Marchenkova
 > 
@@ -52,7 +52,7 @@ surname_from_teachers_list@teacher1534.com | 12345678
 ###  Students: 
 Login | Password
 ---- | ----
-any_surname_from_class_list@student.com | 12345678
+any_surname_from_class_list@student.com | Student12345678
 
 > Log in to any teacher account and open classbook, chose any surname from the list
 >
