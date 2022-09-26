@@ -1,5 +1,7 @@
 # Diary
 
+[ИНСТРУКЦИЯ НА РУССКОМ][ru]
+
 URL: [school-diary-service.herokuapp.com][diary]
 
 This project is a school diary web service. 
@@ -89,3 +91,4 @@ We hope that you will like this project :) We are still young and ready to get b
 [db_url]:<www.ru>
 [diary]:<school-diary-service.herokuapp.con>
 [bot]:<diary-telegram.herokuapp.com>
+[ru]:<https://disk.yandex.ru/i/XYaiJbFHJCFU9g>
