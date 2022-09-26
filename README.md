@@ -2,7 +2,7 @@
 
 [ИНСТРУКЦИЯ НА РУССКОМ][ru]
 
-URL: [school-diary-service.herokuapp.com][diary]
+URL: [https://school-diary-service.herokuapp.com][diary]
 
 This project is a school diary web service. 
 
