@@ -81,7 +81,7 @@ That's it ✅ Now you can reload the web page and select which notifications you
 - Add .env (*Warning! For telegram alerts add your bot token, same is for posgresql, the only thing which is available is HASH secret key*)
 - Make DB migrations `alembic upgrade head` or [download our base][db_url]
 - Start the server!
-[Download already existing db][db]
+- [Download already existing db][db]
 
 
 ## P.S
