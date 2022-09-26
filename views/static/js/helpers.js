@@ -105,32 +105,59 @@ async function changePassword() {
 }
 
 async function changeEmail() {
-    var type = localStorage.getItem('type');
-    var new_email = document.getElementById('New_email').value;
-    var response = await fetch('/change_user_email', {
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
         },
-        body: JSON.stringify({
-            'type': type,
-            'new_email': new_email,
-        })
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: 'Do yout really want to change email?',
+        text: "You can change it back later if you want",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, change',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed){
+            var type = localStorage.getItem('type');
+            var new_email = document.getElementById('New_email').value;
+            var response = await fetch('/change_user_email', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'type': type,
+                    'new_email': new_email,
+                })
 
-    });
-    if (response.ok) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Upgraded',
-            position: 'top',
-            timer: 2000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-        })
-    } else {
-        await alertError(response)
-    }
+            });
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Upgraded',
+                    position: 'top',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+            } else {
+                await alertError(response)
+            }
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Email is same as before',
+                'error'
+            )
+        }
+    })
 }
 
 async function loadPage(type, page) {
