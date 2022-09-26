@@ -1,7 +1,17 @@
 async function addGroup() {
-    // form check
     let user_id = localStorage.getItem('user_id');
     let groupName = document.getElementById("groupname").value;
+    if (groupName === '') {
+        Swal.fire({
+            icon: 'question',
+            title: 'Group name can\'t be empty',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+        return;
+    }
     let data = {
         'name': groupName,
         'user_id': user_id
@@ -16,11 +26,18 @@ async function addGroup() {
 }
 
 async function addStudentKey() {
-    // form check
     let user_id = localStorage.getItem('user_id');
     let name = document.getElementById('name').value.trim();
     let surname = document.getElementById('surname').value.trim();
-    if (document.querySelector('input[name="group"]:checked') == null) {
+    if (document.querySelector('input[name="group"]:checked') == null || name === '' || surname === '') {
+        Swal.fire({
+            icon: 'question',
+            title: 'Not enough info',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
         return;
     }
     let group = document.querySelector('input[name="group"]:checked').value;
@@ -52,10 +69,20 @@ async function addStudentKey() {
 }
 
 async function addTeacherKey() {
-    // form check
     let user_id = localStorage.getItem('user_id');
     let name = document.getElementById('name').value.trim();
     let surname = document.getElementById('surname').value.trim();
+    if (name === '' || surname === '') {
+        Swal.fire({
+            icon: 'question',
+            title: 'Not enough info',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+        return;
+    }
     let data = {
         'user_id': user_id,
         'name': name,
@@ -90,10 +117,17 @@ async function downloadTeachers() {
 }
 
 async function addSubject() {
-    // form check
     let user_id = localStorage.getItem('user_id');
     let subject = document.getElementById('subject').value;
-    if (document.querySelector('input[name="type"]:checked') == null) {
+    if (document.querySelector('input[name="type"]:checked') == null || subject === '') {
+        Swal.fire({
+            icon: 'question',
+            title: 'Not enough info',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
         return;
     }
     let lesson_type = document.querySelector('input[name="type"]:checked').value;
@@ -303,9 +337,19 @@ async function deleteLesson(day_i) {
 }
 
 async function searchSchool() {
-    // form check
     let name = document.getElementById('name').value;
     let city = document.getElementById('city').value;
+    if (name === '' || city === '') {
+        Swal.fire({
+            icon: 'question',
+            title: 'Not enough info',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+        return
+    }
     let data = {
         'name': name,
         'city': city
@@ -320,31 +364,53 @@ async function searchSchool() {
 }
 
 async function linkSchool(school_id, school_number) {
-    // window.confirm to sweetalert
-    if (!window.confirm(`Are you sure to link profile to school ${school_number}?`)) {
-        return;
-    }
-    let user_id = localStorage.getItem('user_id');
-    let data = {
-        'user_id': user_id,
-        'school_id': school_id
-    };
-    let response = await callServer('/execute/admin/link_school', data, 'POST');
-    if (response.ok) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Done',
-            text: 'Linked',
-            position: 'top',
-            timer: 2000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-        })
-        window.location.reload(true);
-    } else {
-        checkCredentials(response.status);
-        await alertError(response);
-    }
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: `Are you sure to link profile to school ${school_number}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, connect',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            let user_id = localStorage.getItem('user_id');
+            let data = {
+                'user_id': user_id,
+                'school_id': school_id
+            };
+            let response = await callServer('/execute/admin/link_school', data, 'POST');
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Done',
+                    text: 'Linked',
+                    position: 'top',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+                window.location.reload(true);
+            } else {
+                checkCredentials(response.status);
+                await alertError(response);
+            }
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Nothing happeded',
+                'error'
+            )
+        }
+    })
 }
 
 function upgradeGroups() {
@@ -358,7 +424,7 @@ function upgradeGroups() {
     })
     swalWithBootstrapButtons.fire({
         title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        text: "There is no 12th grade, current 11th grade will be deleted. You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, level up classes',

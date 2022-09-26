@@ -757,6 +757,7 @@ class Book:
             group: DBGroup = Group().get(student.group_id)
             session.add(group)
             hw_query = group.homework.all()
+            print(hw_query[0].class_date)
             result: dict[DBHomework] = {}
             for dct in hw_query:
                 result.setdefault(dct.class_date, []).append(dct)
@@ -767,7 +768,7 @@ class Book:
                     hw_dict = {'body': hw.body, 'exec_time': hw.exec_time, 'made': hw.time, 'subject': subject}
                     hw_on_date.append(hw_dict)
                 result[index] = hw_on_date
-            result = collections.OrderedDict(sorted(result.items()))
+            result = collections.OrderedDict(sorted(result.items(), reverse=True))
         return result
 
 
