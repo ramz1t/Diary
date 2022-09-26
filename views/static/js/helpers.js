@@ -79,6 +79,25 @@ function hmComment(hw, position){
 
 
 async function changePassword() {
+    var new_pass = document.getElementById("New_pass").value;
+    var old_pass = document.getElementById("Old_pass").value;
+    var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
+    if (new_pass === '' || old_pass === '' || repeat_new_pass === '') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Not enough info',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+        return;
+    }
+    if (new_pass !== repeat_new_pass) {
+        document.getElementById("New_pass").classList.add('is-invalid');
+        document.getElementById("Repeat_new_pass").classList.add('is-invalid');
+        return;
+    }
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: 'btn btn-success',
@@ -98,14 +117,6 @@ async function changePassword() {
     }).then(async (result) => {
         if (result.isConfirmed){
             var type = localStorage.getItem('type');
-            var new_pass = document.getElementById("New_pass").value;
-            var old_pass = document.getElementById("Old_pass").value;
-            var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
-            if (new_pass !== repeat_new_pass) {
-                document.getElementById("New_pass").classList.add('is-invalid');
-                document.getElementById("Repeat_new_pass").classList.add('is-invalid');
-                return;
-            }
             var response = await fetch('/change_user_password', {
                 method: 'POST',
                 headers: {
@@ -142,6 +153,19 @@ async function changePassword() {
 }
 
 async function changeEmail() {
+    var new_email = document.getElementById('New_email').value;
+    console.log(new_email)
+    if (new_email === '') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Please write new email',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+        return;
+    }
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: 'btn btn-success',
@@ -161,7 +185,6 @@ async function changeEmail() {
     }).then(async (result) => {
         if (result.isConfirmed){
             var type = localStorage.getItem('type');
-            var new_email = document.getElementById('New_email').value;
             var response = await fetch('/change_user_email', {
                 method: 'POST',
                 headers: {
