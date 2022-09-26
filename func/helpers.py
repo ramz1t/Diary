@@ -1,6 +1,7 @@
 import datetime
 import os
 from contextlib import closing
+from logic.auth import create_access_token
 from logic.auth import get_password_hash, verify_password
 from models.token import TokenData
 import psycopg2
@@ -11,7 +12,7 @@ from fastapi.security.utils import get_authorization_scheme_param
 from jose import jwt, JWTError
 from starlette import status
 from starlette.responses import JSONResponse
-from datetime import date
+from datetime import date, timedelta
 
 from db_models import TelegramAuthorization
 from func.db_user_find import get_user_by_email
@@ -22,7 +23,7 @@ from data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, 
 
 def change_user_password(current_user, body: ApiChangePassword):
     with Sessions() as session:
-        if current_user.password != get_password_hash(body.new_pass):
+        if not verify_password(body.new_pass, current_user.password):
             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong password')
         current_user.password = get_password_hash(body)
         session.add(current_user)
@@ -32,10 +33,17 @@ def change_user_password(current_user, body: ApiChangePassword):
 
 def change_user_email(current_user, body: ApiChangeEmail):
     with Sessions() as session:
+        session.add(current_user)
         current_user.email = body.new_email
         session.add(current_user)
         session.commit()
-    return JSONResponse(status_code=status.HTTP_200_OK, content='updated')
+        access_token_expires = timedelta(minutes=365 * 24 * 60)
+        access_token = create_access_token(
+            data={"sub": body.new_email, "type": body.type}, expires_delta=access_token_expires
+        )
+        response = JSONResponse(status_code=status.HTTP_200_OK, content='updated')
+        response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=False)
+    return response
 
 
 def verify_user_type(usertype, request) -> bool:
