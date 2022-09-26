@@ -18,7 +18,7 @@ All of them work together as a team.
 
 1) First you need to log in to admin account and connect to school (both of them can be created only from our dev side, so if you have to use existing ones)
 2) After that you can create groups, teachers, students and many more
-3) UI is simple socwe hope yiu will get used to it
+3) UI is simple so we hope you will get used to it
 4) To create student and teacher account you need a secret key which you can download at Export pages of Admin panel
 
 ## Telegram Bot notifications
