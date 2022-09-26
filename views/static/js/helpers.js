@@ -79,29 +79,66 @@ function hmComment(hw, position){
 
 
 async function changePassword() {
-    var type = $.cookie("type");
-    var new_pass = document.getElementById("New_pass").value;
-    var old_pass = document.getElementById("Old_pass").value;
-    var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
-    if (new_pass !== repeat_new_pass) {
-        document.getElementById("New_pass").classList.add('is-invalid');
-        document.getElementById("Repeat_new_pass").classList.add('is-invalid');
-        return;
-    }
-    var response = await fetch('/change_user_password', {
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
         },
-        body: JSON.stringify({
-            'new_password': new_pass,
-            'old_password': old_pass,
-            'type': type
-        })
-    });
-    var text = await response.json();
-    alert(text);
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: 'Do yout really want to change password?',
+        text: "You can change it back later if you want",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, change',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed){
+            var type = localStorage.getItem('type');
+            var new_pass = document.getElementById("New_pass").value;
+            var old_pass = document.getElementById("Old_pass").value;
+            var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
+            if (new_pass !== repeat_new_pass) {
+                document.getElementById("New_pass").classList.add('is-invalid');
+                document.getElementById("Repeat_new_pass").classList.add('is-invalid');
+                return;
+            }
+            var response = await fetch('/change_user_password', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'new_password': new_pass,
+                    'old_password': old_pass,
+                    'type': type
+                })
+            });
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Changed',
+                    position: 'top',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+            } else {
+                await alertError(response)
+            }
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Password is same as before',
+                'error'
+            )
+        }
+    })
 }
 
 async function changeEmail() {
@@ -140,7 +177,7 @@ async function changeEmail() {
             if (response.ok) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Upgraded',
+                    title: 'Changed',
                     position: 'top',
                     timer: 2000,
                     timerProgressBar: true,

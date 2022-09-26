@@ -23,9 +23,9 @@ from data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, 
 
 def change_user_password(current_user, body: ApiChangePassword):
     with Sessions() as session:
-        if not verify_password(body.new_pass, current_user.password):
+        if not verify_password(body.old_password, current_user.password):
             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong password')
-        current_user.password = get_password_hash(body)
+        current_user.password = get_password_hash(body.new_password)
         session.add(current_user)
         session.commit()
         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')

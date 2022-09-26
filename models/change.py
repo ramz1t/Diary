@@ -2,8 +2,8 @@ from pydantic import BaseModel
 
 class ApiChangePassword(BaseModel):
     type: str
-    old_pass: str
-    new_pass: str
+    old_password: str
+    new_password: str
 
 
 class ApiChangeEmail(BaseModel):
