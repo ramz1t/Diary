@@ -10,7 +10,8 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {% for group in groups %}
-                    <li><a class="dropdown-item" onclick="setValue('group', '{{ group.name }}', '{{group.id}}')" >{{ group.name }}</a></li>
+                    <li><a class="dropdown-item" onclick="setValue('group', '{{ group.name }}', '{{group.id}}')">{{
+                        group.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -21,7 +22,8 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {% for subject in subjects %}
-                    <li><a class="dropdown-item" onclick="setValue('subject', '{{ subject.name }}', '{{subject.id}}')" >{{ subject.name }}</a></li>
+                    <li><a class="dropdown-item" onclick="setValue('subject', '{{ subject.name }}', '{{subject.id}}')">{{
+                        subject.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -32,7 +34,9 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {% for teacher in teachers %}
-                    <li><a class="dropdown-item" onclick="setValue('teacher', '{{ teacher.surname }} {{teacher.name}}', '{{teacher.id}}')" >{{teacher.surname}} {{ teacher.name }}</a></li>
+                    <li><a class="dropdown-item"
+                           onclick="setValue('teacher', '{{ teacher.surname }} {{teacher.name}}', '{{teacher.id}}')">{{teacher.surname}}
+                        {{ teacher.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

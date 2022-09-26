@@ -1,6 +1,8 @@
 import datetime
 import os
 from contextlib import closing
+from logic.auth import create_access_token
+from logic.auth import get_password_hash, verify_password
 from models.token import TokenData
 import psycopg2
 import requests
@@ -10,36 +12,38 @@ from fastapi.security.utils import get_authorization_scheme_param
 from jose import jwt, JWTError
 from starlette import status
 from starlette.responses import JSONResponse
-from datetime import date
+from datetime import date, timedelta
 
 from db_models import TelegramAuthorization
 from func.db_user_find import get_user_by_email
 from logic.auth import SECRET_KEY, ALGORITHM
-# from Dairy.models.admin import ApiChangePassword, ApiChangeEmail
+from models.change import ApiChangePassword, ApiChangeEmail
 from data.data import Sessions, YEAR_END, YEAR_START, TODAY, DB_NAME, USERNAME, DB_HOST, DB_PASS, SEASON_1, \
     SEASON_2, SEASON_3
 
-# def change_user_password(email, body: ApiChangePassword):
-#     with Sessions() as session:
-#         user = get_user_by_email(email=email, type=body.type)
-#         if not verify_password(plain_password=body.old_password, hashed_password=user.password):
-#             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old password is not correct')
-#         user.password = get_password_hash(body.new_password)
-#         session.add(user)
-#         session.commit()
-#         return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
-#
-#
-# def change_user_email(body: ApiChangeEmail):
-#     with Sessions() as session:
-#         user = get_user_by_email(email=body.email, type=body.type)
-#         if user.email == body.email:
-#             user.email = body.new_email
-#             session.add(user)
-#             session.commit()
-#             return JSONResponse(status_code=status.HTTP_201_CREATED, content='Successfully')
-#         else:
-#             return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Old email is not correct')
+def change_user_password(current_user, body: ApiChangePassword):
+    with Sessions() as session:
+        if not verify_password(body.old_password, current_user.password):
+            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong password')
+        current_user.password = get_password_hash(body.new_password)
+        session.add(current_user)
+        session.commit()
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Password changed')
+
+
+def change_user_email(current_user, body: ApiChangeEmail):
+    with Sessions() as session:
+        session.add(current_user)
+        current_user.email = body.new_email
+        session.add(current_user)
+        session.commit()
+        access_token_expires = timedelta(minutes=365 * 24 * 60)
+        access_token = create_access_token(
+            data={"sub": body.new_email, "type": body.type}, expires_delta=access_token_expires
+        )
+        response = JSONResponse(status_code=status.HTTP_200_OK, content='updated')
+        response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=False)
+    return response
 
 
 def verify_user_type(usertype, request) -> bool:
@@ -113,6 +117,35 @@ def teaching_days_dates(days_indexes):
                 if index == current_day.weekday():
                     dates.append({'long': current_day.strftime("%Y-%m-%d"), 'short': current_day.strftime('%d')})
         current_day += datetime.timedelta(days=1)
+    return dates
+
+
+def eight_days(days_indexes):
+    days_indexes = list(set(days_indexes))
+    current_day = datetime.date.today()
+    cd_index = current_day.weekday()
+    dates = []
+    start_index = -1
+    for index in days_indexes:
+        if index > cd_index:
+            current_day = current_day - datetime.timedelta(cd_index) + datetime.timedelta(index)
+            start_index = days_indexes.index(index)
+            break
+    k = 0
+    if start_index == -1:
+        start_index = 0
+        current_day = current_day + datetime.timedelta(days=7 - current_day.weekday() + days_indexes[0])
+    while k < 8:
+        dates.append({'long': current_day.strftime('%Y-%m-%d'), 
+                      'title': f"{current_day.strftime('%d.%m')}, {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][current_day.weekday()]}"})
+        start_index += 1
+        if start_index == len(days_indexes):
+            start_index -= len(days_indexes)
+            current_day += datetime.timedelta(days=7) - datetime.timedelta(current_day.weekday())
+        current_day += datetime.timedelta(days=days_indexes[start_index]) - datetime.timedelta(current_day.weekday())
+        if current_day > YEAR_END:
+            break
+        k += 1
     return dates
 
 

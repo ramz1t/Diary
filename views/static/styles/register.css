@@ -55,3 +55,43 @@ body{
     align-items: center;
     justify-content: center;
 }
+
+
+.emailText,
+.passText,
+.subPassText{
+	display: block;
+	font-weight: 300;
+	font-style: italic;
+	padding: 5px;
+}
+form.valid .emailText,
+form.valid .passText,
+form.valid .subPassText{
+	color: #00ff00;
+}
+form.invalid .emailText,
+form.invalid .passText,
+form.invalid .subPassText{
+	color: #f00;
+}
+form.valid::before,
+form.invalid::before{
+	content: "";
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	top: 36px;
+	right: 5px;
+	z-index: 100;
+}
+form.valid::before{
+	background: url(../photos/check.svg)no-repeat center /cover;
+}
+form.invalid::before{
+	background: url(../photos/error.png)no-repeat center /cover;
+}
+
+label {
+    padding-bottom: 5px;
+}

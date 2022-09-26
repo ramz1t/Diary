@@ -16,6 +16,8 @@ function executeScripts(page) {
         loadDiary('load');
     } else if (page === 'group_book') {
         openClassBook('load')
+    } else if (page === 'teacher_homework') {
+        load_hw('load')
     }
 }
 
@@ -46,69 +48,182 @@ function checkCredentials(status) {
 
 }
 
+function convertToJSON(str) {
+    str = str.replaceAll("'", '"');
+    str = str.replaceAll('None', '""');
+    str = JSON.parse(str);
+    return str;
+}
+
+function markComment(mark, position){
+    mark = convertToJSON(mark)
+    Swal.fire({
+        html: `Time: ${mark['time']}<br> Class date: ${mark['date']}<br> Comment: ${mark['comment']}`,
+        position: position,
+        confirmButtonColor: '#004d00',
+        title: 'Information'
+    })
+}
+
+
+function hmComment(hw, position){
+    hw = convertToJSON(hw)
+    Swal.fire({
+        text: `Homework was added on ${hw['made']}`,
+        position: position,
+        confirmButtonColor: '#004d00',
+        title: 'Information'
+    })
+}
+
 
 
 async function changePassword() {
-    var type = $.cookie("type");
-    var new_pass = document.getElementById("New_pass").value;
-    var old_pass = document.getElementById("Old_pass").value;
-    var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
-    if (new_pass !== repeat_new_pass) {
-        document.getElementById("New_pass").classList.add('is-invalid');
-        document.getElementById("Repeat_new_pass").classList.add('is-invalid');
-        return;
-    }
-    var response = await fetch('/change_user_password', {
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
         },
-        body: JSON.stringify({
-            'new_password': new_pass,
-            'old_password': old_pass,
-            'type': type
-        })
-    });
-    var text = await response.json();
-    alert(text);
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: 'Do yout really want to change password?',
+        text: "You can change it back later if you want",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, change',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed){
+            var type = localStorage.getItem('type');
+            var new_pass = document.getElementById("New_pass").value;
+            var old_pass = document.getElementById("Old_pass").value;
+            var repeat_new_pass = document.getElementById("Repeat_new_pass").value;
+            if (new_pass !== repeat_new_pass) {
+                document.getElementById("New_pass").classList.add('is-invalid');
+                document.getElementById("Repeat_new_pass").classList.add('is-invalid');
+                return;
+            }
+            var response = await fetch('/change_user_password', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'new_password': new_pass,
+                    'old_password': old_pass,
+                    'type': type
+                })
+            });
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Changed',
+                    position: 'top',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+            } else {
+                await alertError(response)
+            }
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Password is same as before',
+                'error'
+            )
+        }
+    })
 }
 
 async function changeEmail() {
-    var type = $.cookie("type");
-    var new_email = document.getElementById('New_email').value;
-    var old_email = document.getElementById('Old_email').value;
-    var response = await fetch('/change_user_email', {
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
         },
-        body: JSON.stringify({
-            'type': type,
-            'new_email': new_email,
-            'old_email': old_email
-        })
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: 'Do yout really want to change email?',
+        text: "You can change it back later if you want",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, change',
+        padding: '0 0 1.25em',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed){
+            var type = localStorage.getItem('type');
+            var new_email = document.getElementById('New_email').value;
+            var response = await fetch('/change_user_email', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'type': type,
+                    'new_email': new_email,
+                })
 
-    });
-    var text = await response.json();
-    alert(text);
+            });
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Changed',
+                    position: 'top',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+            } else {
+                await alertError(response)
+            }
+        }
+        else {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Email is same as before',
+                'error'
+            )
+        }
+    })
 }
 
 async function loadPage(type, page) {
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
     let user_id = localStorage.getItem('user_id');
     if (page === 'load') {
-        page = localStorage.getItem(`${type}_page`);
+        page = params.page;
     } else {
-        localStorage.setItem(`${type}_page`, page);
+        var searchParams = new URLSearchParams(window.location.search)
+        searchParams.set("page", page);
+        var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+        history.pushState(null, '', newRelativePathQuery);
     }
     if (page !== null) {
+        const wrapper = document.getElementById('wrapper');
+        wrapper.innerHTML = `<div class="content-wrapper"><div class="flex-row"><h1>Loading...</h1>
+                            <div class="spinner-border text-primary" style="color: var(--diary-color)" role="status">
+                                <span class="visually-hidden">Loading...</span></div>
+                            </div>
+                            </div>
+                            `;
         let data = {
             'user_id': user_id
         };
         let response = await callServer(`/load_page/?page=${page}&type=${type}`, data, 'PATCH');
         if (response.ok) {
-            let wrapper = document.getElementById('wrapper');
+            wrapper.innerHTML = '';
             response = await response.text();
             wrapper.innerHTML = '';
             wrapper.innerHTML = response;
@@ -170,4 +285,9 @@ function hideShow() {
             eyes[i].classList.replace('bi-eye', 'bi-eye-slash');
         }
     }
+}
+
+
+function downloadPrivacy() {
+    window.open(`/download_privacy`, '_blank')
 }

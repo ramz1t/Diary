@@ -173,10 +173,13 @@ function sendMark() {
         'date': date, 'mark': mark, 'student_id': studentId, 'subject_id': localStorage.getItem('book_class_id'),
         'comment': comment, 'season': season
     }
-    callServer('/execute/mark/create', data, 'POST').then((response) => {
+    callServer('/execute/mark/create', data, 'POST').then(async (response) => {
         const p = alertError(response);
         checkCredentials(response);
         const cell = document.getElementById(`${studentId}-${date}`);
+        const data = JSON.parse(await response.json());
+        const markId = data['id'];
+        cell.dataset.dbMarkId = (markId).toString();
         cell.dataset.dbMark = (mark).toString();
         document.getElementById('modal-container').classList.add('none');
         checkMarkEquality(cell, mark);
@@ -188,6 +191,8 @@ async function getFinalMarksTable(class_id) {
         document.getElementById('primary-content').classList.add('none');
         document.getElementById('secondary-content').classList.remove('none');
         const data = await response.json();
+        document.getElementById('name').innerText = data.name;
+        document.getElementById('subject').innerHTML = data.subject
         const table = document.getElementById('marks-table');
         const firstRow = table.children[0];
         table.innerHTML = '';
@@ -266,7 +271,6 @@ window.addEventListener('click', (e) => {
 
 async function finalMark(value) {
     const modalWindow = document.getElementById('modal-container');
-    console.log(modalWindow);
     const season = modalWindow.dataset.season;
     const studentId = modalWindow.dataset.studentId;
     const classId = document.getElementById('marks-table').dataset.classId;
@@ -276,7 +280,6 @@ async function finalMark(value) {
         'mark': value,
         'subject_id': classId
     };
-    console.log(data);
     callServer(`/execute/mark/create_final_mark`, data, 'POST').then(async (response) => {
         try {
             checkCredentials(response.status)
@@ -286,4 +289,126 @@ async function finalMark(value) {
 
         }
     })
+}
+
+function load_hw(class_id, group_id) {
+    if (class_id === 'load') {
+        class_id = localStorage.getItem('hw_class_id');
+        group_id = localStorage.getItem('hw_group_id');
+    } else {
+        localStorage.setItem('hw_class_id', class_id);
+        localStorage.setItem('hw_group_id', group_id);
+    }
+    if (class_id === null || group_id === null) {
+        return;
+    }
+    const btns = document.querySelectorAll('.round-border');
+    btns.forEach((btn) => {
+        btn.classList.remove('round-border');
+    });
+    const wrapper = document.getElementById('secondary-content');
+    wrapper.innerHTML = 'Loading...'
+    document.getElementById(`hw-btn-${class_id}`).classList.add('round-border');
+    callServer(`/class_homework?group_id=${class_id}`).then(async (response) => {
+        try {
+            checkCredentials(response.status);
+            await alertError(response);
+            const data = await response.json();
+            wrapper.innerHTML = '';
+            wrapper.dataset.classId = class_id;
+            wrapper.dataset.groupId = group_id;
+            data['hw'].forEach((hw) => {
+                wrapper.innerHTML += `
+                <div id="hw-${hw.id}" data-body="${hw.body}" data-time="${hw.exec_time}" data-date="${hw.class_date}" class="white border-radius p-20">
+                    <div style="padding-bottom: 10px" class="flex-row allign-center">
+                        <i class="bi bi-calendar-week"></i>
+                        <h6 class="gray">Date:</h6>
+                        <h6 class="gray">${hw.class_date}</h6>
+                    </div>
+                    <div class="flex-row space-between allign-center">
+                        <h3>${hw.body}</h3>
+                        <div class="flex-row allign-center">
+                            <div class="flex-row round-border p-5" style="gap: 0.2rem; margin-right: 15px;">
+                                <i class="bi bi-clock"></i>
+                                <p>${hw.exec_time}</p>
+                                <p>min.</p>
+                            </div>
+                            <div class="flex-row">
+                                <i onclick="openHwModal('edit', '${hw.id}')" class="bi bi-pencil"></i>
+                                <i onclick="deleteFromDB('${hw.id}', 'homework')" class="bi bi-trash3 red"></i>
+                            </div>  
+                        </div>
+                    </div>
+                </div>`;
+            });
+            const datesBox = document.getElementById('dates-flex');
+            const datesTitle = datesBox.children[0];
+            datesBox.innerHTML = ''
+            datesBox.appendChild(datesTitle);
+            data['dates'].forEach((date) => {
+                datesBox.innerHTML += `
+                <div data-long-date="${date['long']}" id="date-${date['long']}" onclick="document.getElementById('date-${date['long']}').classList.toggle('selected-date')"
+                class="pointer white border-radius p-5 flex-row align-center">
+                    <p>${date['title']}</p>
+                </div>
+                `;
+            });
+            if (data['hw'].length === 0) {
+                wrapper.innerHTML = '<h5>No homework yet</h5>';
+            }
+        } catch (error) {
+            
+        }
+    })
+}
+
+function openHwModal(type, hwId) {
+    const btn = document.querySelector('.round-border');
+    const cls = btn.children[0].innerText;
+    const subject = btn.children[2].innerText;
+    document.getElementById('group-name').innerHTML = `${cls} ${subject}`;
+    document.getElementById('hw-type').innerText = type.charAt(0).toUpperCase() + type.slice(1);;
+    if (type === 'edit') {
+        const hw = document.getElementById(`hw-${hwId}`);
+        document.getElementById(`date-${hw.dataset.date}`).classList.add('selected-date');
+        document.getElementById('homework').value = hw.dataset.body;
+        document.getElementById('exec_time').value = hw.dataset.time;
+    }
+    document.getElementById('hw-container').classList.remove('none');
+}
+
+function sendHomework() {
+    document.querySelectorAll('.selected-date').forEach((el) => {
+        const data = {
+            'value': document.getElementById('homework').value,
+            'exec_time': document.getElementById('exec_time').value,
+            'date': el.dataset.longDate,
+            'class_id': document.getElementById('secondary-content').dataset.classId,
+            'group_id': document.getElementById('secondary-content').dataset.groupId
+        }
+        callServer('/execute/homework/create', data, 'POST').then(async (response) => {
+            try {
+                checkCredentials(response.status);
+                await alertError(response);
+            } catch (error) {
+                
+            }
+        })
+    });
+    closeHwModal();
+    Swal.fire({
+        icon: 'success',
+        text: 'Saved!',
+        position: 'top',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+    });
+    load_hw('load');            
+}
+
+function closeHwModal() {
+    document.getElementById('homework').value = '';
+    document.getElementById('exec_time').value = '';
+    document.getElementById('hw-container').classList.add('none');
 }

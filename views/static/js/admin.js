@@ -1,4 +1,5 @@
 async function addGroup() {
+    // form check
     let user_id = localStorage.getItem('user_id');
     let groupName = document.getElementById("groupname").value;
     let data = {
@@ -15,6 +16,7 @@ async function addGroup() {
 }
 
 async function addStudentKey() {
+    // form check
     let user_id = localStorage.getItem('user_id');
     let name = document.getElementById('name').value.trim();
     let surname = document.getElementById('surname').value.trim();
@@ -30,7 +32,19 @@ async function addStudentKey() {
     }
     let response = await callServer('/execute/studentkey/add_key', data, 'POST');
     if (response.ok) {
-        document.location.reload(true);
+        const key = await response.json();
+        document.querySelector('table').children[1].innerHTML += `
+        <tr>
+                <th scope="row">${ key.id }</th>
+                <td>${ key.value }</td>
+                <td>${ key.surname }</td>
+                <td>${ key.name }</td>
+                <td>${ key.group }</td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('${ key.id }', 'studentkey')" class="bi bi-trash3"></i></td>
+            </tr>
+        `;
+        document.getElementById('name').value = '';
+        document.getElementById('surname').value = '';
     } else {
         checkCredentials(response.status);
         await alertError(response);
@@ -38,6 +52,7 @@ async function addStudentKey() {
 }
 
 async function addTeacherKey() {
+    // form check
     let user_id = localStorage.getItem('user_id');
     let name = document.getElementById('name').value.trim();
     let surname = document.getElementById('surname').value.trim();
@@ -48,7 +63,18 @@ async function addTeacherKey() {
     };
     let response = await callServer('/execute/teacherkey/add_key', data, 'POST')
     if (response.ok) {
-        document.location.reload(true);
+        const key = await response.json();
+        document.querySelector('table').children[1].innerHTML += `
+        <tr>
+                <th scope="row">${ key.id }</th>
+                <td>${ key.value }</td>
+                <td>${ key.surname }</td>
+                <td>${ key.name }</td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('${ key.id }', 'teacherkey')" class="bi bi-trash3"></i></td>
+            </tr>
+        `;
+        document.getElementById('name').value = '';
+        document.getElementById('surname').value = '';
     } else {
         checkCredentials(response.status);
         await alertError(response);
@@ -64,6 +90,7 @@ async function downloadTeachers() {
 }
 
 async function addSubject() {
+    // form check
     let user_id = localStorage.getItem('user_id');
     let subject = document.getElementById('subject').value;
     if (document.querySelector('input[name="type"]:checked') == null) {
@@ -76,20 +103,6 @@ async function addSubject() {
         'type': lesson_type
     };
     let response = await callServer('/execute/subject/create', data, 'POST');
-    if (response.ok) {
-        document.location.reload(true);
-    } else {
-        checkCredentials(response.status);
-        await alertError(response);
-    }
-}
-
-async function addSchool() {
-    let city = document.getElementById('city').value;
-    let data = {
-        'city': city
-    };
-    let response = await callServer('/execute/school/create', data, 'POST');
     if (response.ok) {
         document.location.reload(true);
     } else {
@@ -134,7 +147,11 @@ async function addClass() {
         Swal.fire({
             icon: 'question',
             title: 'Sorry',
-            text: 'not enough info'
+            text: 'not enough info',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
         })
         return;
     }
@@ -178,7 +195,11 @@ async function addLesson(day_number) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'last lesson not saved'
+                text: 'last lesson not saved',
+                position: 'top',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
             return;
         }
@@ -228,7 +249,11 @@ async function addLessonToDB(day_i, lesson_i) {
         Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'choose lesson'
+                text: 'choose lesson',
+                position: 'top',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
         return;
     }
@@ -253,26 +278,32 @@ async function deleteLesson(day_i) {
     let lesson_counter = document.getElementById(`day-${day_i}-lessons-count`);
     let day = document.getElementById(`day-${day_i}`);
     let group_id = localStorage.getItem('schedule_group_id');
+    const lesson_i = lesson_counter.innerText;
     let data = {
         'day_number': day_i,
-        'lesson_number': lesson_counter.innerText,
+        'lesson_number': lesson_i,
         'group_id': group_id
     };
-    let response = await callServer('/execute/scheduleclass/delete', data, 'POST');
-    if (response.ok) {
-        day.removeChild(day.children[day.childElementCount - 2]);
-        lesson_counter.innerText = parseInt(lesson_counter.innerText) - 1;
-        if (day.childElementCount === 1) {
-            let footer = document.getElementById(`footer-${day_i}`);
-            footer.removeChild(footer.lastElementChild);
-            footer.lastElementChild.setAttribute('style', 'width: 100%');
+    if (document.getElementById(`lesson-${day_i}-${lesson_i}_db_id`).innerText !== '') {
+        let response = await callServer('/execute/scheduleclass/delete', data, 'POST');
+        try {
+            await alertError(response);
+            checkCredentials(response.status);
+        } catch (error) {
+            return;
         }
-    } else {
-        checkCredentials(response.status);
     }
+    day.removeChild(day.children[day.childElementCount - 2]);
+    lesson_counter.innerText = parseInt(lesson_counter.innerText) - 1;
+    if (day.childElementCount === 1) {
+        let footer = document.getElementById(`footer-${day_i}`);
+        footer.removeChild(footer.lastElementChild);
+        footer.lastElementChild.setAttribute('style', 'width: 100%');
+    }    
 }
 
 async function searchSchool() {
+    // form check
     let name = document.getElementById('name').value;
     let city = document.getElementById('city').value;
     let data = {
@@ -289,6 +320,7 @@ async function searchSchool() {
 }
 
 async function linkSchool(school_id, school_number) {
+    // window.confirm to sweetalert
     if (!window.confirm(`Are you sure to link profile to school ${school_number}?`)) {
         return;
     }
@@ -302,7 +334,11 @@ async function linkSchool(school_id, school_number) {
         Swal.fire({
             icon: 'success',
             title: 'Done',
-            text: 'Linked'
+            text: 'Linked',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
         })
         window.location.reload(true);
     } else {
@@ -331,9 +367,19 @@ function upgradeGroups() {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed){
-            callServer('/upgrade_groups', data, 'POST').then((response) => {
+            callServer('/upgrade_groups', data, 'POST').then(async (response) => {
             if (response.ok) {
-                window.location.reload(true);
+                const data = await response.json();
+                data.forEach((el) => {
+                    el = el[0];
+                    console.log(el['type']);
+                    if (el['type'] === 'update') {
+                        document.getElementById(`${el['id']}-name`).innerText = el['name'];
+                    } 
+                    else if (el['type'] === 'delete') {
+                        document.getElementById(`${el['id']}-row`).remove();
+                    }
+                });
             }
             else {
                 Swal.DismissReason.cancel

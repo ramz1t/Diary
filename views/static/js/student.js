@@ -19,27 +19,37 @@ function loadDiary(day) {
             return;
         }
         let inner = '';
-        for (let i = 0; i < diary_data.classes.length; i++) {
+        diary_data['classes'].forEach((el) => {
             inner = `
             <div class="flex-row space-between justify-center diary-class p-10 border-radius white">
                 <div class="flex-row">
-                    <h3 class="p-5 lesson-n">${diary_data['classes'][i].number}</h3>
+                    <h3 class="p-5 lesson-n">${el.number}</h3>
                     <div class="splitter"></div>
                     <div class="lesson-info">
-                        <h6>${diary_data['classes'][i].subject}</h6>
-                        <p class="initials grey">${diary_data['classes'][i].teacher}</p>
+                        <h6>${el.subject}</h6>
+                        <p class="initials grey">${el.teacher}</p>
                     </div>
                     <div class="splitter"></div>
-                    <p id="hw" class="p-10">${diary_data['classes'][i].hw}</p>
+                    <p id="hw" class="p-10" onclick="comment('Homework was added on ${el.hw['made']}')">
+                    ${el.hw['body'] !== null ? el.hw['body'] : ''}
+                    </p>
                 </div>
                 <div class="flex-row">
-                    <div class="splitter"></div>
-                    <h3 onclick="alert('Mark was added on ${diary_data.classes[i].mark_time}')" id="mark" class="p-5 mark pointer">${diary_data['classes'][i].mark}</h3>
+                    ${el.hw['exec_time'] === null ? '' : `
+                    <div class="flex-row round-border p-5 allign-center" style="gap: 0.2rem; margin-right: 15px;">
+                        <i class="bi bi-clock"></i>
+                        <p>${el.hw['exec_time']}</p>
+                        <p>min.</p>
+                    </div>`}
+                    <div class="flex-row">
+                        <div class="splitter"></div>
+                        <h3 onclick="comment('Mark was added on ${el.mark_time}')" id="mark" class="p-5 mark pointer">${el.mark}</h3>
+                    </div>
                 </div>
             </div>`;
             diary.innerHTML += inner;
             inner = '';
-        }
+        });
     })
 }
 
@@ -65,10 +75,23 @@ async function setPermissions() {
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                text: 'Saved!'
+                text: 'Saved!',
+                position: 'top',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             });
         }
         await alertError(response);
         checkCredentials(response.status);
+    })
+}
+
+function comment(text){
+    Swal.fire({
+        text: text,
+        position: 'top',
+        confirmButtonColor: '#004d00',
+        title: 'Information'
     })
 }

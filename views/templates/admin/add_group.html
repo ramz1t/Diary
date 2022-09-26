@@ -4,7 +4,7 @@
         <br>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="groupname" placeholder="Name">
-            <label for="groupname"><i class="bi bi-person"></i>Group name</label>
+            <label for="groupname"><i class="bi bi-person icon-custom"></i>Group name</label>
         </div>
         <button class="btn btn-login-custom text-light" onclick="addGroup()">Add group</button>
         <br>
@@ -26,11 +26,12 @@
             </thead>
             <tbody>
             {% for group in groups %}
-            <tr>
+            <tr id="{{group.id}}-row">
                 <th scope="row">{{ group.id }}</th>
-                <td>{{ group.name }}</td>
+                <td id="{{group.id}}-name">{{ group.name }}</td>
                 <td>{{ group.student_count }}</td>
-                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ group.id }}', 'group')" class="bi bi-trash3"></i></td>
+                <td><i style="color: red; cursor: pointer" onclick="deleteFromDB('{{ group.id }}', 'group')"
+                       class="bi bi-trash3"></i></td>
             </tr>
             {% endfor %}
             </tbody>

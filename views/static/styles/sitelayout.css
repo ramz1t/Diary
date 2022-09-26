@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap');
 
-/** {*/
-/*    outline: solid 1px deeppink;*/
-/*}*/
+/* * {
+    outline: solid 1px deeppink;
+} */
 
 :root {
     --dairy-color: #004d00;
@@ -25,14 +25,14 @@ body {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    margin-right: 1rem;
+    padding-left: calc(var(--nav-width) - 40px);
 }
 
 .content-wrapper {
-    width: calc(100vw - var(--nav-width) - 20px);
-    padding-right: 30px;
+    width: 100%;
+    padding-right: 2rem;
     margin-top: 2rem;
-    padding-left: 25px;
+    padding-left: 2rem;
 }
 
 .page {
@@ -83,6 +83,10 @@ body {
     gap: 3rem;
 }
 
+.column-8 {
+    grid-template-columns: repeat(8, 1fr);
+}
+
 .column-5 {
     grid-template-columns: repeat(5, 1fr);
 }
@@ -91,8 +95,16 @@ body {
     grid-template-columns: repeat(2, 1fr);
 }
 
+.column-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .column-4 {
     grid-template-columns: repeat(4, 1fr);
+}
+
+.column-10 {
+    grid-template-columns: repeat(10, 1fr);
 }
 
 .space-between {
@@ -134,8 +146,8 @@ box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
 .eye {
     position: absolute;
     float: right;
-    margin-left: 90%;
-    margin-top: 18px;
+    margin-left: calc(100% - 50px);
+    margin-top: -30px;
 }
 
 .pointer {
@@ -149,6 +161,10 @@ box-shadow: 0px 0px 40px -14px rgba(0, 77, 0, 0.29);
 
 .date-btn:hover {
     border: 2px solid black;
+}
+
+.gray {
+    color: gray;
 }
 
 .red {
@@ -174,15 +190,6 @@ box-shadow: 4px 4px 16px 3px rgba(34, 60, 80, 0.2);
     border-radius: 15px;
 }
 
-.wave-container {
-    text-align: center;
-    overflow: hidden;
-    width: 100%;
-}
-
-.wave-container > svg {
-    display: block;
-}
 
 @keyframes animateWave {
     0% {
@@ -194,7 +201,46 @@ box-shadow: 4px 4px 16px 3px rgba(34, 60, 80, 0.2);
 }
 
 .wave-container > svg {
-    display: block;
+    padding-top: 15px;
+    position: relative;
+    top: 2px;
     transform-origin: bottom;
     animation: animateWave 1000ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+#footer-box {
+    text-align: left; 
+    color: white; 
+    background-color: var(--dairy-color);
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px
+}
+
+.footer-title{
+    padding-bottom: .3rem;
+}
+
+.footer-btn{
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0 !important;
+    margin-right: 10px;
+}
+
+.instagram:hover{
+    color: orange;
+}
+
+p {
+    margin-bottom: 0 !important;
+}
+
+.footer-column {
+    width: fit-content;
+}
+
+a {
+    text-decoration: none;
 }

@@ -1,9 +1,14 @@
+import collections
+from distutils.archive_util import make_archive
+import json
 from random import randint
+from re import S
 from typing import Optional
 
 import psycopg2
 
 from pydantic.dataclasses import dataclass
+from db_models import DBHomework
 
 from data.data import Sessions, symbols, DB_NAME, USERNAME, DB_HOST, DB_PASS
 from fastapi.responses import JSONResponse
@@ -13,7 +18,7 @@ from abc import abstractmethod, ABC
 from db_models import DBAdmin, DBTeacherKey, DBKey, DBGroup, DBStudent, DBSchool, DBTeacher, DBSubject, \
     DBClassesRelationship, DBScheduleClass, DBMark
 from func.helpers import teaching_days_dates, check_date, get_title, get_day_index_from_date, get_current_time, \
-    alert_on_telegram, get_seasons_info, get_current_season
+    alert_on_telegram, get_seasons_info, get_current_season, eight_days
 from logic.auth import get_password_hash
 from contextlib import closing
 
@@ -46,6 +51,8 @@ class ApiBase:
                  mark: int = None,
                  comment: str = None,
                  season: str = None,
+                 class_id: int = None,
+                 exec_time: int = None,
                  *args, **kwargs):
         self.email = email
         self.old_password = old_password
@@ -73,6 +80,8 @@ class ApiBase:
         self.mark = mark
         self.comment = comment
         self.season = season
+        self.class_id = class_id
+        self.exec_time = exec_time
 
     email: Optional[str]
     password: Optional[str]
@@ -100,6 +109,8 @@ class ApiBase:
     student_id: Optional[int]
     comment: Optional[str]
     season: Optional[int]
+    class_id: Optional[int]
+    exec_time: Optional[int]
 
 
 class KeyBase(ABC):
@@ -121,14 +132,19 @@ class StudentKey(KeyBase):
 
     def add_key(self, body: ApiBase):
         with Sessions() as session:
+            school_id = session.query(DBAdmin).filter_by(id=body.user_id).first().school_id
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
             name = ' '.join([name.capitalize() for name in body.name.split()])
             surname = ' '.join([surname.capitalize() for surname in body.surname.split()])
             key = DBKey(value=value, name=name, surname=surname, group=body.group,
-                        school_id=School.school_name(Admin().get(body).school_id))
+                        school_id=school_id)
+            key_dict = key.__dict__.copy()
             session.add(key)
             session.commit()
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
+            del key_dict['_sa_instance_state']
+            key_id = self.get_key(ApiBase(key=value)).id
+            key_dict['id'] = key_id
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=key_dict)
 
     def get_key(self, body: ApiBase):
         with Sessions() as session:
@@ -141,15 +157,17 @@ class StudentKey(KeyBase):
             session.delete(key)
             session.commit()
 
-    def get_student_keys(self, body: ApiBase):
+    def get_student_keys(self, admin_id: int):
         with Sessions() as session:
-            keys = session.query(DBKey).filter_by(school_id=School.school_name(Admin().get(body).school_id)).all()
+            school_id = Admin().get(ApiBase(user_id=admin_id)).school_id
+            keys = session.query(DBKey).filter_by(school_id=school_id).all()
             return keys
 
-    def get_student_keys_for_export(self, body: ApiBase):
+    def get_student_keys_for_export(self, admin_id: int):
         with Sessions() as session:
+            school_id = Admin().get(ApiBase(user_id=admin_id)).school_id
             keys_for_export = session.query(DBKey).filter_by(
-                school_id=School.school_name(Admin().get(body).school_id)).all()
+                school_id=school_id).all()
             return set([key.group for key in keys_for_export])
 
     @staticmethod
@@ -164,28 +182,32 @@ class TeacherKey(KeyBase):
 
     def add_key(self, body: ApiBase):
         with Sessions() as session:
+            school_id = session.query(DBAdmin).filter_by(id=body.user_id).first().school_id
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
-            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(),
-                               school_id=School.school_name(Admin().get(body).school_id))
+            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(), school_id=school_id)
+            key_dict = key.__dict__.copy()         
             session.add(key)
             session.commit()
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='Key created successfully')
+            del key_dict['_sa_instance_state']
+            key_id = self.get_key(ApiBase(key=value)).id
+            key_dict['id'] = key_id
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=key_dict)
 
     def get_key(self, body: ApiBase):
         with Sessions() as session:
-            key = session.query(DBTeacherKey).filter_by(value=body.value).first()
+            key = session.query(DBTeacherKey).filter_by(value=body.key).first()
             return key
 
-    def delete_key(self, body: ApiBase):
+    def delete_key(self, key: DBTeacherKey):
         with Sessions() as session:
-            key = session.query(DBTeacherKey).filter_by(value=body.value).first()
+            key = session.query(DBTeacherKey).filter_by(value=key.key).first()
             session.delete(key)
             session.commit()
 
     def get_teacher_keys(self, body: ApiBase):
         with Sessions() as session:
             keys = session.query(DBTeacherKey).filter_by(
-                school_id=School.school_name(Admin().get(body).school_id)).all()
+                school_id=Admin().get(body).school_id).all()
             return keys
 
     @staticmethod
@@ -290,11 +312,11 @@ class Teacher(CRUDBase, TeacherKey):
             key = self.get_key(body)
             if key is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Wrong key')
-            if not session.query(Teacher).filter_by(email=body.email).first() is None:
+            if not session.query(DBTeacher).filter_by(email=body.email).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Name already in use')
             teacher = DBTeacher(email=body.email, password=get_password_hash(body.password), name=key.name,
                                 surname=key.surname, school_id=key.school_id)
-            school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
+            school = session.query(DBSchool).filter_by(id=key.school_id).first()
             school.teachers.append(teacher)
             session.add(school)
             session.commit()
@@ -402,6 +424,13 @@ class Group(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
+            res = []
+            for i, s in enumerate(body.name):
+                    if s.isalpha():
+                        res = [body.name[:i], body.name[i:]]
+                        break
+            if len(res) < 2 or len(res[0]) == 0 or len(res[1]) == 0:
+                return JSONResponse(status_code=status.HTTP_406_NOT_ACCEPTABLE, content='Please write group name in format NumberLetter')
             if not session.query(DBGroup).filter_by(name=body.name,
                                                     school_db_id=Admin().get(body).school_id).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
@@ -441,19 +470,23 @@ class Group(CRUDBase):
 
     def upgrade(self, body: ApiBase):
         with Sessions() as session:
+            update_data = []
             school = session.query(DBSchool).filter_by(id=Admin().get(body).school_id).first()
             for group in school.groups:
-                for index, letter in enumerate(group.name, 0):
-                    if letter.isalpha():
-                        res = [group.name[:index], group.name[index:]]
+                for i, s in enumerate(group.name):
+                    if s.isalpha():
+                        res = [group.name[:i], group.name[i:]]
+                        break
                 num = int(res[0]) + 1
                 if num > 11:
                     self.delete(group.id)
+                    update_data.append([{'id': group.id, 'name': group.name, 'type': 'delete'}])
                 else:
                     group.name = ''.join((str(num), res[1]))
                     session.add(group)
-                    session.commit()
-        return JSONResponse(status_code=status.HTTP_200_OK, content='upgraded')
+                    update_data.append([{'id': group.id, 'name': group.name, 'type': 'update'}])
+            session.commit()    
+        return JSONResponse(status_code=status.HTTP_200_OK, content=update_data)
 
 
 class Cls(CRUDBase):
@@ -533,7 +566,7 @@ class Cls(CRUDBase):
             classes_ids = session.query(DBClassesRelationship).filter_by(teacher_id=teacher_id).all()
             for cls in classes_ids:
                 res.append({'id': cls.id, 'name': Group().get(cls.group_id).name,
-                            'subject': Subject.get(cls.subject_id)})
+                            'subject': Subject.get(cls.subject_id), 'group_id': cls.group_id})
             return res
 
     @staticmethod
@@ -607,6 +640,20 @@ class ScheduleClass(CRUDBase):
         return data
 
 
+    @staticmethod
+    def get_eight_teacher_working_days(class_id):
+        with Sessions() as session:
+            res = []
+            for day_i in range(5):
+                classes = session.query(DBScheduleClass).filter_by(day_number=day_i, class_id=class_id).all()
+                for cls in classes:
+                    if cls is not None:
+                        res.append(day_i)
+            return eight_days(res)
+            
+
+
+
 class Book:
 
     @staticmethod
@@ -615,7 +662,7 @@ class Book:
             res = {}
             group = session.query(DBGroup).filter_by(id=group_id).first()
             if group is not None:
-                dates = teaching_days_dates(Cls.get_teacher_classes_days(class_id))
+                dates = teaching_days_dates(set(Cls.get_teacher_classes_days(class_id)))
                 subject = Subject().get(Cls.get_one(class_id).subject_id)
                 res.update({'name': group.name, 'subject': subject, 'current_season': get_current_season(),
                             'students_count': 0, 'dates': dates, 'students': [],
@@ -646,18 +693,24 @@ class Book:
             day_i = get_day_index_from_date(date)
             schedule_classes = session.query(DBScheduleClass).filter_by(group_id=group.id, day_number=day_i).all()
             schedule_classes = sorted(schedule_classes, key=lambda x: x.class_number)
+            marks_clss = []
             for cls in schedule_classes:
                 db_cls = Cls.get_one(cls.class_id)
                 number = cls.class_number + 1
                 teacher = Teacher().get(db_cls.teacher_id)
                 subject = Subject.get(db_cls.subject_id)
+                hw = Homework().get(ApiBase(date=date, class_id=db_cls.id))
                 mark = Mark().get(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
                 if mark is not None:
-                    mark = mark.value
+                    if mark.class_id in marks_clss:
+                        mark = ''
+                    else:
+                        marks_clss.append(mark.class_id)
+                        mark = mark.value
+                        mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))   
                 else:
                     mark = ''
-                mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
-                hw = ''
+                    mark_time = ''
                 day['classes'].append(
                     {'number': number, 'teacher': teacher, 'subject': subject, 'hw': hw, 'mark': mark,
                      'mark_time': mark_time})
@@ -697,6 +750,26 @@ class Book:
                 res['students'].append(student_data)
         return res
 
+    @staticmethod
+    def student_hw(student_id):
+        with Sessions() as session:
+            student: DBStudent = session.query(DBStudent).filter_by(id=student_id).first()
+            group: DBGroup = Group().get(student.group_id)
+            session.add(group)
+            hw_query = group.homework.all()
+            result: dict[DBHomework] = {}
+            for dct in hw_query:
+                result.setdefault(dct.class_date, []).append(dct)
+            for index in result:
+                hw_on_date = []
+                for hw in result[index]:
+                    subject = Subject.get(Cls.get_one(hw.class_id).subject_id)
+                    hw_dict = {'body': hw.body, 'exec_time': hw.exec_time, 'made': hw.time, 'subject': subject}
+                    hw_on_date.append(hw_dict)
+                result[index] = hw_on_date
+            result = collections.OrderedDict(sorted(result.items()))
+        return result
+
 
 class Mark(CRUDBase):
 
@@ -708,7 +781,7 @@ class Mark(CRUDBase):
                 mark.value = body.mark
                 session.add(mark)
                 session.commit()
-                return JSONResponse(status_code=status.HTTP_200_OK, content='mark updated')
+                return JSONResponse(status_code=status.HTTP_200_OK, content=json.dumps({'id': mark.id}))
             mark = DBMark(date=body.date, value=body.mark, student_id=body.student_id, class_id=body.subject_id,
                           time=get_current_time(), comment=body.comment, season=body.season, final=False)
             session.add(mark)
@@ -716,7 +789,9 @@ class Mark(CRUDBase):
             data = {'time': mark.time, 'body': f'New mark, <b>{mark.value}</b>', 'date': mark.date,
                     'comment': mark.comment}
         alert_on_telegram(body.student_id, data, 'mark')
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content='mark added successfully')
+        mark_dict = mark.__dict__
+        del mark_dict['_sa_instance_state']
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=json.dumps(mark_dict))
 
     @staticmethod
     def create_final_mark(body: ApiBase):
@@ -837,6 +912,55 @@ class Mark(CRUDBase):
         return avg, warning
 
 
+class Homework(CRUDBase):
+
+    def create(self, body: ApiBase):
+        with Sessions() as session:
+            print(body.class_id)
+            group: DBGroup = Group().get(body.group_id)
+            session.add(group)
+            hw: DBHomework = group.homework.filter_by(db_group_id=body.group_id, class_date=body.date, class_id=body.class_id).first()
+            if hw is not None:
+                hw.time = get_current_time()
+                hw.body = body.value
+                hw.exec_time = body.exec_time
+                session.add(hw)
+                session.commit()    
+                return JSONResponse(status_code=status.HTTP_200_OK, content='hw edited')
+            hw = DBHomework(class_date=body.date, time=get_current_time(), body=body.value, exec_time=body.exec_time, 
+                            class_id=body.class_id)
+            group.homework.append(hw)
+            session.add(group)
+            session.commit()
+            data = {'time': hw.time, 'body': f'New homework, <b>{hw.body}</b>', 'date': hw.time,
+                    'comment': ''}
+            [alert_on_telegram(student.id, data, 'hw') for student in group.students]
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content='homework created')
+
+    def get(self, body: ApiBase):
+        with Sessions() as session:
+            hw: DBHomework = session.query(DBHomework).filter_by(class_id=body.class_id, class_date=body.date).first()
+            if hw is not None:
+                return {'body': hw.body, 'exec_time': hw.exec_time, 'made': hw.time}
+            else:
+                return {'body': None, 'exec_time': None, 'made': None}
+
+    def delete(id: int):
+        with Sessions() as session:
+            hw = session.query(DBHomework).filter_by(id=id).first()
+            session.delete(hw)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content='hw deleted')
+
+ 
+    @staticmethod
+    def group_hw(class_id: int):
+        with Sessions() as session:
+            homework: list[DBHomework] = session.query(DBHomework).filter_by(class_id=class_id).all()
+            homework = sorted(homework, key=lambda x: x.class_date, reverse=True)
+        return homework
+
+
 class CRUDAdapter:
     _clss = {'student': Student,
              'admin': Admin,
@@ -849,7 +973,8 @@ class CRUDAdapter:
              'cls': Cls,
              'scheduleclass': ScheduleClass,
              'book': Book,
-             'mark': Mark}
+             'mark': Mark,
+             'homework': Homework}
 
     @property
     def clss(self):

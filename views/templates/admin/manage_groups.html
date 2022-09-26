@@ -1,14 +1,17 @@
 <div class="content-wrapper">
-    <div style="display: flex; flex-direction: row">
-        <h1 style="padding-right: 1rem">Edit schedule of </h1>
-        <div class="class-dropdown">
-            <h1 onclick="showDropdown()" class="dropbtn" id="group">group</h1>
-            <div id="class-dropdown" class="class-dropdown-content">
-                {% for group in groups %}
-                <a onclick="loadSchedule('{{group.name}}', '{{group.id}}')">{{ group.name }}</a>
-                {% endfor %}
-                <p style="display: none" id="group_id"></p>
+    <div class="flex-row allign-center">
+        <h1 style="margin-bottom: 0; padding-right: 1rem">Edit schedule of </h1>
+        <div class="round-border p-5 flex-row allign-center">
+            <div class="class-dropdown" onclick="showDropdown()">
+                <h1 style="margin-bottom: 0" class="dropbtn" id="group">group</h1>
+                <div id="class-dropdown" class="class-dropdown-content">
+                    {% for group in groups %}
+                    <a onclick="loadSchedule('{{group.name}}', '{{group.id}}')">{{ group.name }}</a>
+                    {% endfor %}
+                    <p style="display: none" id="group_id"></p>
+                </div>
             </div>
+            <i class="bi bi-caret-down-fill"></i>
         </div>
     </div>
     <br>
@@ -16,3 +19,4 @@
 
     </div>
 </div>
+  

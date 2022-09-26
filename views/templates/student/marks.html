@@ -21,11 +21,11 @@
             <div class="flex-row space-between justify-center">
                 <div class="flex-row grid-gap-half">
                     {% for mark in subject.seasons[season].marks %}
-                    <p onclick="alert(`Time: {{mark.time}}\nClass date: {{mark.date}}\nComment: {{mark.comment}}`)"
+                    <p onclick="markComment(`{{mark}}`, 'top')"
                        class="mark-list-element p-5">{{mark.value}}</p>
                     {% endfor %}
                 </div>
-                <div class="flex-row">
+                <div class="flex-row allign-center">
                     <p class="red p-5 bold">{{subject.seasons[season].season_final}}</p>
                     <p style="min-width: 60px" class="mark-list-element p-5 bold">{{subject.seasons[season].avg}}</p>
                 </div>

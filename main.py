@@ -1,4 +1,5 @@
 from datetime import timedelta
+from tokenize import group
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
@@ -6,6 +7,8 @@ from fastapi.responses import Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.responses import JSONResponse, RedirectResponse
+from func.helpers import change_user_password, change_user_email
+from models.change import ApiChangeEmail, ApiChangePassword
 
 from files.export import write_student_keys, write_teacher_keys
 from func.helpers import check_date, make_dates_for_week, get_title, teaching_days_dates, set_permissions
@@ -16,7 +19,8 @@ from crud_models import CRUDAdapter
 from crud_models import ApiBase
 from pages import PagesAdapter, ApiPage
 
-app = FastAPI()
+# don't forget to set debug=False on production server!!!
+app = FastAPI(debug=True)
 app.mount("/static", StaticFiles(directory="views/static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
 crudadapter = CRUDAdapter()
@@ -148,14 +152,14 @@ def delete_from_db(id: int, model: str):
 
 ''' DB urls'''
 
-# @app.post("/change_user_password")
-# def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
-#     return change_user_password(email=current_user.email, body=body)
-#
-#
-# @app.post('/change_user_email')
-# def change_email(body: ApiChangeEmail):
-#     return change_user_email(body=body)
+@app.post("/change_user_password")
+def change_password(body: ApiChangePassword, current_user=Depends(get_current_user)):
+    return change_user_password(current_user, body=body)
+
+
+@app.post('/change_user_email')
+def change_email(body: ApiChangeEmail, current_user=Depends(get_current_user)):
+    return change_user_email(current_user, body=body)
 
 
 ''' download urls'''
@@ -163,18 +167,18 @@ def delete_from_db(id: int, model: str):
 
 @app.get('/download_group/{groupname}')
 def download_file(groupname, current_user=Depends(get_current_user)):
-    write_student_keys(groupname, current_user.email)
+    write_student_keys(groupname, current_user.id)
     return FileResponse(f'./files/{groupname}.txt',
                         media_type='application/octet-stream',
-                        filename=groupname)
+                        filename=f'{groupname}.txt')
 
 
 @app.get('/download_teachers')
 def download_teachers(current_user=Depends(get_current_user)):
-    write_teacher_keys(current_user.email)
+    write_teacher_keys(current_user.id)
     return FileResponse(f'./files/teachers.txt',
                         media_type='application/octet-stream',
-                        filename='teachers')
+                        filename='teachers.txt')
 
 
 @app.get('/weather_photo')
@@ -205,6 +209,19 @@ def edit_tg_permissions(hw: bool, mark: bool, current_user=Depends(get_current_u
 @app.get('/final_marks')
 def get_final_marks_for_table(class_id: int):
     return crudadapter.clss['book'].get_final(class_id)
+
+
+@app.get('/class_homework')
+def get_class_homework(group_id: int):
+    return {'hw': crudadapter.clss['homework'].group_hw(group_id),
+            'dates': crudadapter.clss['scheduleclass'].get_eight_teacher_working_days(group_id)}
+
+
+@app.get('/download_privacy')
+def download_privacy():
+    return FileResponse(f'./files/Privacy.pdf',
+                        media_type='application/octet-stream',
+                        filename='Privacy.pdf')
 
 
 if __name__ == '__main__':

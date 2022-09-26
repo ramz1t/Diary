@@ -48,13 +48,6 @@ th {
     background-color: #e5e5e5;
 }
 
-/*.absolute {*/
-/*    position: absolute;*/
-/*    left: 274px;*/
-/*    border-top-width: 1px;*/
-/*    margin-top: -1px;*/
-/*    top: auto;*/
-/*}*/
 
 #modal-container {
     position: absolute;
@@ -69,7 +62,7 @@ th {
     height: 175px;
 }
 
-p {
+p, h6 {
     margin-bottom: 0 !important;
 }
 
@@ -84,4 +77,18 @@ h5 {
 
 .warning-icon {
     color: orangered;
+}
+
+#hw-container {
+    position: absolute;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: rgba(76, 74, 74, 0.8);
+    padding-top: 7rem;
+    padding-bottom: 17rem;
+}
+
+.selected-date {
+    outline: 2px solid var(--dairy-color);
+    border-radius: 10px;
 }

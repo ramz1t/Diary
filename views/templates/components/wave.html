@@ -1,8 +1,70 @@
-<footer>
-    <div class="wave-container">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-            <path fill="#004d00" fill-opacity="1"
-                  d="M0,96L48,128C96,160,192,224,288,234.7C384,245,480,203,576,202.7C672,203,768,245,864,256C960,267,1056,245,1152,234.7C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+<footer style="display: flex; flex-direction: row; justify-content: flex-end;">
+    <div id="wave" class="wave-container" style="width: calc(100vw - var(--nav-width) + 40px)">
+        <svg style="transform:rotate(0deg); transition: 0.3s" viewBox="0 0 1440 100" version="1.1"
+             xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0">
+                    <stop stop-color="#004d00" offset="0%"></stop>
+                    <stop stop-color="#004d00" offset="100%"></stop>
+                </linearGradient>
+            </defs>
+            <path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-0)"
+                  d="M0,40L30,35C60,30,120,20,180,20C240,20,300,30,360,40C420,50,480,60,540,61.7C600,63,660,57,720,46.7C780,37,840,23,900,28.3C960,33,1020,57,1080,61.7C1140,67,1200,53,1260,40C1320,27,1380,13,1440,11.7C1500,10,1560,20,1620,21.7C1680,23,1740,17,1800,16.7C1860,17,1920,23,1980,36.7C2040,50,2100,70,2160,80C2220,90,2280,90,2340,86.7C2400,83,2460,77,2520,76.7C2580,77,2640,83,2700,71.7C2760,60,2820,30,2880,25C2940,20,3000,40,3060,40C3120,40,3180,20,3240,11.7C3300,3,3360,7,3420,6.7C3480,7,3540,3,3600,5C3660,7,3720,13,3780,28.3C3840,43,3900,67,3960,71.7C4020,77,4080,63,4140,61.7C4200,60,4260,70,4290,75L4320,80L4320,100L4290,100C4260,100,4200,100,4140,100C4080,100,4020,100,3960,100C3900,100,3840,100,3780,100C3720,100,3660,100,3600,100C3540,100,3480,100,3420,100C3360,100,3300,100,3240,100C3180,100,3120,100,3060,100C3000,100,2940,100,2880,100C2820,100,2760,100,2700,100C2640,100,2580,100,2520,100C2460,100,2400,100,2340,100C2280,100,2220,100,2160,100C2100,100,2040,100,1980,100C1920,100,1860,100,1800,100C1740,100,1680,100,1620,100C1560,100,1500,100,1440,100C1380,100,1320,100,1260,100C1200,100,1140,100,1080,100C1020,100,960,100,900,100C840,100,780,100,720,100C660,100,600,100,540,100C480,100,420,100,360,100C300,100,240,100,180,100C120,100,60,100,30,100L0,100Z"></path>
         </svg>
+        <div id="footer-box" class="flex-row justify-center" style="min-height: 100px">
+            <div class='grid grid-gap-half column-5' style="width: 80%">
+                <div class="footer-column">
+                    <h6 class="footer-title">Timur Ramazanov</h6>
+                    <div class='flex-row allign-center space-between'>
+                        <a class="footer-btn" href='https://instagram.com/timurram007' target="_blank">
+                            <i class="bi bi-instagram instagram"></i>
+                        </a>
+                        <a class="footer-btn" href='https://github.com/ramz1t' target="_blank">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <p>Ramz1t</p>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h6 class="footer-title">Leonid Prokopev</h6>
+                    <div class='flex-row allign-center space-between'>
+                        <a class="footer-btn" href='https://instagram.com/altr3s' target="_blank">
+                            <i class="bi bi-instagram instagram"></i>
+                        </a>
+                        <a class="footer-btn" href='https://github.com/altr3s' target="_blank">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <p>altr3s</p>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h6 class="footer-title">Support our project</h6>
+                    <div style="gap: 0" class="flex-row allign-center space-between">
+                        <a class="footer-btn" href='https://github.com/ramz1t/Diary' target="_blank">
+                            <i class="bi bi-github"></i> Diary
+                        </a>
+                        <a class="footer-btn" style="margin-right: 0" href='https://www.donationalerts.com/r/SchoolDairy' target="_blank">
+                            <i class="bi bi-coin"></i> Donate
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h6 class="footer-title">Feedback</h6>
+                    <div style="gap: 0" class="flex-row allign-center space-between">
+                        <a class="footer-btn" style="margin-right: 0" href='https://taplink.cc/schooldiary' target="_blank">
+                            <i class="bi bi-envelope"></i> Send Email
+                        </a>
+                    </div>
+                </div>
+                 <div class="footer-column">
+                    <h6 class="footer-title">Privacy & terms</h6>
+                    <div style="gap: 0" class="flex-row allign-center space-between">
+                        <a class="footer-btn" style="margin-right: 0" onclick="downloadPrivacy()">
+                            <i class="bi bi-file-earmark-lock icon-custom"></i>Read
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </footer>

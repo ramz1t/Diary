@@ -46,7 +46,7 @@ class AddStudentKeyPage(PageBase):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
         groups = clss['group'].get_groups(self, body)
-        keys = clss['studentkey'].get_student_keys(self, body)
+        keys = clss['studentkey'].get_student_keys(self, current_user.id)
         data = {"request": request, "groups": groups, "keys": keys}
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
@@ -59,7 +59,7 @@ class ExportStudentKeysPage(PageBase):
         if not verify_user_type(usertype=self.USERTYPE, request=request):
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content='No access to this page with this account type')
-        keys_for_export = clss['student'].get_student_keys_for_export(self, body)
+        keys_for_export = clss['student'].get_student_keys_for_export(self, current_user.id)
         data = {"request": request, "keys_for_export": keys_for_export}
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
@@ -269,6 +269,26 @@ class FinalMarksPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
+class TeacherHWPage(PageBase):
+    USERTYPE = 'teacher'
+    FILE_NAME = 'homework.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        groups = clss['cls'].get_classes_for_final_marks(current_user.id)
+        data = {'request': request, 'groups': groups, 'dates': []}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
+class StudentHWPage(PageBase):
+    USERTYPE = 'student'
+    FILE_NAME = 'homework.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        hw = clss['book'].student_hw(current_user.id)
+        data = {'request': request, 'hw': hw}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -286,7 +306,9 @@ class PagesAdapter:
               'student_profile_info': StudentInfoPage,
               'student_marks': MarksPage,
               'telegram': TelegramPage,
-              'final_marks': FinalMarksPage}
+              'final_marks': FinalMarksPage,
+              'teacher_homework': TeacherHWPage,
+              'student_hw': StudentHWPage}
 
     @property
     def pages(self):

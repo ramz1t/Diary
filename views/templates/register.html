@@ -14,45 +14,112 @@
         <img id="logo" src="{{ url_for('static', path='photos/dairy.png') }}">
     </div>
     <div class="page-flex-element" id="card-div">
-    <div class="card shadow-lg" style="width: 30rem;">
-        <div class="card-body">
-            <p class="text-center fs-3 fw-bolder">Register ({{ usertype }})</p>
-            <div class="card-custom">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
-                    <label for="email"><i class="bi bi-envelope icon-custom"></i>Email address</label>
-                </div>
-                <div class="form-floating mb-3 flex-row">
-                    <input type="password" class="pass_input form-control" id="password" placeholder="password">
-                    <div class="eye" onclick="hideShow()">
-                        <i class="eye-btn bi bi-eye-slash"></i>
+        <div class="card shadow-lg" style="width: 30rem;">
+            <div class="card-body">
+                <p class="text-center fs-3 fw-bolder">Register ({{ usertype }})</p>
+                <div class="card-custom">
+                    <div class="form-floating mb-3">
+                        <form class="emailBox">
+                            <label for="email"><i class="bi bi-envelope icon-custom"></i> Email address</label>
+                            <input type="email" id="email" class="form-control" placeholder="name@example.com">
+                            <span class="emailText"></span>
+                        </form>
                     </div>
-                    <label for="password"><i class="bi bi-key icon-custom"></i>Password</label>
-                </div>
-                <div class="form-floating mb-3 flex-row">
-                    <input type="password" class="pass_input form-control" id="repeatpassword" placeholder="password">
-                    <div class="eye" onclick="hideShow()">
-                        <i class="eye-btn bi bi-eye-slash"></i>
+                    <div class="form-floating mb-3">
+                        <form class="passBox">
+                            <label for="password"><i class="bi bi-key icon-custom"></i> Password</label>
+                            <input type="password" class="pass_input form-control" id="password"
+                                   placeholder="password">
+                            <div class="eye" onclick="hideShow()">
+                                <i class="eye-btn bi bi-eye-slash"></i>
+                            </div>
+                            <span class="passText"></span>
+                        </form>
                     </div>
-                    <label for="repeatpassword"><i class="bi bi-key icon-custom"></i>Repeat password</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="secretkey" placeholder="example">
-                    <label for="secretkey"><i class="bi bi-link icon-custom"></i>Enter secretkey</label>
-                </div>
-                <div class="btn-custom">
-                    <button onclick="submit()" type="button" class="btn btn-login-custom text-light">Register</button>
+                    <div class="form-floating mb-3">
+                        <form class="subPassBox">
+                            <label for="repeatpassword"><i class="bi bi-key icon-custom"></i> Repeat
+                                password</label>
+                            <input type="password" class="pass_input form-control" id="repeatpassword"
+                                   placeholder="password">
+                            <div class="eye" onclick="hideShow()">
+                                <i class="eye-btn bi bi-eye-slash"></i>
+                            </div>
+                            <span class="subPassText"></span>
+                        </form>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <form class="secretKeyBox">
+                            <label for="secretkey"><i class="bi bi-link icon-custom"></i> Enter
+                                secretkey</label>
+                            <input type="password" class="form-control" id="secretkey" placeholder="example">
+                            <span class="secretKeyText"></span>
+                        </form>
+                    </div>
+                    <div class="btn-custom">
+                        <button onclick="submit()" type="button" class="btn btn-login-custom text-light">Register
+                        </button>
+                    </div>
+
+                    <div class="had" style="padding-top: 1rem">
+                        <a class="link text-decoration-none" href="/{{usertype}}/login">I already have an account</a>
+                    </div>
+                    <div class="change-type">
+                        <a href="/">Choose user type</a>
+                    </div>
                 </div>
             </div>
-                <div class="had">
-                    <a class="link text-decoration-none" href="/{{usertype}}/login">I already have an account</a>
-                </div>
-                <div class="change-type">
-                    <a href="/">Choose user type</a>
-                </div>
         </div>
     </div>
 </div>
-</div>
+<script>
+    var pass = document.getElementById("password");
+    var subpass = document.getElementById("repeatpassword");
+    var email = document.getElementById("email");
+    email.addEventListener('input', () => {
+        const emailBox = document.querySelector('.emailBox');
+        const emailText = document.querySelector('.emailText');
+        const emailPattern = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$/;
+        if (email.value.match(emailPattern)) {
+            emailBox.classList.add('valid');
+            emailBox.classList.remove('invalid');
+            emailText.innerHTML = "Your Email Address in Valid";
+        } else {
+            emailBox.classList.add('invalid');
+            emailBox.classList.remove('valid');
+            emailText.innerHTML = "Must be a valid email address.";
+            return;
+        }
+    })
+    pass.addEventListener("input", () => {
+        const passBox = document.querySelector('.passBox');
+        const passText = document.querySelector('.passText');
+        const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+        if (pass.value.match(passwordPattern)) {
+            passBox.classList.add('valid');
+            passBox.classList.remove('invalid');
+            passText.innerHTML = "Your Password in Valid";
+        } else {
+            passBox.classList.add('invalid');
+            passBox.classList.remove('valid');
+            passText.innerHTML = "Your password must be at least 8 characters as well as contain at least one uppercase, one lowercase, and one number.";
+            return;
+        }
+    })
+    subpass.addEventListener('input', () => {
+        const subPassBox = document.querySelector('.subPassBox');
+        const subPassText = document.querySelector('.subPassText');
+        if (pass.value === subpass.value) {
+            subPassBox.classList.add('valid');
+            subPassBox.classList.remove('invalid');
+            subPassText.innerHTML = "Passwords match"
+        } else {
+            subPassBox.classList.add('invalid');
+            subPassBox.classList.remove('valid');
+            subPassText.innerHTML = "Miss match";
+            return;
+        }
+    })
+</script>
 </body>
 </html>
