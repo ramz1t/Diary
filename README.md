@@ -79,18 +79,16 @@ That's it ✅ Now you can reload the web page and select which notifications you
 - Clone project
 - Set up python and its dependancies `pip install -r 'requirements.txt'`
 - Add .env (*Warning! For telegram alerts add your bot token, same is for posgresql, the only thing which is available is HASH secret key*)
-- Make DB migrations `alembic upgrade head` or [download our base][db_url]
+- Make DB migrations `alembic upgrade head` or [download our base][db]
 - Start the server!
-- [Download already existing db][db]
 
 
 ## P.S
-We hope that you will like this project :) We are still young and ready to get better and better. If you found that something is not working or want to say something you can find mail address in the footer of every page
+We hope that you will like this project :) We are still young and ready to get better and better. If you found that something is not working or want to say something you can find feedback form in the footer of every page
 
 >p.s. 2: a bit of money for coffee is also appreciated ✨
 
-[db_url]:<www.ru>
 [diary]:<https://school-diary-service.herokuapp.com>
 [bot]:<https://diary-telegram.herokuapp.com>
-[ru]:<https://disk.yandex.ru/i/XYaiJbFHJCFU9g>
+[ru]:<README_RU.md>
 [db]:<https://disk.yandex.ru/d/3tiUdF4uz4Xgtw>
