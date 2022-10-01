@@ -2,7 +2,7 @@
 
 [README IN ENGLISH][en]
 
-URL: [school-diary-service.herokuapp.com][diary]
+URL: [diary-fusm.onrender.com][diary]
 
 Веб-проект школьного дневника
 
@@ -86,7 +86,7 @@ Login | Password
 
 >p.s. 2: немного денег на кофе тоже приветствуется ✨
 
-[diary]:<https://school-diary-service.herokuapp.com>
+[diary]:<https://diary-fusm.onrender.com>
 [bot]:<https://diary-telegram.herokuapp.com>
 [en]:<README.md>
 [db]:<https://disk.yandex.ru/d/3tiUdF4uz4Xgtw>
