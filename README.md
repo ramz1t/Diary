@@ -2,7 +2,7 @@
 
 [ИНСТРУКЦИЯ НА РУССКОМ][ru]
 
-URL: [school-diary-service.herokuapp.com][diary]
+URL: [diary-fusm.onrender.com][diary]
 
 This project is a school diary web service. 
 
@@ -88,7 +88,7 @@ We hope that you will like this project :) We are still young and ready to get b
 
 >p.s. 2: a bit of money for coffee is also appreciated ✨
 
-[diary]:<https://school-diary-service.herokuapp.com>
+[diary]:<https://diary-fusm.onrender.com>
 [bot]:<https://diary-telegram.herokuapp.com>
 [ru]:<README_RU.md>
 [db]:<https://disk.yandex.ru/d/3tiUdF4uz4Xgtw>
