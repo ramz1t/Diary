@@ -28,31 +28,31 @@ URL: [diary-fusm.onrender.com][diary]
 
 ### Школы:
 
-Name | City
----- | ----
-1534 | Moscow
-1234 | Omsk
-1111 | Kiev
+| Name | City   |
+|------|--------|
+| 1534 | Moscow |
+| 1234 | Omsk   |
+| 1111 | Kiev   |
 
 ### Админы: 
-Login | Password
----- | ----
-1534@admin.com | Admin1534
-1234@admin.com | Admin1234
+| Login          | Password  |
+|----------------|-----------|
+| 1534@admin.com | Admin1534 |
+| 1234@admin.com | Admin1234 |
 
 ### Учителя:
-Login | Password
----- | ----
-любая_фамилия_учителя_из_списка_ниже@teacher1534.com | Teacher12345678
+| Login                                                | Password        |
+|------------------------------------------------------|-----------------|
+| любая_фамилия_учителя_из_списка_ниже@teacher1534.com | Teacher12345678 |
 
 > Babenko, Gusev, Antonova, Shumilov, Kuntina, Leonteva, Malygin, Chernov, Chirikov, Pchelintsev, Sharapova, Marchenkova
 > 
 > *фамилии в логине пишите с маленькой буквы
 
 ###  Ученики: 
-Login | Password
----- | ----
-любая_фамилия_ученика_из_списка_ниже@student.com | Student12345678
+| Login                                            | Password        |
+|--------------------------------------------------|-----------------|
+| любая_фамилия_ученика_из_списка_ниже@student.com | Student12345678 |
 
 > Войдите в аккаунт любого учителя и скопируйте любую фамилию из списка класса.
 >

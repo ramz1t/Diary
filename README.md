@@ -30,31 +30,31 @@ We highly recommend to try the project on your machine, because when everyone tr
 
 ### Schools:
 
-Name | City
----- | ----
-1534 | Moscow
-1234 | Omsk
-1111 | Kiev
+| Name | City   |
+|------|--------|
+| 1534 | Moscow |
+| 1234 | Omsk   |
+| 1111 | Kiev   |
 
 ### Admins: 
-Login | Password
----- | ----
-1534@admin.com | Admin1534
-1234@admin.com | Admin1234
+| Login          | Password  |
+|----------------|-----------|
+| 1534@admin.com | Admin1534 |
+| 1234@admin.com | Admin1234 |
 
 ### Teachers:
-Login | Password
----- | ----
-surname_from_teachers_list@teacher1534.com | Teacher12345678
+| Login                                      | Password        |
+|--------------------------------------------|-----------------|
+| surname_from_teachers_list@teacher1534.com | Teacher12345678 |
 
 > Babenko, Gusev, Antonova, Shumilov, Kuntina, Leonteva, Malygin, Chernov, Chirikov, Pchelintsev, Sharapova, Marchenkova
 > 
 > *all in lowercase
 
 ###  Students: 
-Login | Password
----- | ----
-any_surname_from_class_list@student.com | Student12345678
+| Login                                   | Password        |
+|-----------------------------------------|-----------------|
+| any_surname_from_class_list@student.com | Student12345678 |
 
 > Log in to any teacher account and open classbook, chose any surname from the list
 >
