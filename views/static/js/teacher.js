@@ -252,7 +252,12 @@ function closeTable() {
 window.addEventListener('click', (e) => {
     if (e.target.classList.contains('warning-icon')) {
         const warning = e.target.dataset.warning
-        alert(warning !== '' ? warning : 'No problems!');
+        Swal.fire({
+            title: 'Warning',
+            position: 'top',
+            confirmButtonColor: '#004d00',
+            text: warning
+        })
     } else if (e.target.classList.contains('final-mark-area')) {
         const initials = e.target.parentNode.children[1].innerText;
         const studentId = e.target.parentNode.children[1].dataset.studentId;
