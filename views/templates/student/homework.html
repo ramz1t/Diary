@@ -1,25 +1,41 @@
 <div class="content-wrapper">
-    <h1>Homework</h1>
+    <div class="flex-row space-between">
+        <h1>Homework</h1>
+        <div class="border-radius white p-20 flex-row allign-center">
+            <h5>Choose type</h5>
+            <div>
+                <div>
+                    <input type="checkbox" id="new_hw" onchange="toggleHW('new')" checked>
+                    <label for="new_hw">New homework</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="old_hw" onchange="toggleHW('old')">
+                    <label for="old_hw">Old homework</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <br>
     <div class="grid grid-gap-2 column-2">
         {% for hw_date in hw %}
-        <div>
+        <div class="hw-day {{ '' if hw[hw_date].new else 'none'}}" data-new="{{hw[hw_date].new}}">
             <h5 class="p-5">{{ hw_date }}</h5>
             <div class="white border-radius p-20 grid grid-gap-half">
-                {% for hw_single in hw[hw_date] %}
-                    <div onclick="hmComment(`{{hw_single}}`, 'top')">
-                        <h6 class="initials grey" style="margin-bottom: 10px">{{ hw_single.subject }}</h6>
-                        <div class="flex-row space-between">
-                            <p>{{ hw_single.body }}</p>
-                            <div class="flex-row" style="gap: 5px">
-                                <i class="bi bi-clock"></i>
-                                <p>{{ hw_single.exec_time }}</p>
-                                <p>min.</p>
-                            </div>
+                {% for hw_single in hw[hw_date].hw %}
+                <div onclick="hmComment(`{{hw_single}}`, 'top')">
+                    <h6 class="initials grey" style="margin-bottom: 10px">{{ hw_single.subject }}</h6>
+                    <div class="flex-row space-between">
+                        <p>{{ hw_single.body }}</p>
+                        <div class="flex-row" style="gap: 5px">
+                            <i class="bi bi-clock"></i>
+                            <p>{{ hw_single.exec_time }}</p>
+                            <p>min.</p>
                         </div>
                     </div>
+                </div>
                 {% endfor %}
-            </div> 
+            </div>
         </div>
         {% endfor %}
     </div>

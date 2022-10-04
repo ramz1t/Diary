@@ -64,3 +64,21 @@ body{
 #hide{
     display: none;
 }
+
+#left-box {
+    display: none;
+}
+
+#card-div {
+    width: 100%;
+}
+
+@media (min-width: 1000px) {
+    #left-box {
+        display: block;
+    }
+
+    #card-div {
+        width: 50%;
+    }
+}
