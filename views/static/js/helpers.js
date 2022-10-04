@@ -233,6 +233,14 @@ async function loadPage(type, page) {
         var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
         history.pushState(null, '', newRelativePathQuery);
     }
+    if (page === null) {
+        const init_pages = {
+            admin: '',
+            student: 'my_diary',
+            teacher: 'classes'
+        }
+        page = init_pages[type]
+    }
     if (page !== null) {
         const wrapper = document.getElementById('wrapper');
         wrapper.innerHTML = `<div class="content-wrapper"><div class="flex-row"><h1>Loading...</h1>
