@@ -289,6 +289,18 @@ class StudentHWPage(PageBase):
         return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
 
 
+class ManageStudents(PageBase):
+    USERTYPE = 'admin'
+    FILE_NAME = 'members.html'
+
+    def export(self, body: ApiPage, request, current_user):
+        groups = clss['group'].get_for_edit(current_user.school_id)
+        school = clss['school'].school_name(current_user.school_id)
+        total = sum([len(group['students']) for group in groups])
+        data = {'request': request, 'groups': groups, 'school': school, 'total': total}
+        return templates.TemplateResponse(f'{self.USERTYPE}/{self.FILE_NAME}', data)
+
+
 class PagesAdapter:
     _pages = {'add_student_key': AddStudentKeyPage,
               'export_student_keys': ExportStudentKeysPage,
@@ -308,7 +320,8 @@ class PagesAdapter:
               'telegram': TelegramPage,
               'final_marks': FinalMarksPage,
               'teacher_homework': TeacherHWPage,
-              'student_hw': StudentHWPage}
+              'student_hw': StudentHWPage,
+              'manage_students': ManageStudents}
 
     @property
     def pages(self):

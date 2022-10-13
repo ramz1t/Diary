@@ -466,3 +466,62 @@ function upgradeGroups() {
         }
     })
 }
+
+const openEditModal = (name, surname, id) => {
+    document.getElementById('modal').dataset.studentId = id;
+    document.getElementById('student-id').innerText = `ID ${id}`;
+    document.getElementById('name').value = name;
+    document.getElementById('surname').value = surname;
+    document.getElementById('modal').classList.remove('none');
+}
+
+const changeForm = type => {
+    document.getElementById('forms').childNodes.forEach((form) => {
+        try {
+            form.classList.add('none');
+        } catch (e) {
+
+        }
+    })
+    document.querySelectorAll('.change-btn').forEach((btn) => {
+        btn.classList.remove('round-border')
+    })
+    document.getElementById(`${type}-btn`).classList.add('round-border');
+    document.getElementById(`${type}-form`).classList.remove('none');
+}
+
+const changeStudent = type => {
+    const id = document.getElementById('modal').dataset.studentId;
+    const value = document.getElementById(type).value;
+    if (type === 'password' && value === '') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Password can\'t be empty!',
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+        return
+    }
+    const data = {
+        'value': value,
+        'type': type,
+        'id': id
+    }
+    callServer('/update_student', data, 'POST').then(async (response) => {
+        await alertError(response);
+        checkCredentials(response.status);
+        const text = await response.text();
+        if (response.ok) {
+            Swal.fire({
+                    icon: 'success',
+                    title: text,
+                    position: 'top',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+        }
+    })
+}

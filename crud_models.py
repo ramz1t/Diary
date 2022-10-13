@@ -304,7 +304,27 @@ class Student(CRUDBase, StudentKey):
 
     @staticmethod
     def delete(id: int):
-        pass
+        with Sessions() as session:
+            student = session.query(DBStudent).filter_by(id=id).first()
+            session.delete(student)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content='student deleted')
+
+    @staticmethod
+    def update(id: int, value: str, type: str):
+        with Sessions() as session:
+            student = session.query(DBStudent).filter_by(id=id).first()
+            if type == 'name':
+                student.name = value
+            elif type == 'surname':
+                student.surname = value
+            elif type == 'password':
+                student.password = get_password_hash(value)
+            else:
+                return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content='Invalid property name')
+            session.add(student)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content=f'{type.capitalize()} updated!')
 
 
 class Teacher(CRUDBase, TeacherKey):
@@ -490,6 +510,24 @@ class Group(CRUDBase):
                     update_data.append([{'id': group.id, 'name': group.name, 'type': 'update'}])
             session.commit()
         return JSONResponse(status_code=status.HTTP_200_OK, content=update_data)
+
+    @staticmethod
+    def get_for_edit(school_id: int):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(id=school_id).first()
+            data = []
+            for group in school.groups:
+                students = []
+                for student in sorted(group.students, key=lambda x: x.surname):
+                    student_dict = student.__dict__
+                    del student_dict['_sa_instance_state']
+                    students.append(student_dict)
+                group_dict = group.__dict__
+                del group_dict['_sa_instance_state']
+                group_dict.update({'students': students})
+                data.append(group_dict)
+            return data
+
 
 
 class Cls(CRUDBase):

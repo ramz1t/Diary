@@ -1,0 +1,91 @@
+<div id="modal"
+     style="position: absolute; z-index: 10; min-width: 100vw; min-height: 100vh; background-color: rgba(82, 82, 82, 0.7);"
+     class="none flex-row justify-center allign-center white">
+    <div class="border-radius p-20 white">
+        <div class="flex-row space-between allign-center">
+            <h2 style="margin-bottom: 0 !important;">Edit student <span id="student-id" class="p-5 round-border"
+                                                                        style="min-width: 60px; text-align: center"></span>
+            </h2>
+            <i class="bi bi-x-lg" onclick="document.getElementById('modal').classList.add('none')"></i>
+        </div>
+        <br>
+        <div class="flex-row space-between allign-center">
+            <div id="name-btn" class="pointer change-btn white border-radius p-20"
+                    onclick="changeForm('name')">Change name
+            </div>
+            <div id="surname-btn" class="pointer change-btn white border-radius p-20"
+                    onclick="changeForm('surname')">Change surname
+            </div>
+            <div id="password-btn" class="pointer change-btn white border-radius p-20"
+                    onclick="changeForm('password')">Change password
+            </div>
+        </div>
+        <div id="forms">
+            <div class="none" id="name-form" style="margin-top: 1rem">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="name">
+                </div>
+                <button onclick="changeStudent('name')" class="diary-btn p-10" style="min-width: 100%">Send</button>
+            </div>
+            <div class="none" id="surname-form" style="margin-top: 1rem">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="surname">
+                </div>
+                <button onclick="changeStudent('surname')" class="diary-btn p-10" style="min-width: 100%">Send</button>
+            </div>
+            <div class="none" id="password-form" style="margin-top: 1rem">
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="password">
+                </div>
+                <button onclick="changeStudent('password')" class="diary-btn p-10" style="min-width: 100%">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-wrapper">
+    <h1>Edit students</h1>
+    <br>
+    <h6>All students in school №{{school}}, total: {{ total }}</h6>
+    <br>
+    <div class="accordion" id="accordionExample">
+        {% for group in groups %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{{group['id']}}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-{{group['id']}}"
+                        aria-controls="collapseOne">
+                    <div class="flex-row space-between allign-center">
+                        <h5>{{group['name']}}</h5>
+                    </div>
+                </button>
+            </h2>
+            <div id="collapse-{{group['id']}}" class="accordion-collapse collapse"
+                 aria-labelledby="heading-{{group['id']}}"
+                 data-bs-parent="#accordionExample">
+                <div class="accordion-body grid column-3 grid-gap-2">
+                    {% if group['students'] | length > 0 %}
+                    {% for student in group['students'] %}
+                    <div class="flex-row allign-center space-between border-radius p-10 white">
+                        <div class="flex-row allign-center">
+                            <h6 class="p-5 round-border" style="min-width: 60px; text-align: center">ID
+                                {{student['id']}}</h6>
+                            <p>{{student['surname'] + ' ' + student['name']}}</p>
+                        </div>
+                        <div class="flex-row allign-center">
+                            <i class="bi bi-pencil pointer" onclick="openEditModal('{{student.name}}',
+                            '{{student.surname}}', '{{student.id}}')"></i>
+                            <i class="bi bi-trash3 red pointer" onclick="deleteFromDB('{{student.id}}', 'student')"></i>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <h5>No students to edit yet, add them <span class="red pointer" style="text-decoration: underline"
+                                                                onclick="loadPage('admin', 'add_student_key')">here</span>
+                    </h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
