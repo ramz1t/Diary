@@ -55,7 +55,7 @@ function convertToJSON(str) {
     return str;
 }
 
-function markComment(mark, position){
+function markComment(mark, position) {
     mark = convertToJSON(mark)
     Swal.fire({
         html: `Time: ${mark['time']}<br> Class date: ${mark['date']}<br> Comment: ${mark['comment']}`,
@@ -66,7 +66,7 @@ function markComment(mark, position){
 }
 
 
-function hmComment(hw, position){
+function hmComment(hw, position) {
     hw = convertToJSON(hw)
     Swal.fire({
         text: `Homework was added on ${hw['made']}`,
@@ -75,7 +75,6 @@ function hmComment(hw, position){
         title: 'Information'
     })
 }
-
 
 
 async function changePassword() {
@@ -115,7 +114,7 @@ async function changePassword() {
         cancelButtonText: 'No, cancel!',
         reverseButtons: true
     }).then(async (result) => {
-        if (result.isConfirmed){
+        if (result.isConfirmed) {
             var type = localStorage.getItem('type');
             var response = await fetch('/change_user_password', {
                 method: 'POST',
@@ -141,8 +140,7 @@ async function changePassword() {
             } else {
                 await alertError(response)
             }
-        }
-        else {
+        } else {
             swalWithBootstrapButtons.fire(
                 'Cancelled',
                 'Password is same as before',
@@ -183,7 +181,7 @@ async function changeEmail() {
         cancelButtonText: 'No, cancel!',
         reverseButtons: true
     }).then(async (result) => {
-        if (result.isConfirmed){
+        if (result.isConfirmed) {
             var type = localStorage.getItem('type');
             var response = await fetch('/change_user_email', {
                 method: 'POST',
@@ -209,8 +207,7 @@ async function changeEmail() {
             } else {
                 await alertError(response)
             }
-        }
-        else {
+        } else {
             swalWithBootstrapButtons.fire(
                 'Cancelled',
                 'Email is same as before',
@@ -233,14 +230,27 @@ async function loadPage(type, page) {
         var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
         history.pushState(null, '', newRelativePathQuery);
     }
+    if (page === null) {
+        const init_pages = {
+            admin: 'manage_students',
+            student: 'my_diary',
+            teacher: 'classes'
+        }
+        page = init_pages[type]
+    }
     if (page !== null) {
         const wrapper = document.getElementById('wrapper');
-        wrapper.innerHTML = `<div class="content-wrapper"><div class="flex-row"><h1>Loading...</h1>
-                            <div class="spinner-border text-primary" style="color: var(--diary-color)" role="status">
-                                <span class="visually-hidden">Loading...</span></div>
-                            </div>
-                            </div>
-                            `;
+        wrapper.innerHTML = `
+        <div class="content-wrapper" style="padding-right: 50%">
+            <h1>Loading...</h1>
+            <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+            </p>
+        </div>`;
         let data = {
             'user_id': user_id
         };
@@ -275,14 +285,13 @@ function deleteFromDB(id, model) {
         cancelButtonText: 'No, cancel',
         reverseButtons: true
     }).then((result) => {
-        if (result.isConfirmed){
+        if (result.isConfirmed) {
             callServer(`/${model}/delete?id=${id}`, {}, 'POST').then(async (response) => {
                 checkCredentials(response.status);
                 await alertError(response);
                 window.location.reload(true)
-    })
-        }
-        else {
+            })
+        } else {
             swalWithBootstrapButtons.fire(
                 'Cancelled',
                 'Data is safe :)',
@@ -296,13 +305,12 @@ function deleteFromDB(id, model) {
 function hideShow() {
     var input_fields = $('.pass_input');
     var eyes = $('.eye-btn');
-    if(input_fields[0].type === 'password') {
+    if (input_fields[0].type === 'password') {
         for (let i = 0; i < input_fields.length; i++) {
             input_fields[i].type = 'text';
             eyes[i].classList.replace('bi-eye-slash', 'bi-eye');
         }
-    }
-    else{
+    } else {
         for (let i = 0; i < input_fields.length; i++) {
             input_fields[i].type = 'password';
             eyes[i].classList.replace('bi-eye', 'bi-eye-slash');

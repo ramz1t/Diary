@@ -6,7 +6,7 @@ function loadDiary(day) {
             day = 'mon';
         } else {
             let weekday = ['', 'mon', 'tue', 'wed', 'thu', 'fri', ''];
-	        day = weekday[objToday.getDay()];
+            day = weekday[objToday.getDay()];
         }
     }
     const date = document.getElementById(day).dataset.date;
@@ -87,11 +87,31 @@ async function setPermissions() {
     })
 }
 
-function comment(text){
+function comment(text) {
     Swal.fire({
         text: text,
         position: 'top',
         confirmButtonColor: '#004d00',
         title: 'Information'
     })
+}
+
+const toggleHW = (hw_type) => {
+    const days = document.querySelectorAll('.hw-day');
+    const check = document.getElementById(`${hw_type}_hw`).checked;
+    console.log(hw_type, check)
+    if (check) {
+        console.log(days[0])
+        days.forEach((day) => {
+            if (day.dataset.new === 'True' && hw_type === 'new' || day.dataset.new === 'False' && hw_type === 'old') {
+                day.classList.remove('none')
+            }
+        })
+    } else {
+        days.forEach((day) => {
+            if (day.dataset.new === 'True' && hw_type === 'new' || day.dataset.new === 'False' && hw_type === 'old') {
+                day.classList.add('none')
+            }
+        })
+    }
 }

@@ -1,4 +1,5 @@
 import collections
+import datetime
 from distutils.archive_util import make_archive
 import json
 from random import randint
@@ -184,8 +185,9 @@ class TeacherKey(KeyBase):
         with Sessions() as session:
             school_id = session.query(DBAdmin).filter_by(id=body.user_id).first().school_id
             value = ''.join([symbols[randint(0, 61)] for _ in range(8)])
-            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(), school_id=school_id)
-            key_dict = key.__dict__.copy()         
+            key = DBTeacherKey(value=value, name=body.name.capitalize(), surname=body.surname.capitalize(),
+                               school_id=school_id)
+            key_dict = key.__dict__.copy()
             session.add(key)
             session.commit()
             del key_dict['_sa_instance_state']
@@ -302,7 +304,27 @@ class Student(CRUDBase, StudentKey):
 
     @staticmethod
     def delete(id: int):
-        pass
+        with Sessions() as session:
+            student = session.query(DBStudent).filter_by(id=id).first()
+            session.delete(student)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content='student deleted')
+
+    @staticmethod
+    def update(id: int, value: str, type: str):
+        with Sessions() as session:
+            student = session.query(DBStudent).filter_by(id=id).first()
+            if type == 'name':
+                student.name = value
+            elif type == 'surname':
+                student.surname = value
+            elif type == 'password':
+                student.password = get_password_hash(value)
+            else:
+                return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content='Invalid property name')
+            session.add(student)
+            session.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content=f'{type.capitalize()} updated!')
 
 
 class Teacher(CRUDBase, TeacherKey):
@@ -426,11 +448,12 @@ class Group(CRUDBase):
         with Sessions() as session:
             res = []
             for i, s in enumerate(body.name):
-                    if s.isalpha():
-                        res = [body.name[:i], body.name[i:]]
-                        break
+                if s.isalpha():
+                    res = [body.name[:i], body.name[i:]]
+                    break
             if len(res) < 2 or len(res[0]) == 0 or len(res[1]) == 0:
-                return JSONResponse(status_code=status.HTTP_406_NOT_ACCEPTABLE, content='Please write group name in format NumberLetter')
+                return JSONResponse(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                                    content='Please write group name in format NumberLetter')
             if not session.query(DBGroup).filter_by(name=body.name,
                                                     school_db_id=Admin().get(body).school_id).first() is None:
                 return JSONResponse(status_code=status.HTTP_409_CONFLICT, content='Group already exists')
@@ -485,8 +508,26 @@ class Group(CRUDBase):
                     group.name = ''.join((str(num), res[1]))
                     session.add(group)
                     update_data.append([{'id': group.id, 'name': group.name, 'type': 'update'}])
-            session.commit()    
+            session.commit()
         return JSONResponse(status_code=status.HTTP_200_OK, content=update_data)
+
+    @staticmethod
+    def get_for_edit(school_id: int):
+        with Sessions() as session:
+            school = session.query(DBSchool).filter_by(id=school_id).first()
+            data = []
+            for group in school.groups:
+                students = []
+                for student in sorted(group.students, key=lambda x: x.surname):
+                    student_dict = student.__dict__
+                    del student_dict['_sa_instance_state']
+                    students.append(student_dict)
+                group_dict = group.__dict__
+                del group_dict['_sa_instance_state']
+                group_dict.update({'students': students})
+                data.append(group_dict)
+            return data
+
 
 
 class Cls(CRUDBase):
@@ -639,7 +680,6 @@ class ScheduleClass(CRUDBase):
                 data.append(day)
         return data
 
-
     @staticmethod
     def get_eight_teacher_working_days(class_id):
         with Sessions() as session:
@@ -650,8 +690,6 @@ class ScheduleClass(CRUDBase):
                     if cls is not None:
                         res.append(day_i)
             return eight_days(res)
-            
-
 
 
 class Book:
@@ -707,7 +745,7 @@ class Book:
                     else:
                         marks_clss.append(mark.class_id)
                         mark = mark.value
-                        mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))   
+                        mark_time = Mark.time(ApiBase(date=date, subject_id=db_cls.id, student_id=current_user.id))
                 else:
                     mark = ''
                     mark_time = ''
@@ -753,11 +791,11 @@ class Book:
     @staticmethod
     def student_hw(student_id):
         with Sessions() as session:
+            today_str = datetime.datetime.today().strftime('%Y-%m-%d')
             student: DBStudent = session.query(DBStudent).filter_by(id=student_id).first()
             group: DBGroup = Group().get(student.group_id)
             session.add(group)
             hw_query = group.homework.all()
-            print(hw_query[0].class_date)
             result: dict[DBHomework] = {}
             for dct in hw_query:
                 result.setdefault(dct.class_date, []).append(dct)
@@ -767,7 +805,7 @@ class Book:
                     subject = Subject.get(Cls.get_one(hw.class_id).subject_id)
                     hw_dict = {'body': hw.body, 'exec_time': hw.exec_time, 'made': hw.time, 'subject': subject}
                     hw_on_date.append(hw_dict)
-                result[index] = hw_on_date
+                result[index] = {'new': hw.class_date >= today_str, 'hw': hw_on_date}
             result = collections.OrderedDict(sorted(result.items(), reverse=True))
         return result
 
@@ -917,18 +955,18 @@ class Homework(CRUDBase):
 
     def create(self, body: ApiBase):
         with Sessions() as session:
-            print(body.class_id)
             group: DBGroup = Group().get(body.group_id)
             session.add(group)
-            hw: DBHomework = group.homework.filter_by(db_group_id=body.group_id, class_date=body.date, class_id=body.class_id).first()
+            hw: DBHomework = group.homework.filter_by(db_group_id=body.group_id, class_date=body.date,
+                                                      class_id=body.class_id).first()
             if hw is not None:
                 hw.time = get_current_time()
                 hw.body = body.value
                 hw.exec_time = body.exec_time
                 session.add(hw)
-                session.commit()    
+                session.commit()
                 return JSONResponse(status_code=status.HTTP_200_OK, content='hw edited')
-            hw = DBHomework(class_date=body.date, time=get_current_time(), body=body.value, exec_time=body.exec_time, 
+            hw = DBHomework(class_date=body.date, time=get_current_time(), body=body.value, exec_time=body.exec_time,
                             class_id=body.class_id)
             group.homework.append(hw)
             session.add(group)
@@ -953,7 +991,6 @@ class Homework(CRUDBase):
             session.commit()
         return JSONResponse(status_code=status.HTTP_200_OK, content='hw deleted')
 
- 
     @staticmethod
     def group_hw(class_id: int):
         with Sessions() as session:
