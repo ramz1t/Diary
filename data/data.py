@@ -22,10 +22,12 @@ SERVER_DOMAIN = 'http://127.0.0.1:8001'
 '''dates of year start and end'''
 TODAY = date.today()
 
-YEAR_START = date(year=TODAY.year, month=9, day=1)
-YEAR_END = date(year=TODAY.year, month=5, day=31) + timedelta(days=365)
-
-SEASON_1 = (YEAR_START, date(year=TODAY.year, month=11, day=27))
+if TODAY.month > 6:
+    YEAR_START = date(year=TODAY.year, month=9, day=1)
+else:
+    YEAR_START = date(year=TODAY.year - 1, month=9, day=1)
+YEAR_END = date(year=YEAR_START.year + 1, month=5, day=31)
+SEASON_1 = (YEAR_START, date(year=YEAR_START.year, month=11, day=27))
 SEASON_2 = (SEASON_1[1] + timedelta(days=1), date(year=TODAY.year + 1, month=2, day=26))
 SEASON_3 = (SEASON_2[1] + timedelta(days=1), YEAR_END)
 
