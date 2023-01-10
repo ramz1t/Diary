@@ -159,12 +159,11 @@ def get_current_time():
 
 
 def get_current_season():
-    today = datetime.date.today()
-    if SEASON_1[0] <= today <= SEASON_1[1]:
+    if SEASON_1[0] <= TODAY <= SEASON_1[1]:
         return 1
-    elif SEASON_2[0] <= today <= SEASON_2[1]:
+    elif SEASON_2[0] <= TODAY <= SEASON_2[1]:
         return 2
-    elif SEASON_3[0] <= today <= SEASON_3[1]:
+    elif SEASON_3[0] <= TODAY <= SEASON_3[1]:
         return 3
 
 
