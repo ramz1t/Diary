@@ -6,9 +6,7 @@ URL: [diary-fusm.onrender.com][diary]
 
 This project is a school diary web service. 
 
-> Note: it is using SQLite database, which is disk driven. It means that all your changes will be deleted every hour, sorry but thats how Heroku and SQLite work together :(
->
-> However, you can always clone the project and run the server locally, we will leave the instructions bellow
+>You can always clone the project and run the server locally, we will leave the instructions bellow
 
 
 The site has three sections
