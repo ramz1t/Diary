@@ -14,7 +14,7 @@ symbols = string.digits + string.ascii_letters
 
 Base = declarative_base()
 
-Engine = create_engine('sqlite:///data/data.db')
+Engine = create_engine(os.getenv('POSTGRESQL_CONNECTION'))
 Base.metadata.create_all(Engine)
 Sessions = sessionmaker(bind=Engine)
 SERVER_DOMAIN = 'http://127.0.0.1:8001'
